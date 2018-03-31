@@ -1,0 +1,3 @@
+# virtual environment with python 3.x
+
+^venv(.)*
