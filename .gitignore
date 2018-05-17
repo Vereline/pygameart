@@ -3,4 +3,6 @@ venv*
 # pycharm settings
 .idea/
 # pycache - no idea if it's need or not in the project
-__pycache__ 
+__pycache__
+# vscode settings
+.vscode/ 
