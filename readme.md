@@ -36,7 +36,8 @@ Please update to Node >=6 and npm >=3 to get supported tools in new projects.
 
 sudo npm install -g n
 sudo n latest
-
+## it's important to get the latest version of nodejs or at least 6<=
+## and get the latest version of npm 
 
 ### Install and run django server
 
