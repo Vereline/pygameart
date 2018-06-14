@@ -122,7 +122,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# MEDIA_ROOT = '/'
+MEDIA_ROOT = os.path.join(BASE_DIR, '/')
+MEDIA_URL = '/'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [

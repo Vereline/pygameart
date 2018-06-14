@@ -82,9 +82,8 @@ class App extends Component {
           <div key={item.id}>
             <h1>{item.title}</h1>
             <span>{item.description}</span>
-            <img src={"opengameart/"+item.file_path}  alt="logo"/>
+            <img src={get_url_of_image(item.id)}  alt="logo"/>
             <h2>{item.file_path}</h2>
-            <h2>{item.likes}</h2>
             <p>
                 Likes
                 <h2>{item.likes}</h2>
@@ -96,6 +95,8 @@ class App extends Component {
   }
 }
 
-
+function get_url_of_image(pk){
+    return 'http://localhost:8000/arts/'+ pk + '/image'
+}
 
 export default App;
