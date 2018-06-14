@@ -6,7 +6,7 @@ from .models import Art
 
 class ArtAdmin(admin.ModelAdmin):
     model = Art
-    list_display = ('title', 'id', 'file_path', 'likes', 'creation_date')
+    list_display = ('title', 'file_id', 'id', 'file_path', 'likes', 'creation_date')
     fields = ('title', 'description', 'file', 'likes')
 
 

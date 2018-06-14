@@ -50,15 +50,24 @@ pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver 127.0.0.1:8000
 
+
 ### Create django app
 django-admin startproject todo_api .
 python manage.py startapp todos
 ##AFTER
 ./manage.py makemigrations
+./manage.py showmigrations
 ./manage.py migrate
+
 
 ### Create super user
 python manage.py createsuperuser
 
+
 ### Django shell
 python manage.py shell
+
+
+### Run test
+1. Come into the directory with tests
+2. ./manage.py test

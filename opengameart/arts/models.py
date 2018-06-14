@@ -1,5 +1,4 @@
 from django.db import models
-import imghdr
 from PIL import Image  # Holds downloaded image and verifies it
 import os
 from opengameart.settings import BASE_DIR
@@ -8,7 +7,7 @@ import copy  # Copies instances of Image
 
 
 class Art(models.Model):
-    id = models.CharField(unique=True, max_length=100, primary_key=True)
+    file_id = models.CharField(unique=True, max_length=100, default='')
     title = models.CharField(max_length=255)
     description = models.TextField()
     file_path = models.CharField(max_length=255)
@@ -34,7 +33,7 @@ class Art(models.Model):
             art_id = get_id_by_path(file_name)
             file_name = file_name.split('.')
             # Rename image file into unique value
-            self.id = art_id
+            self.file_id = art_id
             self.file.name = art_id + '.' + file_name[-1]
             self.file_path = os.path.join('', 'images/loaded/') + self.file.name
 
