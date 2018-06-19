@@ -1,0 +1,16 @@
+frontend:
+1. connect babel and webpack(look at project in redux)
+2. connect redux
+3. start write independent frontend application(then connect to backend)
+4. think about getting photos from backend
+
+backend:
+1. think about sending photos to frontend('Get query from front' or "POST query from back")
+2. make tables to connect arts and users
+	a. table arts(is ready)
+	b. table user(may be based on default django model)
+	c. art <-> user - table of objects
+you get 3 tables to connect art and user
+3. read tutorials about react-redux-django spa(single page application)
+4. continue edit admin site
+
