@@ -13,4 +13,4 @@ backend:
 you get 3 tables to connect art and user
 3. read tutorials about react-redux-django spa(single page application)
 4. continue edit admin site
-
+5. Database tab (in the right side) may be connected and watched (sqlite - Django default) 
