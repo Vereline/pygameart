@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import './AppMenu.css';
+import '../styles/AppMenu.css';
 
 class AppMenu extends Component {
   render() {

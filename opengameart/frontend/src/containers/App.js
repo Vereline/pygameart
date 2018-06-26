@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
-import './App.css';
-import AppHeader from './AppHeader'
-import AppFooter from './AppFooter'
-import AppMenu from "./AppMenu";
+import '../styles/App.css';
+import AppHeader from '../components/AppHeader'
+import AppFooter from '../components/AppFooter'
+import AppMenu from "../components/AppMenu";
 
 class App extends Component {
   render() {

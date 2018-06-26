@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import './AppFooter.css';
+import '../styles/AppFooter.css';
 
 class AppFooter extends Component {
   render() {
