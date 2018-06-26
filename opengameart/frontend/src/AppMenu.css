@@ -1,0 +1,22 @@
+.AppMenu ul {
+    list-style-type: none;
+    overflow: hidden;
+    background-color: #333333;
+    text-align: left;
+    padding: 0;
+    width: max-content;
+}
+
+.AppMenu li {
+    padding: 16px;
+}
+
+.AppMenu li a {
+    color: white;
+    text-align: left;
+    text-decoration: none;
+}
+
+.AppMenu li:hover {
+    background-color: #111111;
+}
