@@ -4,6 +4,7 @@ import '../styles/App.css';
 import AppHeader from '../components/AppHeader'
 import AppFooter from '../components/AppFooter'
 import AppMenu from "../components/AppMenu";
+import AppPost from "../components/AppPost";
 
 class App extends Component {
   render() {
@@ -14,6 +15,10 @@ class App extends Component {
           <AppHeader />
         </header>
         <AppMenu />
+        <AppPost />
+        <AppPost />
+        <AppPost />
+
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
