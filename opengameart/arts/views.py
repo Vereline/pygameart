@@ -8,12 +8,12 @@ from .serializers import ArtSerializer
 import os
 
 
-class ListTodo(generics.ListCreateAPIView):
+class ListArt(generics.ListCreateAPIView):
     queryset = Art.objects.all()
     serializer_class = ArtSerializer
 
 
-class DetailTodo(generics.RetrieveUpdateDestroyAPIView):
+class DetailArt(generics.RetrieveUpdateDestroyAPIView):
     queryset = Art.objects.all()
     serializer_class = ArtSerializer
 
@@ -22,4 +22,3 @@ def image_view(request, pk):
     art = Art.objects.get(id=pk)
     img = '<img src={src} width="500px"/>'.format(src=os.getcwd()+art.file.url)
     return HttpResponse(img)
-    # return HttpResponse(art_image)

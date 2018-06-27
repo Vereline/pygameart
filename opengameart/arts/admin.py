@@ -14,10 +14,9 @@ class ArtAdmin(admin.ModelAdmin):
     readonly_fields = ['display_image_field']
 
     def display_image_field(self, obj):
-        print(os.getcwd())
+        # print(os.getcwd())
         url = os.getcwd() + obj.file.url
         return mark_safe('<img src="{url}" width="{width}" height={height} />'.format(
-            # url=obj.file.url,
             url=url,
             width=300,
             height=300,
