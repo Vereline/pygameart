@@ -28,13 +28,10 @@ def image_view(request, pk):
 
 
 def get_art(request):
-    # context = dict(backend_form=ArtForm())
-
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = ArtForm(request.POST, request.FILES)
-        # context['posted'] = form.instance
         # check whether it's valid:
         if form.is_valid():
             # process the data in form.cleaned_data as required

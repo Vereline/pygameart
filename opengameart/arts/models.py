@@ -25,7 +25,6 @@ class Art(models.Model):
     description = models.TextField()
     file_path = models.CharField(max_length=255)
     file = models.ImageField(upload_to=image_directory_path, storage=image_storage, null=True, blank=True)
-    # file = models.ImageField(upload_to=os.path.join(BASE_DIR, 'images/loaded/'), null=True, blank=True)
     creation_date = models.DateTimeField(auto_now_add=True)
     likes = models.IntegerField(default=0)
 

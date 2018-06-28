@@ -3,7 +3,6 @@ from django.contrib import admin
 # Register your models here.
 from .models import Art
 from django.utils.html import mark_safe
-import os
 
 
 class ArtAdmin(admin.ModelAdmin):
@@ -14,7 +13,6 @@ class ArtAdmin(admin.ModelAdmin):
 
     def display_image_field(self, obj):
         url = obj.file.url
-        # url = os.getcwd() + obj.file.url
         return mark_safe('<img src="{url}" width="{width}" height={height} />'.format(
             url=url,
             width=300,
