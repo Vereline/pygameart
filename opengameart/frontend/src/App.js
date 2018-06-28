@@ -4,10 +4,10 @@ import { connect } from 'react-redux'
 import {echo} from './actions/echo'
 import {serverMessage} from './reducers'
 
-// import AppHeader from './components/AppHeader'
-// import AppFooter from './components/AppFooter'
-// import AppMenu from "./components/AppMenu";
-// import AppPost from "./components/AppPost";
+import AppHeader from './components/AppHeader'
+import AppFooter from './components/AppFooter'
+import AppMenu from "./components/AppMenu";
+import AppPost from "./components/AppPost";
 
 class App extends Component {
   componentDidMount() {
@@ -17,23 +17,19 @@ class App extends Component {
   render() {
     return (
       <div>
-          {/*<header className="App-header">*/}
-          {/*<h1 className="App-title">PyGameArt</h1>*/}
-          {/*<AppHeader />*/}
-        {/*</header>*/}
-        {/*<AppMenu />*/}
-        {/*<AppPost />*/}
+          <header className="App-header">
+          <h1 className="App-title">PyGameArt</h1>
+          <AppHeader />
+        </header>
+        <AppMenu />
+          <p>
+              {this.props.message}
+          </p>
+        <AppPost />
+          <footer className="App-footer">
+              <AppFooter />
+          </footer>
 
-        {/*<p className="App-intro">*/}
-          {/*To get started, edit <code>src/App.js</code> and save to reload.*/}
-        {/*</p>*/}
-          {/*<footer className="App-footer">*/}
-              {/*<AppFooter />*/}
-          {/*</footer>*/}
-        <h2>Welcome to React</h2>
-        <p>
-          {this.props.message}
-        </p>
       </div>
     );
   }
