@@ -3,7 +3,6 @@ from django.contrib import admin
 # Register your models here.
 from .models import Art
 from django.utils.html import mark_safe
-from opengameart.settings import MEDIA_ROOT, MEDIA_URL
 import os
 
 
@@ -14,8 +13,8 @@ class ArtAdmin(admin.ModelAdmin):
     readonly_fields = ['display_image_field']
 
     def display_image_field(self, obj):
-        # print(os.getcwd())
-        url = os.getcwd() + obj.file.url
+        url = obj.file.url
+        # url = os.getcwd() + obj.file.url
         return mark_safe('<img src="{url}" width="{width}" height={height} />'.format(
             url=url,
             width=300,

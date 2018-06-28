@@ -64,6 +64,8 @@ python manage.py startapp todos
 ### Create super user
 python manage.py createsuperuser
 
+login: vereline
+pass: victoria1234
 
 ### Django shell
 python manage.py shell
@@ -72,3 +74,11 @@ python manage.py shell
 ### Run test
 1. Come into the directory with tests
 2. ./manage.py test
+
+### Collect static files
+./manage.py collectstaticfiles
+
+### Custom sql queries
+https://docs.djangoproject.com/en/2.0/topics/db/sql/
+
+

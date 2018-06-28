@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from opengameart.settings import MEDIA_ROOT, MEDIA_URL
+from opengameart.settings import MEDIA_ROOT, MEDIA_URL, DEBUG
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
@@ -25,4 +25,5 @@ urlpatterns = [
 ]
 
 urlpatterns += staticfiles_urlpatterns()
-urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
+if DEBUG is True:
+    urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)

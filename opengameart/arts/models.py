@@ -1,7 +1,22 @@
 from django.db import models
+from django.core.files.storage import FileSystemStorage
+from django.conf import settings
 from PIL import Image  # Holds downloaded image and verifies it
 import copy  # Copies instances of Image
 # Create your models here.
+
+
+image_storage = FileSystemStorage(
+    # Physical file location ROOT
+    location='{0}/images/'.format(settings.MEDIA_ROOT),
+    # Url for file
+    base_url='{0}images/'.format(settings.MEDIA_URL),
+)
+
+
+def image_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/images/loaded/<filename>
+    return 'loaded/{0}'.format(filename)
 
 
 class Art(models.Model):
@@ -9,7 +24,7 @@ class Art(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     file_path = models.CharField(max_length=255)
-    file = models.ImageField(upload_to='images/loaded/', null=True, blank=True)
+    file = models.ImageField(upload_to=image_directory_path, storage=image_storage, null=True, blank=True)
     # file = models.ImageField(upload_to=os.path.join(BASE_DIR, 'images/loaded/'), null=True, blank=True)
     creation_date = models.DateTimeField(auto_now_add=True)
     likes = models.IntegerField(default=0)
@@ -33,13 +48,17 @@ class Art(models.Model):
             # Rename image file into unique value
             self.file_id = art_id
             self.file.name = self.file_id + '.' + file_name[-1]
-            self.file_path = 'images/loaded/' + self.file.name
+            self.file_path = '/images/loaded/' + self.file.name
 
         except Exception as e:
             print("Error trying to save model: saving image failed: " + str(e))
             pass
 
         super(Art, self).save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        self.file.delete()
+        super(Art, self).delete(*args, **kwargs)
 
 
 def valid_img(img):
