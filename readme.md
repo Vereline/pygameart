@@ -48,6 +48,9 @@ python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 
+### pip add new packages
+pip freeze --all > requirements.txt
+
 python manage.py migrate
 python manage.py runserver 127.0.0.1:8000
 
@@ -55,6 +58,7 @@ python manage.py runserver 127.0.0.1:8000
 ### Create django app
 django-admin startproject todo_api .
 python manage.py startapp todos
+
 ##AFTER
 ./manage.py makemigrations
 ./manage.py showmigrations
@@ -64,8 +68,13 @@ python manage.py startapp todos
 ### Create super user
 python manage.py createsuperuser
 
+Admin:
 login: vereline
 pass: victoria1234
+
+User:
+Test_user
+testpassword
 
 ### Django shell
 python manage.py shell
@@ -80,5 +89,15 @@ python manage.py shell
 
 ### Custom sql queries
 https://docs.djangoproject.com/en/2.0/topics/db/sql/
+
+
+
+### Test authentication
+http://127.0.0.1:8000
+http://127.0.0.1:8000/api/auth/token/obtain/ -- check here by entering existing account
+
+http://127.0.0.1:8000/api/echo -- echo message to check authentication
+Content: {"message" : "kek"}
+
 
 
