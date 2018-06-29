@@ -8,8 +8,11 @@
     <form method="post">
         {% csrf_token %}
         <p>Are you sure you want to delete "{{ object }}"?</p>
+        <p>Title</p>
         <p>{{ object.title }}</p>
+        <p>Description</p>
         <p>{{ object.description }}</p>
+        <img src="{{ object.file.url }}"><br>
     <input type="submit" value="Confirm" />
 </form>
 </body>

@@ -8,7 +8,12 @@
     <p> Add your art here</p>
     <form action="{% url 'add_art' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form }}
+        <p>Title</p>
+        {{ form.title }}
+        <p>Description</p>
+        {{ form.description }}
+        <p>File</p>
+        {{ form.file }}<br>
         <input type="submit" value="Submit" />
     </form>
 </body>
