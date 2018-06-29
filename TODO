@@ -1,4 +1,8 @@
-frontend:
+IMPORTANT:
+DISABLE FRONTENT, MAKE SIMPLE FRONTENT WITH DEFAULT DJANGO PAGES AND REST REACT SEPARATELY
+THEN CONNECT BACKEND AND FRONTEND REACT LATER
+
+Frontend:
 1. connect babel and webpack(look at project in redux)
 2. connect redux
 3. start write independent frontend application(then connect to backend)
