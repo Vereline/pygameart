@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
-    'corsheaders',
+    'corsheaders',  # A Django App that adds CORS (Cross-Origin Resource Sharing) headers to responses.
 
     'arts',
 
@@ -61,7 +61,7 @@ ROOT_URLCONF = 'opengameart.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, '/arts/templates/')],
+        'DIRS': [os.path.join(BASE_DIR, 'static/templates/')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -121,11 +121,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 
 STATICFILES_DIRS = [
-    # os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'static'),
+    BASE_DIR,
 ]
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 

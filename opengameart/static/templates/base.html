@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+    {% block stylesheet %}{% endblock %}
+
+</head>
+<body>
+    <header class="App-header">
+        <h1 class="App-title App-intro">PyGameArt</h1>
+
+        <div class="AppHeader">
+            <ul class="AppHeader-list">
+              <li class="AppHeader-listItem"><a href="#">Home</a></li>
+              <li class="AppHeader-listItem"><a href="#">News</a></li>
+              <li class="AppHeader-listItem"><a href="#">Contact</a></li>
+              <li class="AppHeader-listItem"><a href="#">Popular Today</a></li>
+              <li class="AppHeader-listItem"><a href="#">About</a></li>
+            </ul>
+        </div>
+    </header>
+    <main>
+        <div class="AppMenu">
+            <ul class="AppMenu-list">
+              <li class="AppMenu-listItem"><a href="#">My photos</a></li>
+              <li class="AppMenu-listItem"><a href="#">My music</a></li>
+              <li class="AppMenu-listItem"><a href="#">My friends</a></li>
+              <li class="AppMenu-listItem"><a href="#">Popular Today</a></li>
+              <li class="AppMenu-listItem"><a href="#">Latest news</a></li>
+            </ul>
+        </div>
+
+         {% block content %}
+         {% endblock %}
+    </main>
+
+    <footer>
+         <div class="AppFooter">
+            <p class="AppFooter-text">Victoria Stanko, 2018</p>
+            <em class="AppFooter-email">vstanko1998@gmail.com</em>
+          </div>
+    </footer>
+    <script src={% static 'js/jquery-3.3.1.min.js' %}></script>
+    <script src="{% static 'js/app.js' %}"></script>
+
+    {% block javascript %}{% endblock %}
+
+</body>
+</html>

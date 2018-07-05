@@ -28,6 +28,7 @@ def image_view(request, pk):
 
 
 def get_art(request):
+    """ Add image to db """
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
