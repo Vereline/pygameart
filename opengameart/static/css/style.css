@@ -74,6 +74,13 @@ footer {
     padding: 15px;
 }
 
+.AppMenu {
+    float: left;
+    display: block;
+    margin: 20px;
+}
+
+
 .AppMenu ul {
     display: inline-block;
     list-style-type: none;
@@ -96,5 +103,13 @@ footer {
 
 .AppMenu li:hover {
     background-color: #111111;
+}
+
+.PageContent {
+    display:inline-block;
+    float: right;
+    margin: 20px;
+    padding: 20px;
+
 }
 

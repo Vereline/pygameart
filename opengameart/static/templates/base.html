@@ -39,9 +39,11 @@
               <li class="AppMenu-listItem"><a href="#">Latest news</a></li>
             </ul>
         </div>
+        <div class="PageContent">
+            {% block content %}
+            {% endblock %}
+        </div>
 
-         {% block content %}
-         {% endblock %}
     </main>
 
     <footer>
