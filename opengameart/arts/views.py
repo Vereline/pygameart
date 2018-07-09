@@ -63,3 +63,7 @@ class ArtDelete(DeleteView):
     model = Art
     form_class = ArtForm
     fields = ('title', 'description', 'file',)
+
+
+def load_sandbox(request):
+    return render(request, 'sandbox.html')
