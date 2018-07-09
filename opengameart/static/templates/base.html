@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-4.1.1-dist/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-4.1.1-dist/css/bootstrap-grid.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-4.1.1-dist/css/bootstrap-reboot.css' %}">
 
     {% block stylesheet %}{% endblock %}
 
@@ -52,8 +55,11 @@
             <em class="AppFooter-email">vstanko1998@gmail.com</em>
           </div>
     </footer>
-    <script src={% static 'js/jquery-3.3.1.min.js' %}></script>
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
     <script src="{% static 'js/app.js' %}"></script>
+
+    <script src="{% static 'css/bootstrap-4.1.1-dist/js/bootstrap.js' %}"></script>
+    <script src="{% static 'css/bootstrap-4.1.1-dist/js/bootstrap.bundle.js' %}"></script>
 
     {% block javascript %}{% endblock %}
 
