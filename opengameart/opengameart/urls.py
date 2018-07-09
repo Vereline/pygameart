@@ -28,6 +28,7 @@ from rest_framework_simplejwt.views import (
 
 from rest_framework import views, serializers, status
 from rest_framework.response import Response
+from django.contrib.auth.views import login, logout
 
 
 class MessageSerializer(serializers.Serializer):
@@ -50,6 +51,9 @@ urlpatterns = [
     url(r'^api/auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/auth/token/obtain/$', TokenObtainPairView.as_view()),
     url(r'^api/auth/token/refresh/$', TokenRefreshView.as_view()),
+    url(r'^accounts/login/$', login, name='login'),
+    url(r'^accounts/logout/$', logout, name='logout'),
+
 ]
 
 urlpatterns += staticfiles_urlpatterns()

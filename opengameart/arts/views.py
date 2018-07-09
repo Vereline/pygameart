@@ -9,24 +9,30 @@ from .models import Art
 from .serializers import ArtSerializer
 from .forms import ArtForm
 import os
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 
 
+@method_decorator(login_required, name='dispatch')
 class ListArt(generics.ListCreateAPIView):
     queryset = Art.objects.all()
     serializer_class = ArtSerializer
 
 
+@method_decorator(login_required, name='dispatch')
 class DetailArt(generics.RetrieveUpdateDestroyAPIView):
     queryset = Art.objects.all()
     serializer_class = ArtSerializer
 
 
+@login_required
 def image_view(request, pk):
     art = get_object_or_404(Art, pk)
     img = '<img src={src} width="500px"/>'.format(src=os.getcwd()+art.file.url)
     return HttpResponse(img)
 
 
+@login_required
 def get_art(request):
     """ Add image to db """
     # if this is a POST request we need to process the form data
@@ -49,6 +55,7 @@ def get_art(request):
         return render(request,  'add_art.html', {'form': form})
 
 
+@method_decorator(login_required, name='dispatch')
 class ArtDelete(DeleteView):
     """ Delete image by id """
     success_url = reverse_lazy('get_list_art')
