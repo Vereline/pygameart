@@ -1,69 +1,95 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <head>
+        <meta charset="UTF-8">
+        <title>PyGameArt</title>
+        <link rel="shortcut icon" href="{%  static 'favicon.ico' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-4.1.1-dist/css/bootstrap.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-4.1.1-dist/css/bootstrap-grid.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-4.1.1-dist/css/bootstrap-reboot.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 
-    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-4.1.1-dist/css/bootstrap.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-4.1.1-dist/css/bootstrap-grid.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-4.1.1-dist/css/bootstrap-reboot.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+        {% block stylesheet %}{% endblock %}
 
-    {% block stylesheet %}{% endblock %}
+    </head>
+    <body>
+        <header class="">
+            <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+                <h1  class="navbar-brand ">PyGameArt</h1>
 
-</head>
-<body>
-    <header class="App-header">
-        <h1 class="App-title App-intro">PyGameArt</h1>
+                <ul class="navbar-nav">
+                  <li  class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                  <li  class="nav-item"><a class="nav-link" href="#">News</a></li>
+                  <li  class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                  <li  class="nav-item"><a class="nav-link" href="#">Popular Today</a></li>
+                  <li  class="nav-item"><a class="nav-link" href="#">About</a></li>
+                  <li  class="nav-item"><a class="nav-link" href={% url 'load_sandbox' %}>Sandbox</a></li>
+                  {# make ajax query instead simple travelling through pages here #}
+                </ul>
 
-        <div class="AppHeader">
-            <ul class="AppHeader-list">
-              <li class="AppHeader-listItem"><a href="#">Home</a></li>
-              <li class="AppHeader-listItem"><a href="#">News</a></li>
-              <li class="AppHeader-listItem"><a href="#">Contact</a></li>
-              <li class="AppHeader-listItem"><a href="#">Popular Today</a></li>
-              <li class="AppHeader-listItem"><a href="#">About</a></li>
-              <li class="AppHeader-listItem"><a href={% url 'load_sandbox' %}>Sandbox</a></li>
-              {# make ajax query instead simple travelling through pages here #}
-            </ul>
-        </div>
+                <form class="form-inline float-md-right" action="">
+                    <input class="form-control mr-sm-2" type="text" placeholder="Search">
+                    <button class="btn btn-success" type="submit">Search</button>
+                </form>
 
-        {% if user.is_authenticated %}
-			<a href={% url 'logout' %}>Logout</a>
-		{% endif %}
-    </header>
-    <main>
-        <div class="AppMenu">
-            <ul class="AppMenu-list">
-              <li class="AppMenu-listItem"><a href="#">My photos</a></li>
-              <li class="AppMenu-listItem"><a href="#">My music</a></li>
-              <li class="AppMenu-listItem"><a href="#">My friends</a></li>
-              <li class="AppMenu-listItem"><a href="#">Popular Today</a></li>
-              <li class="AppMenu-listItem"><a href="#">Latest news</a></li>
-            </ul>
-        </div>
-        <div class="PageContent">
-            {% block content %}
-            {% endblock %}
-        </div>
+                {% if user.is_authenticated %}
+                    <a class="nav-link float-right" href={% url 'logout' %}>Logout</a>
+                {% endif %}
+            </nav>
+        </header>
+        <main>
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="AppMenu">
+                        <ul class="list-group">
+                          <li class="list-group-item d-flex justify-content-between align-items-center bg-dark">
+                              <a class="nav-link" href="#">My photos</a>
+                              <span class="badge badge-success badge-pill">0</span>
+                          </li>
+                          <li class="list-group-item d-flex justify-content-between align-items-center bg-dark">
+                              <a class="nav-link" href="#">My music</a>
+                              <span class="badge badge-success badge-pill">0</span>
+                          </li>
+                          <li class="list-group-item d-flex justify-content-between align-items-center bg-dark">
+                              <a class="nav-link" href="#">My friends</a>
+                              <span class="badge badge-success badge-pill">0</span>
+                          </li>
+                          <li class="list-group-item d-flex justify-content-between align-items-center bg-dark">
+                              <a class="nav-link" href="#">Popular Today</a>
+                              <span class="badge badge-success badge-pill">0</span>
+                          </li>
+                          <li class="list-group-item d-flex justify-content-between align-items-center bg-dark">
+                              <a class="nav-link" href="#">Latest news</a>
+                              <span class="badge badge-success badge-pill">0</span>
+                          </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="">
+                        {% block content %}
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
 
-    </main>
+        </main>
 
-    <footer>
-         <div class="AppFooter">
-            <p class="AppFooter-text">Victoria Stanko, 2018</p>
-            <em class="AppFooter-email">vstanko1998@gmail.com</em>
-          </div>
-    </footer>
+        <footer class="bg-dark">
+             <div class="AppFooter">
+                <p class="AppFooter-text">Victoria Stanko, 2018</p>
+                <em class="AppFooter-email">vstanko1998@gmail.com</em>
+              </div>
+        </footer>
 
-    <script src="{% static 'css/bootstrap-4.1.1-dist/js/bootstrap.js' %}"></script>
-    <script src="{% static 'css/bootstrap-4.1.1-dist/js/bootstrap.bundle.js' %}"></script>
+        <script src="{% static 'css/bootstrap-4.1.1-dist/js/bootstrap.js' %}"></script>
+        <script src="{% static 'css/bootstrap-4.1.1-dist/js/bootstrap.bundle.js' %}"></script>
 
-    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
-    <script src="{% static 'js/app.js' %}"></script>
+        <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+        <script src="{% static 'js/app.js' %}"></script>
 
-    {% block javascript %}{% endblock %}
+        {% block javascript %}{% endblock %}
 
-</body>
+    </body>
 </html>

@@ -1,23 +1,23 @@
-html, body, #root {
-  /*margin: 0;*/
-  /*padding: 0;*/
-  min-height: 100vh;
-  /*width: 100%;*/
-  /*display: flex;*/
-}
+/*html, body, #root {*/
+  /*!*margin: 0;*!*/
+  /*!*padding: 0;*!*/
+  /*min-height: 100vh;*/
+  /*!*width: 100%;*!*/
+  /*!*display: flex;*!*/
+/*}*/
 
 body {
   background: linear-gradient(110deg, #1d9b01 60%, #43c220 60%) no-repeat fixed;
 }
 
-header {
-  /*display: inline-block;*/
-  width:100%;
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
-}
+/*header {*/
+  /*!*display: inline-block;*!*/
+  /*width:100%;*/
+  /*background-color: #222;*/
+  /*height: 150px;*/
+  /*padding: 20px;*/
+  /*color: white;*/
+/*}*/
 
 footer {
    position: fixed;
@@ -28,42 +28,42 @@ footer {
    color: white;
 }
 
-.App-title {
-  font-size: 1.5em;
-}
+/*.App-title {*/
+  /*font-size: 1.5em;*/
+/*}*/
 
-.App-intro {
-  font-size: large;
-}
+/*.App-intro {*/
+  /*font-size: large;*/
+/*}*/
 
-.App {
-  text-align: center;
-}
+/*.App {*/
+  /*text-align: center;*/
+/*}*/
 
-.AppHeader ul {
-    display: inline-block;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #333333;
-}
+/*.AppHeader ul {*/
+    /*display: inline-block;*/
+    /*list-style-type: none;*/
+    /*margin: 0;*/
+    /*padding: 0;*/
+    /*overflow: hidden;*/
+    /*background-color: #333333;*/
+/*}*/
 
-.AppHeader li {
-    float: left;
-}
+/*.AppHeader li {*/
+    /*float: left;*/
+/*}*/
 
-.AppHeader li a {
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 16px;
-    text-decoration: none;
-}
+/*.AppHeader li a {*/
+    /*display: block;*/
+    /*color: white;*/
+    /*text-align: center;*/
+    /*padding: 16px;*/
+    /*text-decoration: none;*/
+/*}*/
 
-.AppHeader li a:hover {
-    background-color: #111111;
-}
+/*.AppHeader li a:hover {*/
+    /*background-color: #111111;*/
+/*}*/
 
 .AppFooter p {
     font-size: 1.5em;
@@ -75,40 +75,39 @@ footer {
 }
 
 .AppMenu {
-    float: left;
     display: block;
     margin: 20px;
 }
 
 
-.AppMenu ul {
-    display: inline-block;
-    list-style-type: none;
-    overflow: hidden;
-    background-color: #333333;
-    text-align: left;
-    padding: 0;
-    width: fit-content;
-}
+/*.AppMenu ul {*/
+    /*display: inline-block;*/
+    /*list-style-type: none;*/
+    /*overflow: hidden;*/
+    /*background-color: #333333;*/
+    /*text-align: left;*/
+    /*padding: 0;*/
+    /*width: fit-content;*/
+/*}*/
 
-.AppMenu li {
-    padding: 16px;
-}
+/*.AppMenu li {*/
+    /*padding: 16px;*/
+/*}*/
 
-.AppMenu li a {
-    color: white;
-    text-align: left;
-    text-decoration: none;
-}
+/*.AppMenu li a {*/
+    /*color: white;*/
+    /*text-align: left;*/
+    /*text-decoration: none;*/
+/*}*/
 
-.AppMenu li:hover {
-    background-color: #111111;
-}
+/*.AppMenu li:hover {*/
+    /*background-color: #111111;*/
+/*}*/
 
-.PageContent {
-    display:inline-block;
-    float: right;
-    margin: 20px;
-    padding: 20px;
+/*.PageContent {*/
+    /*display:inline-block;*/
+    /*float: right;*/
+    /*margin: 20px;*/
+    /*padding: 20px;*/
 
-}
+/*}*/
