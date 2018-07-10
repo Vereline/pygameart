@@ -3,8 +3,6 @@ from django.contrib import admin
 # Register your models here.
 from .models import Art
 from django.utils.html import mark_safe
-import os
-from opengameart.settings import BASE_DIR
 
 
 class ArtAdmin(admin.ModelAdmin):
