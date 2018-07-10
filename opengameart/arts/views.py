@@ -65,5 +65,6 @@ class ArtDelete(DeleteView):
     fields = ('title', 'description', 'file',)
 
 
+@login_required
 def load_sandbox(request):
     return render(request, 'sandbox.html')

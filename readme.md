@@ -76,6 +76,9 @@ User:
 Test_user
 testpassword
 
+User:non_admin
+Pass:12345678a
+
 ### Django shell
 python manage.py shell
 

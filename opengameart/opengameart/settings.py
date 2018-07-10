@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'corsheaders',  # A Django App that adds CORS (Cross-Origin Resource Sharing) headers to responses.
 
     'arts',
+    'accounts',
 
 ]
 
@@ -147,3 +148,9 @@ REST_FRAMEWORK = {
 CORS_ORIGIN_WHITELIST = (
     'localhost:3000/'
 )  # default port for React
+
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
+
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")

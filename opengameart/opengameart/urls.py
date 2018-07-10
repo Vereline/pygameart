@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls import url
-from django.views import generic
+from django.views.generic import TemplateView
 from opengameart.settings import MEDIA_ROOT, MEDIA_URL, DEBUG
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
@@ -45,15 +45,15 @@ class EchoView(views.APIView):
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('arts/', include('arts.urls')),
-    url(r'^$', generic.RedirectView.as_view(url='/api/', permanent=False)),
+    # url(r'^$', generic.RedirectView.as_view(url='/api/', permanent=False)),
+    path('', TemplateView.as_view(template_name='home.html'), name='home'),
+    path('accounts/', include('accounts.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
     url(r'^api/$', get_schema_view()),
     url(r'^api/echo/$', EchoView.as_view()),
     url(r'^api/auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/auth/token/obtain/$', TokenObtainPairView.as_view()),
     url(r'^api/auth/token/refresh/$', TokenRefreshView.as_view()),
-    url(r'^accounts/login/$', login, name='login'),
-    url(r'^accounts/logout/$', logout, name='logout'),
-
 ]
 
 urlpatterns += staticfiles_urlpatterns()
