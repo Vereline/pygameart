@@ -3,12 +3,14 @@ from django.contrib import admin
 # Register your models here.
 from .models import Art
 from django.utils.html import mark_safe
+import os
+from opengameart.settings import BASE_DIR
 
 
 class ArtAdmin(admin.ModelAdmin):
     model = Art
-    list_display = ('title', 'file_id', 'id', 'file_path', 'likes', 'creation_date')
-    fields = ('title', 'description', 'file', 'display_image_field', 'likes')
+    list_display = ('title', 'file_id', 'id', 'file_path', 'likes', 'creation_date', 'owner_id')
+    fields = ('title', 'description', 'file', 'display_image_field', 'likes', 'owner_id')
     readonly_fields = ['display_image_field']
 
     def display_image_field(self, obj):

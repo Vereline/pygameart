@@ -27,6 +27,7 @@ class Art(models.Model):
     file = models.ImageField(upload_to=image_directory_path, storage=image_storage, null=True, blank=True)
     creation_date = models.DateTimeField(auto_now_add=True)
     likes = models.IntegerField(default=0)
+    owner_id = models.CharField(default="", max_length=255)
 
     def __str__(self):
         """A string representation of the model."""
