@@ -104,10 +104,7 @@ footer {
     /*background-color: #111111;*/
 /*}*/
 
-/*.PageContent {*/
-    /*display:inline-block;*/
-    /*float: right;*/
-    /*margin: 20px;*/
-    /*padding: 20px;*/
-
-/*}*/
+.PageContent {
+    margin: 20px;
+    padding: 20px;
+}
