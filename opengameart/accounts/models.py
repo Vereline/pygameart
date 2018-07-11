@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
+from arts.models import Art
 
 # Create your models here.
 image_storage = FileSystemStorage(
@@ -31,6 +32,7 @@ class ArtUser(models.Model):
 
     user_id = models.CharField(default="", max_length=255)
     location = models.CharField(max_length=255, default="", null=True)
+    birth_date = models.DateField(null=True, blank=True)
     description = models.TextField()
     art_direction = models.CharField(max_length=255, choices=ART_DIRECTION, default=art)
     user_avatar = models.ImageField(upload_to=image_directory_path, storage=image_storage, null=True, blank=True)
@@ -56,6 +58,12 @@ class ArtUser(models.Model):
 
         super(ArtUser, self).save(*args, **kwargs)
 
+    def get_user_info(self):
+        return User.objects.get(id=int(self.user_id)).__dict__
+
+    def get_username(self):
+        return self.get_user_info()['username']
+
 
 def get_id_by_path(file_path):
     import hashlib
@@ -67,3 +75,13 @@ def get_id_by_path(file_path):
     except Exception as e:
         print('{}, {}'.format(type(e), e))
     return art_id
+
+
+class ArtPost(models.Model):
+    user = models.ForeignKey(ArtUser, on_delete=models.CASCADE)
+    art = models.ForeignKey(Art, on_delete=models.CASCADE)
+
+    def __str__(self):
+        title = self.art.title
+        author = User.objects.get(id=int(self.user.user_id)).username
+        return '{author}: {title}'.format(title=title, author=author)

@@ -10,6 +10,7 @@ class ArtSerializer(serializers.ModelSerializer):
             'description',
             'creation_date',
             'likes',
-            'file_path'
+            'file_path',
+            'file'
         )
         model = Art

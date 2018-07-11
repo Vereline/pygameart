@@ -25,7 +25,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-
+from accounts.views import home
 from rest_framework import views, serializers, status
 from rest_framework.response import Response
 from django.contrib.auth.views import login, logout
@@ -46,7 +46,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('arts/', include('arts.urls')),
     # url(r'^$', generic.RedirectView.as_view(url='/api/', permanent=False)),
-    path('', TemplateView.as_view(template_name='home.html'), name='home'),
+    # path('', TemplateView.as_view(template_name='home.html'), name='home'),
+    path('', home, name='home'),
     path('accounts/', include('accounts.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     url(r'^api/$', get_schema_view()),
