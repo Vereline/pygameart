@@ -11,20 +11,24 @@ from .forms import ArtForm
 import os
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 
 
+@method_decorator(staff_member_required, name='dispatch')
 @method_decorator(login_required, name='dispatch')
 class ListArt(generics.ListCreateAPIView):
     queryset = Art.objects.all()
     serializer_class = ArtSerializer
 
 
+@method_decorator(staff_member_required, name='dispatch')
 @method_decorator(login_required, name='dispatch')
 class DetailArt(generics.RetrieveUpdateDestroyAPIView):
     queryset = Art.objects.all()
     serializer_class = ArtSerializer
 
 
+@staff_member_required
 @login_required
 def image_view(request, pk):
     art = get_object_or_404(Art, pk)
@@ -68,3 +72,7 @@ class ArtDelete(DeleteView):
 @login_required
 def load_sandbox(request):
     return render(request, 'sandbox.html')
+
+
+def about_page(request):
+    return render(request, 'about.html')

@@ -85,3 +85,5 @@ class ArtPost(models.Model):
         title = self.art.title
         author = User.objects.get(id=int(self.user.user_id)).username
         return '{author}: {title}'.format(title=title, author=author)
+
+# add later models for TxtPost, MusicPost, etc

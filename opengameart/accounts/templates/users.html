@@ -1,10 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block pagetitle %}Configure account{% endblock %}
+
+{% block content %}
+    <h1>Here you may configure your account</h1>
+    <h1> This form is not configured and tested</h1>
+    <form action="{% url 'configure_user' user.id %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>Username</p>
+        {{ form.username }}
+        <p>Password</p>
+        {{ form.password }}
+        <p>Email</p>
+        {{ form.email }}
+
+        <p>Birth Date</p>
+        {{ form.birth_date }}
+        <p>Art direction</p>
+        {{ form.art_direction }}
+        <p>Description</p>
+        {{ form.description }}
+        <p>User Avatar</p>
+        {{ form.user_avatar }}<br>
+        <input type="submit" class="btn btn-dark" value="Submit" />
+    </form>
+{% endblock %}

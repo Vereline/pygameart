@@ -14,6 +14,7 @@ from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import get_object_or_404
+from django.contrib.admin.views.decorators import staff_member_required
 
 
 class SignUp(generic.CreateView):
@@ -23,6 +24,7 @@ class SignUp(generic.CreateView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(staff_member_required, name='dispatch')
 class ListUser(generics.ListCreateAPIView):
     queryset = ArtUser.objects.all()
     serializer_class = ArtUserSerializer
@@ -44,9 +46,10 @@ def home(request):
     return render(request, 'home.html', {'numbers': numbers})
 
 
+@method_decorator(login_required, name='dispatch')
 class UserArtPostView(APIView):
     """
-    A class based view for creating and fetching user arts
+    A class based view for creating and fetching ALL user arts
     """
     renderer_classes = (TemplateHTMLRenderer,)
     template_name = 'post.html'
@@ -77,26 +80,10 @@ class UserArtPostView(APIView):
                         status=status.HTTP_400_BAD_REQUEST)
 
 
-# class CurrentUserArtPostView(generics.ListAPIView):
-#     serializer_class = ArtPostSerializer
-#
-#     # renderer_classes = (TemplateHTMLRenderer,)
-#     # template_name = 'post.html'
-#
-#     def get_queryset(self):
-#         """
-#         This view should return a list of all the posts for
-#         the user as determined by the primary key(pk) portion of the URL.
-#         """
-#         pk = self.kwargs['pk']
-#         art_posts = ArtPost.objects.filter(user__user_id=pk)
-#         serializer = ArtPostSerializer(art_posts, many=True)
-#         # return Response({'posts': serializer.data})
-#         return ArtPost.objects.filter(user__user_id=pk)
-
+@method_decorator(login_required, name='dispatch')
 class CurrentUserArtPostView(generics.ListAPIView):
     """
-    A view that returns a templated HTML representation of a given user.
+    A view that returns a template HTML representation of a given user.
     """
     renderer_classes = (TemplateHTMLRenderer,)
     template_name = 'post.html'
@@ -106,3 +93,8 @@ class CurrentUserArtPostView(generics.ListAPIView):
         art_posts = ArtPost.objects.filter(user__user_id=pk)
         serializer = ArtPostSerializer(art_posts, many=True)
         return Response({'posts': serializer.data})
+
+
+@login_required
+def configure_user(request, **kwargs):
+    return render(request, 'users.html')
