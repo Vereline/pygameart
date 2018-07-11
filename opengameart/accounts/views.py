@@ -3,7 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
-from django.views import generic
+from django.views import generic, View
 from .models import ArtUser, ArtPost
 from .serializers import ArtUserSerializer, ArtPostSerializer
 from django.utils.decorators import method_decorator
@@ -13,6 +13,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import get_object_or_404
 
 
 class SignUp(generic.CreateView):
@@ -47,8 +48,9 @@ class UserArtPostView(APIView):
     """
     A class based view for creating and fetching user arts
     """
-    renderer_classes = (TemplateHTMLRenderer, )
+    renderer_classes = (TemplateHTMLRenderer,)
     template_name = 'post.html'
+
     # renderer_classes = (JSONRenderer, )
 
     def get(self, format=None):
@@ -75,17 +77,32 @@ class UserArtPostView(APIView):
                         status=status.HTTP_400_BAD_REQUEST)
 
 
-def test_num_endless_scroll():
-    pass
+# class CurrentUserArtPostView(generics.ListAPIView):
+#     serializer_class = ArtPostSerializer
+#
+#     # renderer_classes = (TemplateHTMLRenderer,)
+#     # template_name = 'post.html'
+#
+#     def get_queryset(self):
+#         """
+#         This view should return a list of all the posts for
+#         the user as determined by the primary key(pk) portion of the URL.
+#         """
+#         pk = self.kwargs['pk']
+#         art_posts = ArtPost.objects.filter(user__user_id=pk)
+#         serializer = ArtPostSerializer(art_posts, many=True)
+#         # return Response({'posts': serializer.data})
+#         return ArtPost.objects.filter(user__user_id=pk)
 
+class CurrentUserArtPostView(generics.ListAPIView):
+    """
+    A view that returns a templated HTML representation of a given user.
+    """
+    renderer_classes = (TemplateHTMLRenderer,)
+    template_name = 'post.html'
 
-def test_post_endless_scroll():
-    pass
-
-
-def get_only_users_posts():
-    pass
-
-
-def get_all_users_posts():
-    pass
+    def get(self, request, *args, **kwargs):
+        pk = self.kwargs['pk']
+        art_posts = ArtPost.objects.filter(user__user_id=pk)
+        serializer = ArtPostSerializer(art_posts, many=True)
+        return Response({'posts': serializer.data})
