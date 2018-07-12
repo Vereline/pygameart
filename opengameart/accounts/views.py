@@ -111,7 +111,8 @@ def configure_user(request, pk):
         user_form = UserUpdateForm(request.POST, instance=request.user)
         if art_user_form.is_valid() and user_form.is_valid():
             current_user = ArtUser.objects.get(user_id=pk)
-            current_user.user_avatar = art_user_form.cleaned_data['user_avatar']
+            if art_user_form.cleaned_data['user_avatar']:
+                current_user.user_avatar = art_user_form.cleaned_data['user_avatar']
             current_user.description = art_user_form.cleaned_data['description']
             current_user.location = art_user_form.cleaned_data['location']
             current_user.birth_date = art_user_form.cleaned_data['birth_date']
