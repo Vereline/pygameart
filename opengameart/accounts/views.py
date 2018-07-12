@@ -130,7 +130,6 @@ def configure_user(request, pk):
     else:
         art_user = get_object_or_404(ArtUser, user_id=pk)
         art_user_form = ArtUserForm(instance=art_user)
-        print(art_user.user_avatar.url)
         user = get_object_or_404(User, id=pk)
         user_form = UserUpdateForm(instance=user)
         return render(request, 'users.html', {'art_user_form': art_user_form, 'user_form': user_form})
