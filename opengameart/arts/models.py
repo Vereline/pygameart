@@ -33,22 +33,23 @@ class Art(models.Model):
         """A string representation of the model."""
         return self.title
 
-    def save(self, *args, **kwargs):
+    def save(self, update_picture=True, *args, **kwargs):
         """ Save Art model."""
         file_name = self.file.name
         try:
-            img = Image.open(self.file)  # Creates an instance of PIL Image class - PIL does the verification of file
+            if update_picture:
+                img = Image.open(self.file)  # Creates an instance of PIL Image class - PIL does the verification of file
 
-            # img_copy = copy.copy(img)
-            # if not valid_img(img_copy):
-            #     raise Exception('An invalid image was detected when attempting to save an Art!')
+                # img_copy = copy.copy(img)
+                # if not valid_img(img_copy):
+                #     raise Exception('An invalid image was detected when attempting to save an Art!')
 
-            art_id = get_id_by_path(file_name)
-            file_name = file_name.split('.')
-            # Rename image file into unique value
-            self.file_id = art_id
-            self.file.name = self.file_id + '.' + file_name[-1]
-            self.file_path = '/images/loaded/' + self.file.name
+                art_id = get_id_by_path(file_name)
+                file_name = file_name.split('.')
+                # Rename image file into unique value
+                self.file_id = art_id
+                self.file.name = self.file_id + '.' + file_name[-1]
+                self.file_path = '/images/loaded/' + self.file.name
 
         except Exception as e:
             print("Error trying to save model: saving image failed: " + str(e))

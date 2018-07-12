@@ -25,6 +25,7 @@
         {% for post in posts %}
             <div class="infinite-item">
                 <p>{{ post.user.get_username }}</p>
+                <img src="{{ post.user.user_avatar }}"/>
                 <p>{{ post.art.title }}</p>
                 <img src="{{ post.art.file }}"/>
                 {% if current_user %}

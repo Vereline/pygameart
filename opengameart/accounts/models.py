@@ -42,15 +42,16 @@ class ArtUser(models.Model):
         current_user = User.objects.get(id=int(self.user_id))
         return current_user.username
 
-    def save(self, *args, **kwargs):
+    def save(self, update_picture=True, *args, **kwargs):
         """ Save Art model."""
         file_name = self.user_avatar.name
         try:
-            art_user_id = get_id_by_path(file_name)
-            file_name = file_name.split('.')
-            # Rename image file into unique value
-            self.file_id = art_user_id
-            self.user_avatar.name = self.file_id + '.' + file_name[-1]
+            if update_picture:
+                art_user_id = get_id_by_path(file_name)
+                file_name = file_name.split('.')
+                # Rename image file into unique value
+                self.file_id = art_user_id
+                self.user_avatar.name = self.file_id + '.' + file_name[-1]
 
         except Exception as e:
             print("Error trying to save model: saving image failed: " + str(e))
