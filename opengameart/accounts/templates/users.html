@@ -7,21 +7,42 @@
     <h1> This form is not configured and tested</h1>
     <form action="{% url 'configure_user' user.id %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <p>Username</p>
-        {{ form.username }}
-        <p>Password</p>
-        {{ form.password }}
-        <p>Email</p>
-        {{ form.email }}
+        <div class="card-deck">
+            <div class="card">
+                <div class="card-body text-center">
+                    <img src="{{ art_user_form.user_avatar.url }}" />
+                    <p>Avatar</p>
+                    {{ art_user_form.user_avatar }}
 
-        <p>Birth Date</p>
-        {{ form.birth_date }}
-        <p>Art direction</p>
-        {{ form.art_direction }}
-        <p>Description</p>
-        {{ form.description }}
-        <p>User Avatar</p>
-        {{ form.user_avatar }}<br>
+                    <p>Username</p>
+                    {{ user_form.username }}
+                    <p>First Name</p>
+                    {{ user_form.first_name }}
+                    <p>Last Name</p>
+                    {{ user_form.last_name }}
+                    <p>Email</p>
+                    {{ user_form.email }}
+
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body text-center">
+                    <p>Location</p>
+                    {{ art_user_form.location }}
+                    <p>Birth Date</p>
+                    {{ art_user_form.birth_date }}
+                    <p>Art Direction</p>
+                    {{ art_user_form.art_direction }}
+                    <p>Description</p>
+                    {{ art_user_form.description }}
+                </div>
+            </div>
+        </div>
+{#        <p>User Data</p>#}
+{#        {{ user_form }}#}
+{#        <br>#}
+{#        {{ art_user_form }}#}
+{#        <br>#}
         <input type="submit" class="btn btn-dark" value="Submit" />
     </form>
 {% endblock %}

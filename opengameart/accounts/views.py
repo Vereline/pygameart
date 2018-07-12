@@ -1,11 +1,15 @@
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response, redirect
 
 # Create your views here.
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from django.template import RequestContext
+from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views import generic, View
 from .models import ArtUser, ArtPost
 from .serializers import ArtUserSerializer, ArtPostSerializer
+from .forms import ArtUserForm, UserUpdateForm
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from rest_framework import generics, status
@@ -89,12 +93,43 @@ class CurrentUserArtPostView(generics.ListAPIView):
     template_name = 'post.html'
 
     def get(self, request, *args, **kwargs):
+        current_user = False
         pk = self.kwargs['pk']
+        current_user_id = request.user.id
+        if pk == current_user_id:
+            current_user = True
         art_posts = ArtPost.objects.filter(user__user_id=pk)
         serializer = ArtPostSerializer(art_posts, many=True)
-        return Response({'posts': serializer.data})
+        return Response({'posts': serializer.data, 'current_user': current_user})
 
 
 @login_required
-def configure_user(request, **kwargs):
-    return render(request, 'users.html')
+def configure_user(request, pk):
+    """ Change user configuration"""
+    if request.method == 'POST':
+        art_user_form = ArtUserForm(request.POST, request.FILES)
+        user_form = UserUpdateForm(request.POST, instance=request.user)
+        if art_user_form.is_valid() and user_form.is_valid():
+            current_user = ArtUser.objects.get(user_id=pk)
+            current_user.user_avatar = art_user_form.cleaned_data['user_avatar']
+            current_user.description = art_user_form.cleaned_data['description']
+            current_user.location = art_user_form.cleaned_data['location']
+            current_user.birth_date = art_user_form.cleaned_data['birth_date']
+            current_user.art_direction = art_user_form.cleaned_data['art_direction']
+            current_user.save()
+
+            user = User.objects.get(id=pk)
+            user.first_name = user_form.cleaned_data['first_name']
+            user.last_name = user_form.cleaned_data['last_name']
+            user.username = user_form.cleaned_data['username']
+            user.email = user_form.cleaned_data['email']
+            user.save()
+
+            return HttpResponseRedirect('/')
+    else:
+        art_user = get_object_or_404(ArtUser, user_id=pk)
+        art_user_form = ArtUserForm(instance=art_user)
+        print(art_user.user_avatar.url)
+        user = get_object_or_404(User, id=pk)
+        user_form = UserUpdateForm(instance=user)
+        return render(request, 'users.html', {'art_user_form': art_user_form, 'user_form': user_form})
