@@ -18,24 +18,16 @@
 
 {% block content %}
     <div class="infinite-container">
-        {% if current_user %}
-            <a href={% url 'add_art' %}>Add art</a>
-        {% endif %}
-        {% if posts %}
-        {% for post in posts %}
+        {% if friends %}
+        {% for friend in friends %}
             <div class="infinite-item">
-                <img src="{{ post.user.user_avatar }}"/>
-                <p>{{ post.user.get_username }}</p>
-                <p>{{ post.art.title }}</p>
-                <img src="{{ post.art.file }}"/>
-                {% if current_user %}
-                    <a href={% url 'delete_art' post.art.id %}>Delete art</a>
-                {% endif %}
+                <img src="{{ friend.user.user_avatar }}"/>
+                <p>{{ friend.user.get_username }}</p>
             </div>
-
+            <a href="#">Add as a friend</a>
         {% endfor %}
         {% else %}
-            <p>Sorry, you have no posts</p>
+            <p>Sorry, you have no friends at the moment</p>
         {% endif %}
     </div>
 {% endblock %}

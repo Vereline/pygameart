@@ -28,7 +28,7 @@
                   {# make ajax query instead simple travelling through pages here #}
                 </ul>
 
-                <form class="form-inline float-md-right" action="">
+                <form class="form-inline float-md-right" action="{% url 'search_users' %}">
                     <input class="form-control mr-sm-2" type="text" placeholder="Search">
                     <button class="btn btn-success" type="submit">Search</button>
                 </form>
@@ -60,7 +60,7 @@
                               <span class="badge badge-success badge-pill">0</span>
                           </li>
                           <li class="list-group-item d-flex justify-content-between align-items-center bg-dark">
-                              <a class="nav-link" href="#">My friends</a>
+                              <a class="nav-link" href="{% url 'search_users' %}">My friends</a>
                               <span class="badge badge-success badge-pill">0</span>
                           </li>
                           <li class="list-group-item d-flex justify-content-between align-items-center bg-dark">

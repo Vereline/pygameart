@@ -135,3 +135,8 @@ def configure_user(request, pk):
         user = get_object_or_404(User, id=pk)
         user_form = UserUpdateForm(instance=user)
         return render(request, 'users.html', {'art_user_form': art_user_form, 'user_form': user_form})
+
+
+@login_required
+def search_users(request, **kwargs):
+    return render(request, 'friends.html')
