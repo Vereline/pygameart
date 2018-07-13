@@ -28,6 +28,7 @@
                 <p>{{ post.user.get_username }}</p>
                 <p>{{ post.art.title }}</p>
                 <img src="{{ post.art.file }}"/>
+                <p>Likes: </p><span>{{ post.art.likes }}</span>
                 {% if current_user %}
                     <a href={% url 'delete_art' post.art.id %}>Delete art</a>
                 {% endif %}

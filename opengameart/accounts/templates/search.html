@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block pagetitle %}Search results{% endblock %}
+
+{% block javascript %}
+  <script>
+    var infinite = new Waypoint.Infinite({
+      element: $('.infinite-container')[0],
+      onBeforePageLoad: function () {
+        $('.loading').show();
+      },
+      onAfterPageLoad: function ($items) {
+        $('.loading').hide();
+      }
+    });
+  </script>
+{% endblock %}
+
+{% block content %}
+    <div class="infinite-container">
+        <p>Found friends:</p>
+        {% if friends %}
+        {% for friend in friends %}
+            <div class="infinite-item">
+                <img src="{{ friend.user.user_avatar }}"/>
+                <p>{{ friend.user.get_username }}</p>
+            </div>
+            <a href="#">Add as a friend</a>
+        {% endfor %}
+        {% else %}
+            <p>Sorry, I didn't find anything</p>
+        {% endif %}
+    </div>
+    <div class="infinite-container">
+        <p>Found arts:</p>
+        {% if arts %}
+        {% for art in arts %}
+            <div class="infinite-item">
+                <img src="{{ art.file.url }}"/>
+                <p>{{ art.title }}</p>
+            </div>
+            <a href="#">Add as an art</a>
+        {% endfor %}
+        {% else %}
+            <p>Sorry, I didn't find anything</p>
+        {% endif %}
+    </div>
+{% endblock %}

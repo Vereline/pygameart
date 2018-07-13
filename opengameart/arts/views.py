@@ -5,6 +5,7 @@ from django.views.generic.edit import DeleteView
 from django.urls import reverse_lazy
 # Create your views here.
 
+from accounts.models import ArtPost, ArtUser
 from .models import Art
 from .serializers import ArtSerializer
 from .forms import ArtForm
@@ -50,8 +51,11 @@ def get_art(request):
                       description=form.cleaned_data['description'],
                       file=form.cleaned_data['file'])
             art.save()
+            current_art_user = ArtUser.objects.get(user_id=request.user.id)
+            art_post = ArtPost(art_id=art.id, user_id=current_art_user.id)
+            art_post.save()
             # redirect to a new URL:
-            return HttpResponseRedirect('/arts/')
+            return HttpResponseRedirect('/')
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -62,11 +66,23 @@ def get_art(request):
 @method_decorator(login_required, name='dispatch')
 class ArtDelete(DeleteView):
     """ Delete image by id """
-    success_url = reverse_lazy('get_list_art')
+    success_url = reverse_lazy('art_posts_list')
     template_name = "delete_art.html"
     model = Art
     form_class = ArtForm
     fields = ('title', 'description', 'file',)
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Call the delete() method on the fetched object and then redirect to the
+        success URL.
+        """
+        self.object = self.get_object()
+        art_post = ArtPost.objects.get(art_id=self.object.id)
+        art_post.delete()
+        success_url = self.get_success_url()
+        self.object.delete()
+        return HttpResponseRedirect(success_url)
 
 
 @login_required

@@ -2,14 +2,19 @@
 {#{% load static %}#}
 {% block title %}Delete Art{% endblock %}
 {% block content %}
-    <form method="post">
-        {% csrf_token %}
-        <p>Are you sure you want to delete "{{ object }}"?</p>
-        <p>Title</p>
-        <p>{{ object.title }}</p>
-        <p>Description</p>
-        <p>{{ object.description }}</p>
-        <img src="{{ object.file.url }}"><br>
-    <input type="submit" class="btn btn-dark" value="Confirm" />
-</form>
+    <div class="card-deck">
+        <div class="card">
+            <div class="card-body text-center">
+                <form method="post">
+                    {% csrf_token %}
+                    <p>Are you sure you want to delete "{{ object }}"?</p>
+                    <h3>Title: </h3><span>{{ object.title }}</span>
+                    <h3>Description: </h3><span>{{ object.description }}</span><br>
+                    <img src="{{ object.file.url }}"><br>
+                    <input type="submit" class="btn btn-dark" value="Confirm" />
+                </form>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
