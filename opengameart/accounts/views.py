@@ -1,13 +1,13 @@
-from django.shortcuts import render, render_to_response, redirect
+from django.shortcuts import render
 
 # Create your views here.
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.template import RequestContext
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
-from django.views import generic, View
+from django.views import generic
 from .models import ArtUser, ArtPost
+from arts.models import Art
 from .serializers import ArtUserSerializer, ArtPostSerializer
 from .forms import ArtUserForm, UserUpdateForm
 from django.utils.decorators import method_decorator
@@ -145,7 +145,12 @@ def configure_user(request, pk):
 
 
 @login_required
-def search_users(request, **kwargs):
+def search_users(request):
+    if request.method == "GET":
+        search_query = request.GET.get('search_field')
+        users = User.objects.filter(username__contains=search_query).filter(is_staff=False)
+        arts = Art.objects.filter(title__contains=search_query)
+        return render(request, 'search.html', {'friends': users, 'arts': arts})
     return render(request, 'search.html')
 
 

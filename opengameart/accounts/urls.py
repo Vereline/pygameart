@@ -12,7 +12,7 @@ urlpatterns = [
     url(r'^posts/$', views.UserArtPostView.as_view(), name='art_posts_list'),
     path('posts/<int:pk>', views.CurrentUserArtPostView.as_view(), name='art_posts_list_current'),
     path('users/<int:pk>/', views.configure_user, name='configure_user'),
-    path('search/', views.search_users, name='search_users'),
+    url('search/$', views.search_users, name='search_users'),
     path('friends/', views.show_friends, name='show_friends'),
     url(r'^password/change/$', password_change, {
         'template_name': 'registration/password_change_form.html'},
@@ -21,3 +21,4 @@ urlpatterns = [
         {'template_name': 'registration/password_change_done.html'},
         name='password_change_done'),
 ]
+# path for post, url for get are suitable

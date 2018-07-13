@@ -18,3 +18,7 @@ class UserUpdateForm(forms.ModelForm):
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', )
         exclude = ('password', )
+
+
+class SearchForm(forms.Form):
+    search_field = forms.CharField(max_length=255)

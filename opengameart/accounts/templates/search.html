@@ -22,8 +22,8 @@
         {% if friends %}
         {% for friend in friends %}
             <div class="infinite-item">
-                <img src="{{ friend.user.user_avatar }}"/>
-                <p>{{ friend.user.get_username }}</p>
+{#                <img src="{{ friend.user.user_avatar }}"/>#}
+                <p>{{ friend.username }}</p>
             </div>
             <a href="#">Add as a friend</a>
         {% endfor %}
