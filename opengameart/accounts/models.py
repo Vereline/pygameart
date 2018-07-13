@@ -44,9 +44,9 @@ class ArtUser(models.Model):
 
     def save(self, update_picture=True, *args, **kwargs):
         """ Save Art model."""
-        file_name = self.user_avatar.name
         try:
             if update_picture:
+                file_name = self.user_avatar.name
                 art_user_id = get_id_by_path(file_name)
                 file_name = file_name.split('.')
                 # Rename image file into unique value

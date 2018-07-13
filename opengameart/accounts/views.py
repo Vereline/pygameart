@@ -26,6 +26,13 @@ class SignUp(generic.CreateView):
     success_url = reverse_lazy('login')
     template_name = 'signup.html'
 
+    def form_valid(self, form):
+        """If the form is valid, save the associated model."""
+        self.object = form.save()
+        art_user = ArtUser(user_id=self.object.id, update_picture=False)
+        art_user.save()
+        return super().form_valid(form)
+
 
 @method_decorator(login_required, name='dispatch')
 @method_decorator(staff_member_required, name='dispatch')
@@ -139,4 +146,9 @@ def configure_user(request, pk):
 
 @login_required
 def search_users(request, **kwargs):
+    return render(request, 'search.html')
+
+
+@login_required
+def show_friends(request, **kwargs):
     return render(request, 'friends.html')

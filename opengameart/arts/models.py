@@ -35,9 +35,9 @@ class Art(models.Model):
 
     def save(self, update_picture=True, *args, **kwargs):
         """ Save Art model."""
-        file_name = self.file.name
         try:
             if update_picture:
+                file_name = self.file.name
                 img = Image.open(self.file)  # Creates an instance of PIL Image class - PIL does the verification of file
 
                 # img_copy = copy.copy(img)

@@ -79,6 +79,8 @@ testpassword
 User:non_admin
 Pass:12345678a
 
+User:second_user
+Pass:123second
 ### Django shell
 python manage.py shell
 
