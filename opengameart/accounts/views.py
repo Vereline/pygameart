@@ -29,8 +29,8 @@ class SignUp(generic.CreateView):
     def form_valid(self, form):
         """If the form is valid, save the associated model."""
         self.object = form.save()
-        art_user = ArtUser(user_id=self.object.id, update_picture=False)
-        art_user.save()
+        art_user = ArtUser(user_id=self.object.id)
+        art_user.save(update_picture=False)
         return super().form_valid(form)
 
 
