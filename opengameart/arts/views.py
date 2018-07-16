@@ -90,5 +90,10 @@ def load_sandbox(request):
     return render(request, 'sandbox.html')
 
 
+@login_required
+def load_gallery(request):
+    return render(request, 'gallery.html')
+
+
 def about_page(request):
     return render(request, 'about.html')

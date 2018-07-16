@@ -1,0 +1,81 @@
+{%  extends 'base.html' %}
+{% load static %}
+{% block stylesheet %}
+<style>
+    #wrapper{
+      width: 87%;
+      margin: auto;
+      padding: 0 10px;
+      background-color: rgba(255,255,255,0.9);
+      overflow: hidden;
+      box-shadow: 0 0 5px #eee;
+    }
+
+    a {text-decoration: none;}
+
+    li {
+      display: inline;
+      padding: 0px 5px 5px 0px;
+    }
+
+    #main-image{
+      width: 540px;
+      overflow: hidden;
+      margin: 0 auto
+    }
+
+    #main-image img {
+      max-height: 400px;
+      width: auto;
+    }
+
+    .thumbs{text-align: center;}
+</style>
+
+{% endblock stylesheet %}
+
+{% block content %}
+
+<div id="wrapper">
+
+<div id="main-image"><img src="http://farm8.staticflickr.com/7118/7422821064_3f3bf8c057_z.jpg" /></div>
+
+<div id="thumbs">
+    <ul class="thumbs">
+        <li style="list-style-type: none;">
+            <a class="thumb" name="thumb" href="http://farm8.staticflickr.com/7118/7422821064_3f3bf8c057_z.jpg" title="">
+    	    	<img src="http://farm8.staticflickr.com/7118/7422821064_3f3bf8c057_t.jpg" alt="" />
+            </a>
+        </li>
+        <li style="list-style-type: none;">
+            <a class="thumb" name="thumb" href="http://farm8.staticflickr.com/7262/7422665420_bdd63362c1_z.jpg" title="">
+    	    	<img src="http://farm8.staticflickr.com/7262/7422665420_bdd63362c1_t.jpg" alt="" />
+            </a>
+        </li>
+        <li style="list-style-type: none;">
+            <a class="thumb" name="thumb" href="http://farm9.staticflickr.com/8156/7420558992_f0bcb782f6_z.jpg" title="">
+    	    	<img src="http://farm9.staticflickr.com/8156/7420558992_f0bcb782f6_t.jpg" alt="" />
+            </a>
+        </li>
+    </ul>
+</div>
+
+</div>
+
+{% endblock %}
+
+{%  block javascript %}
+
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+            jQuery(".thumb").click(function() {
+
+                  var big_url = jQuery(this).attr("href");
+                  jQuery("#main-image img").attr("src", big_url);
+                return false;
+            });
+
+        });
+
+    </script>
+{% endblock javascript %}
