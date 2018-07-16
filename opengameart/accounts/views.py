@@ -3,7 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse_lazy
 from django.views import generic
 from .models import ArtUser, ArtPost
@@ -157,3 +157,14 @@ def search_users(request):
 @login_required
 def show_friends(request, **kwargs):
     return render(request, 'friends.html')
+
+
+@login_required
+def count_posts(request):
+    if request.method == "GET":
+        pk = int(request.GET.get('pk'))
+        art_user = ArtUser.objects.get(user_id=pk)
+        user_id = art_user.id
+        posts = ArtPost.objects.filter(user_id=user_id)
+        number = [post for post in posts].__len__()
+        return JsonResponse({'count_posts': number})

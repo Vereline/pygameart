@@ -20,5 +20,7 @@ urlpatterns = [
     url(r'^password/change/done/$', password_change_done,
         {'template_name': 'registration/password_change_done.html'},
         name='password_change_done'),
+
+    url(r'^ajax/count_posts/$', views.count_posts, name='count_posts'),
 ]
 # path for post, url for get are suitable
