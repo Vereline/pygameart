@@ -119,3 +119,10 @@ footer {
 .loading {
   background-color: #333;
 }
+
+#progress {
+    border-bottom: 4px solid #FFF;
+    width: 0;
+    position: fixed;
+    top: 0; left: 0;
+  }
