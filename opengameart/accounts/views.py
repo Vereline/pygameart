@@ -172,10 +172,6 @@ def count_posts(request):
 
 @login_required
 def like_post(request):
-<<<<<<< HEAD
     likes = 0
     liked = True
     return JsonResponse({'likes': likes, 'liked':liked})
-=======
-    pass
->>>>>>> b33cdae63a3b982980be611a56b525ce655123b9
