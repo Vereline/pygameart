@@ -168,3 +168,10 @@ def count_posts(request):
         posts = ArtPost.objects.filter(user_id=user_id)
         number = [post for post in posts].__len__()
         return JsonResponse({'count_posts': number})
+
+
+@login_required
+def like_post(request):
+    likes = 0
+    liked = True
+    return JsonResponse({'likes': likes, 'liked':liked})
