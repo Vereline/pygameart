@@ -22,5 +22,6 @@ urlpatterns = [
         name='password_change_done'),
 
     url(r'^ajax/count_posts/$', views.count_posts, name='count_posts'),
+    url('^ajax/like/$', views.like_post, name='like_post'),
 ]
 # path for post, url for get are suitable

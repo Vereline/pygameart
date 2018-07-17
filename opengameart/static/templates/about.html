@@ -3,5 +3,38 @@
 {% block title %}About{% endblock %}
 
 {% block content %}
-    <h1>This is about page</h1>
+    <h1>Welcome to PyGameArt!</h1>
+    <p>This website is created for artists, who want to create a unique awesome content</p>
+
+    <p>Here you may visit several sections:</p>
+    <ul>
+        <li>
+          {% if user.is_authenticated %}
+            <a href={% url 'art_posts_list_current' user.id %}>Art post section</a>, where you can add new art or delete existing one.
+          {% else %}
+            <a class="nav-link" href={% url 'login' %}>Art post section</a>, where you can add new art or delete existing one.
+          {% endif %}
+        </li>
+        <li>
+          {% if user.is_authenticated %}
+            <a href="{% url 'show_friends' %}">Friend list</a>, where you can manage your friends list and add new ones.
+        {% else %}
+            <a class="nav-link" href={% url 'login' %}>Friend list</a>, where you can manage your friends list and add new ones.
+          {% endif %}
+        </li>
+        <li>
+          {% if user.is_authenticated %}
+            <a href="{% url 'load_gallery' user.id %}">Gallery</a>, where all your pics may be watched properly.
+        {% else %}
+            <a class="nav-link" href={% url 'login' %}>Gallery</a>, where all your pics may be watched properly.
+          {% endif %}
+        </li>
+        <li>
+          {% if user.is_authenticated %}
+            <a href={% url 'configure_user' user.id %}>User configuration</a>, where you may configure your account.
+        {% else %}
+            <a class="nav-link" href={% url 'login' %}>User configuration</a>, where you may configure your account.
+          {% endif %}
+        </li>
+    </ul>
 {%  endblock %}
