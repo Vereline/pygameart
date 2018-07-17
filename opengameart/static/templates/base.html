@@ -3,14 +3,14 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>PyGameArt</title>
+        <title>{% block title %}PyGameArt{% endblock title %}</title>
         <link rel="shortcut icon" href="{%  static 'favicon.ico' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-4.1.1-dist/css/bootstrap.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-4.1.1-dist/css/bootstrap-grid.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-4.1.1-dist/css/bootstrap-reboot.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 
-        {% block stylesheet %}{% endblock %}
+        {% block stylesheet %}{% endblock stylesheet%}
 
     </head>
     <body>
@@ -53,7 +53,6 @@
                               <a class="nav-link" href={% url 'login' %}>My arts</a>
                               <span class="badge badge-success badge-pill">0</span>
                               {% endif %}
-
                           </li>
                           <li class="list-group-item d-flex justify-content-between align-items-center bg-dark">
                               <a class="nav-link" href="#">My music</a>
@@ -89,7 +88,7 @@
                 <div class="col-sm-8">
                     <div class="PageContent">
                         {% block content %}
-                        {% endblock %}
+                        {% endblock content%}
                     </div>
                 </div>
             </div>
@@ -113,7 +112,7 @@
 
         <script src="{% static 'js/app.js' %}"></script>
 
-        {% block javascript %}{% endblock %}
+        {% block javascript %}{% endblock javascript%}
         {% block js %}
             <script>
                 // ajax query to get current quantity of posts
@@ -134,6 +133,6 @@
                     {% endif %}
                 });
             </script>
-        {% endblock %}
+        {% endblock js%}
     </body>
 </html>
