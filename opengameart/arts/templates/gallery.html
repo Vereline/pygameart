@@ -15,7 +15,7 @@
 
     li {
       display: inline;
-      padding: 0px 5px 5px 0px;
+      padding: 0 5px 5px 0;
     }
 
     #main-image{
@@ -26,56 +26,114 @@
 
     #main-image img {
       max-height: 400px;
+      height: 300px;
       width: auto;
     }
-
+    .galleryImage{
+        width: 54px;
+        height: 30px;
+    }
     .thumbs{text-align: center;}
+
+    #thumbs li {border:none;}
+    #thumbs li.selected img {border: red solid 3px;}
+
+    .imageButton {display: inline;}
+
+    p.hidden-p {visibility: hidden;}
+
 </style>
 
 {% endblock stylesheet %}
 
 {% block content %}
+    {% if current_user %}
+        <a href={% url 'add_art' %}>Add art</a>
+    {% endif %}
 
-<div id="wrapper">
+    {% if not posts %}
+        <p>Sorry, you have no posts</p>
+    {% else %}
+        <div id="wrapper">
 
-<div id="main-image"><img src="http://farm8.staticflickr.com/7118/7422821064_3f3bf8c057_z.jpg" /></div>
+            <div id="main-image">
+                <img src="{{ first.art.file }}" />
+            </div>
 
-<div id="thumbs">
-    <ul class="thumbs">
-        <li style="list-style-type: none;">
-            <a class="thumb" name="thumb" href="http://farm8.staticflickr.com/7118/7422821064_3f3bf8c057_z.jpg" title="">
-    	    	<img src="http://farm8.staticflickr.com/7118/7422821064_3f3bf8c057_t.jpg" alt="" />
-            </a>
-        </li>
-        <li style="list-style-type: none;">
-            <a class="thumb" name="thumb" href="http://farm8.staticflickr.com/7262/7422665420_bdd63362c1_z.jpg" title="">
-    	    	<img src="http://farm8.staticflickr.com/7262/7422665420_bdd63362c1_t.jpg" alt="" />
-            </a>
-        </li>
-        <li style="list-style-type: none;">
-            <a class="thumb" name="thumb" href="http://farm9.staticflickr.com/8156/7420558992_f0bcb782f6_z.jpg" title="">
-    	    	<img src="http://farm9.staticflickr.com/8156/7420558992_f0bcb782f6_t.jpg" alt="" />
-            </a>
-        </li>
-    </ul>
-</div>
+            <div id="thumbs">
+                <ul class="thumbs">
+                    {% for post in posts %}
+                        <li style="list-style-type: none;">
+                            <a class="thumb" name="thumb" href="{{ post.art.file }}" title="">
+                                <img class='galleryImage' src="{{ post.art.file }}" alt="" />
+                            </a>
+                        </li>
+                    {%  endfor %}
+                </ul>
+            </div>
 
-</div>
+            <div id="prevButton" class="imageButton">
+                <img src="{% static 'arrowLeftGrey.png' %}" alt="" />
+            </div>
+
+            <div id="nextButton" class="imageButton">
+                <img src="{% static 'arrowRightGrey.png' %}" alt="" />
+            </div>
+
+        </div>
+
+    {% endif %}
 
 {% endblock %}
 
 {%  block javascript %}
 
     <script type="text/javascript">
+        $(function() {
+            let current = $("div#thumbs li").first();
+            current.addClass('selected');
+            current.addClass('first');
+            let current_last = $("div#thumbs li").last();
+            current_last.addClass('last');
+        });
+
         jQuery(document).ready(function() {
             jQuery(".thumb").click(function() {
 
-                  var big_url = jQuery(this).attr("href");
+                  $('.selected').removeClass('selected');
+                  jQuery(this).parent().addClass('selected');
+                  let big_url = jQuery(this).attr("href");
                   jQuery("#main-image img").attr("src", big_url);
+
                 return false;
             });
 
         });
 
+        $(function() {
+            $('#nextButton').click(function(){
+                let current = $("div#thumbs li.selected");
+                if (!$(current).hasClass('last')){
+                    $(current).removeClass('selected');
+                    current = $(current).next('li');
+                    current.addClass('selected');
+
+                    let big_url = jQuery("a", current).attr("href");
+                    jQuery("#main-image img").attr("src", big_url);
+                }
+
+            });
+            $('#prevButton').click(function(){
+                let current = $("div#thumbs li.selected");
+                if (!$(current).hasClass('first')){
+                    $(current).removeClass('selected');
+                    current = $(current).prev('li');
+                    current.addClass('selected');
+
+                    let big_url = jQuery("a", current).attr("href");
+                    jQuery("#main-image img").attr("src", big_url);
+                }
+            });
+        });
     </script>
 {% endblock javascript %}

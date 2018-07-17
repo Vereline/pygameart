@@ -3,9 +3,11 @@ from rest_framework import generics
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic.edit import DeleteView
 from django.urls import reverse_lazy
-# Create your views here.
+from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.response import Response
 
 from accounts.models import ArtPost, ArtUser
+from accounts.serializers import ArtPostSerializer
 from .models import Art
 from .serializers import ArtSerializer
 from .forms import ArtForm
@@ -90,9 +92,23 @@ def load_sandbox(request):
     return render(request, 'sandbox.html')
 
 
-@login_required
-def load_gallery(request):
-    return render(request, 'gallery.html')
+@method_decorator(login_required, name='dispatch')
+class LoadGallery(generics.ListAPIView):
+    """
+    A view that returns a template HTML representation of a given user.
+    """
+    renderer_classes = (TemplateHTMLRenderer,)
+    template_name = 'gallery.html'
+
+    def get(self, request, *args, **kwargs):
+        current_user = False
+        pk = self.kwargs['pk']
+        current_user_id = request.user.id
+        if pk == current_user_id:
+            current_user = True
+        art_posts = ArtPost.objects.filter(user__user_id=pk)
+        serializer = ArtPostSerializer(art_posts, many=True)
+        return Response({'posts': serializer.data, 'current_user': current_user, 'first': serializer.data[0]})
 
 
 def about_page(request):
