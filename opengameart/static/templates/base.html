@@ -20,8 +20,8 @@
 
                 <ul class="navbar-nav">
                   <li  class="nav-item"><a class="nav-link" href={% url 'home' %}>Home</a></li>
-                  <li  class="nav-item"><a class="nav-link" href="#">News</a></li>
-                  <li  class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                  <li  class="nav-item"><a class="nav-link" href={% url 'news_page' %}>News</a></li>
+                  <li  class="nav-item"><a class="nav-link" href={% url 'contacts_page' %}>Contact</a></li>
                   <li  class="nav-item"><a class="nav-link" href={% url 'art_posts_list' %}>Popular Today</a></li>
                   <li  class="nav-item"><a class="nav-link" href={% url 'about_page' %}>About</a></li>
                   <li  class="nav-item"><a class="nav-link" href={% url 'load_sandbox' %}>Sandbox</a></li>
@@ -127,7 +127,7 @@
                         let url_id = "{% url 'count_posts' %}";
 
                         $.get(url_id, {'pk': user_id}, function(data){
-                            number = data.count_posts;
+                            number = data['count_posts'];
                             art_post_span.text(number);
                             art_gallery_span.text(number);
                         });
