@@ -15,7 +15,7 @@
     });
   </script>
   <script>
-    $( "button" ).click(function() {
+    $( "button[class~='like']" ).click(function() {
         let art_id = this.id;
         let art_post_span = $('div.infinite-item').find('span#'+art_id);
 
@@ -29,6 +29,25 @@
             liked = data['liked'];
             if (liked){
                 alert('already liked');
+            }
+            art_post_span.text(likes);
+        });
+    });
+
+    $( "button[class~='dislike']" ).click(function() {
+        let art_id = this.id;
+        let art_post_span = $('div.infinite-item').find('span#'+art_id);
+
+        let likes = 0;
+        let disliked = false;
+        let user_id = "{{ user.id }}";
+        let url_id = "{% url 'dislike_post' %}";
+
+        $.get(url_id, {'pk': user_id, 'art_pk': art_id}, function(data){
+            likes = data['likes'];
+            disliked = data['disliked'];
+            if (disliked){
+                alert('already disliked');
             }
             art_post_span.text(likes);
         });
@@ -55,7 +74,8 @@
                 <img src="{{ post.art.file }}"/>
                 <p>Likes: </p><span id="{{ post.art.id }}">{{ post.art.likes }}</span>
 
-                <button id="{{ post.art.id }}" class="btn btn-success" type="submit" >Like</button>
+                <button id="{{ post.art.id }}" class="btn btn-success like" type="submit" >Like</button>
+                <button id="{{ post.art.id }}" class="btn btn-success dislike" type="submit" >Dislike</button>
 
                 {% if current_user %}
                     <a href={% url 'delete_art' post.art.id %}>Delete art</a>

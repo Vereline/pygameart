@@ -197,6 +197,29 @@ def like_post(request):
 
 
 @login_required
+def dislike_post(request):
+    """ This view is called, when like button is pressed
+        And ajax query is done
+    """
+    if request.method == "GET":
+        pk = int(request.GET.get('pk'))
+        art_user = ArtUser.objects.get(user_id=pk)
+        art_pk = int(request.GET.get('art_pk'))
+        art = Art.objects.get(id=art_pk)
+
+        disliked = False
+        if not art_user.liked_arts.filter(id=art_pk).count():
+            disliked = True
+        else:
+            art.likes -= 1
+            art.save()
+            art_user.liked_arts.remove(art)
+            art_user.save()
+
+        return JsonResponse({'likes': art.likes, 'disliked': disliked})
+
+
+@login_required
 def show_likes_in_post(request):
     """ This view is already made to show quantity of likes"""
     # Deprecated and useless
