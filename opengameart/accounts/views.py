@@ -127,7 +127,7 @@ def configure_user(request, pk):
             current_user.art_direction = art_user_form.cleaned_data['art_direction']
             if art_user_form.cleaned_data['user_avatar']:
                 current_user.user_avatar = art_user_form.cleaned_data['user_avatar']
-                current_user.save()
+                current_user.save(update_picture=True)
             else:
                 current_user.save(update_picture=False)
 
@@ -136,7 +136,7 @@ def configure_user(request, pk):
             user.last_name = user_form.cleaned_data['last_name']
             user.username = user_form.cleaned_data['username']
             user.email = user_form.cleaned_data['email']
-            user.save()
+            user.save(update_picture=True)
 
             return HttpResponseRedirect('/')
     else:

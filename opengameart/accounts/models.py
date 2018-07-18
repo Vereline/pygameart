@@ -43,7 +43,7 @@ class ArtUser(models.Model):
         current_user = User.objects.get(id=int(self.user_id))
         return current_user.username
 
-    def save(self, update_picture=True, *args, **kwargs):
+    def save(self, update_picture=False, *args, **kwargs):
         """ Save Art model."""
         try:
             if update_picture:

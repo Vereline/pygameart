@@ -54,7 +54,7 @@ def get_art(request):
                       description=form.cleaned_data['description'],
                       file=form.cleaned_data['file'],
                       owner_id=current_art_user.id)
-            art.save()
+            art.save(update_picture=True)
             art_post = ArtPost(art_id=art.id, user_id=current_art_user.id)
             art_post.save()
             # redirect to a new URL:

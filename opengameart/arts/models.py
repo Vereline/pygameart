@@ -33,7 +33,7 @@ class Art(models.Model):
         """A string representation of the model."""
         return self.title
 
-    def save(self, update_picture=True, *args, **kwargs):
+    def save(self, update_picture=False, *args, **kwargs):
         """ Save Art model."""
         try:
             if update_picture:

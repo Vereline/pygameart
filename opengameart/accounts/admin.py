@@ -48,6 +48,7 @@ class ArtUserAdmin(admin.ModelAdmin):
 class ArtPostAdmin(admin.ModelAdmin):
     model = ArtPost
 
+
 admin.site.register(ArtUser, ArtUserAdmin)
 admin.site.register(ArtPost, ArtPostAdmin)
 
