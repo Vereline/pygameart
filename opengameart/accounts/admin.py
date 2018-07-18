@@ -4,6 +4,7 @@ from .models import ArtUser, ArtPost
 from django.utils.html import mark_safe
 from opengameart.settings import STATIC_URL
 
+
 class LikedArtsInline(admin.TabularInline):
     model = ArtUser.liked_arts.through
 

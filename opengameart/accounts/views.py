@@ -178,13 +178,22 @@ def like_post(request):
     """ This view is called, when like button is pressed
         And ajax query is done
     """
-    post_is_liked = False
-    likes = 0
-    liked = True
-    if post_is_liked:
-        return JsonResponse({'likes': likes, 'liked': liked})
+    if request.method == "GET":
+        pk = int(request.GET.get('pk'))
+        art_user = ArtUser.objects.get(user_id=pk)
+        art_pk = int(request.GET.get('art_pk'))
+        art = Art.objects.get(id=art_pk)
 
-    return JsonResponse({'likes': likes, 'liked': liked})
+        liked = False
+        if art_user.liked_arts.filter(id=art_pk).count():
+            liked = True
+        else:
+            art.likes += 1
+            art.save()
+            art_user.liked_arts.add(art)
+            art_user.save()
+
+        return JsonResponse({'likes': art.likes, 'liked': liked})
 
 
 @login_required
