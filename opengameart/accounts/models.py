@@ -36,6 +36,7 @@ class ArtUser(models.Model):
     description = models.TextField()
     art_direction = models.CharField(max_length=255, choices=ART_DIRECTION, default=art)
     user_avatar = models.ImageField(upload_to=image_directory_path, storage=image_storage, null=True, blank=True)
+    liked_arts = models.ManyToManyField(Art)
 
     def __str__(self):
         """A string representation of the model."""

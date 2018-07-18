@@ -4,12 +4,17 @@ from .models import ArtUser, ArtPost
 from django.utils.html import mark_safe
 
 
+class LikedArtsInline(admin.TabularInline):
+    model = ArtUser.liked_arts.through
+
+
 class ArtUserAdmin(admin.ModelAdmin):
     model = ArtUser
-    list_display = ('user_id', 'location', 'birth_date', 'art_direction')
+    list_display = ('user_id', 'location', 'birth_date', 'art_direction', 'id')
     fields = ('__str__', 'user_id', 'user_avatar', 'display_image_field',  'location', 'birth_date',
               'art_direction', 'description')
     readonly_fields = ['__str__', 'display_image_field']
+    inlines = [LikedArtsInline]
 
     def display_image_field(self, obj):
         url = obj.user_avatar.url

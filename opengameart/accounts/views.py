@@ -73,6 +73,7 @@ class UserArtPostView(APIView):
         :param format: Format of the users posts to return to
         :return: Returns a list of users posts
         """
+        update_all_likes()
         posts = ArtPost.objects.all()
         serializer = ArtPostSerializer(posts, many=True)
         return Response({'posts': serializer.data})
@@ -83,6 +84,7 @@ class UserArtPostView(APIView):
         :param request: Request object for creating art post
         :return: Returns a user record
         """
+        update_all_likes()
         serializer = ArtPostSerializer(data=request.data)
         if serializer.is_valid(raise_exception=ValueError):
             serializer.create(validated_data=request.data)
@@ -100,6 +102,7 @@ class CurrentUserArtPostView(generics.ListAPIView):
     template_name = 'post.html'
 
     def get(self, request, *args, **kwargs):
+        update_all_likes()
         current_user = False
         pk = self.kwargs['pk']
         current_user_id = request.user.id
@@ -172,6 +175,43 @@ def count_posts(request):
 
 @login_required
 def like_post(request):
+    """ This view is called, when like button is pressed
+        And ajax query is done
+    """
+    post_is_liked = False
     likes = 0
     liked = True
-    return JsonResponse({'likes': likes, 'liked':liked})
+    if post_is_liked:
+        return JsonResponse({'likes': likes, 'liked': liked})
+
+    return JsonResponse({'likes': likes, 'liked': liked})
+
+
+@login_required
+def show_likes_in_post(request):
+    """ This view is already made to show quantity of likes"""
+    # Deprecated and useless
+    if request.method == "GET":
+        user_id = request.user.id
+        current_art_user = ArtUser.objects.get(user_id=user_id)
+        art_pk = int(request.GET.get('art_pk'))
+        art = Art.objects.get(id=art_pk)
+        likes = art.artuser_set.count()
+        liked = False
+        if current_art_user.liked_arts.get(id=art_pk):
+            liked = True
+        return JsonResponse({'likes': likes, 'liked': liked})
+
+
+def update_likes(art_id):
+    quantity_of_likes = ArtUser.objects.filter(liked_arts__id=art_id).count()
+    art = Art.objects.get(id=art_id)
+    art.likes = quantity_of_likes
+    art.save()
+    return quantity_of_likes
+
+
+def update_all_likes():
+    arts = [art for art in Art.objects.all()]
+    for art in arts:
+        update_likes(art.id)

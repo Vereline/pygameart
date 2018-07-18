@@ -49,11 +49,12 @@ def get_art(request):
         # check whether it's valid:
         if form.is_valid():
             # process the data in form.cleaned_data as required
+            current_art_user = ArtUser.objects.get(user_id=request.user.id)
             art = Art(title=form.cleaned_data['title'],
                       description=form.cleaned_data['description'],
-                      file=form.cleaned_data['file'])
+                      file=form.cleaned_data['file'],
+                      owner_id=current_art_user.id)
             art.save()
-            current_art_user = ArtUser.objects.get(user_id=request.user.id)
             art_post = ArtPost(art_id=art.id, user_id=current_art_user.id)
             art_post.save()
             # redirect to a new URL:
