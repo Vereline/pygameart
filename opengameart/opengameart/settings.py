@@ -38,6 +38,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'corsheaders',  # A Django App that adds CORS (Cross-Origin Resource Sharing) headers to responses.
+    'debug_toolbar',
 
     'arts',
     'accounts',
@@ -133,7 +134,6 @@ STATICFILES_DIRS = [
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-
 # Rest Framework
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
@@ -158,3 +158,13 @@ LOGOUT_REDIRECT_URL = 'home'
 
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
