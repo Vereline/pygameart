@@ -207,7 +207,7 @@ def update_likes(art_id):
     quantity_of_likes = ArtUser.objects.filter(liked_arts__id=art_id).count()
     art = Art.objects.get(id=art_id)
     art.likes = quantity_of_likes
-    art.save()
+    art.save(update_picture=False)
     return quantity_of_likes
 
 

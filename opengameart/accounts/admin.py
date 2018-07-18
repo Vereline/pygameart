@@ -18,6 +18,8 @@ class ArtUserAdmin(admin.ModelAdmin):
 
     def display_image_field(self, obj):
         url = obj.user_avatar.url
+        if not self.check_image_path(url):
+            self.fix_images_paths()
         return mark_safe('<img src="{url}" width="{width}" height={height} />'.format(
             url=url,
             width=300,
@@ -25,10 +27,28 @@ class ArtUserAdmin(admin.ModelAdmin):
         )
         )
 
+    def fix_images_paths(self):
+        all_users = [user for user in ArtUser.objects.all()]
+        for user in all_users:
+            image_path = user.user_avatar.url
+            if not self.check_image_path(image_path):
+                dirs_arr = user.user_avatar.url.split('/')
+                dirs_arr.insert(-1, 'avatars')
+                dirs_arr = '/'.join(dirs_arr)
+                user.user_avatar.url = dirs_arr
+                user.save(update_picture=False)
+
+    @staticmethod
+    def check_image_path(path):
+        if '/avatars/' not in path:
+            return False
+        return True
+
 
 class ArtPostAdmin(admin.ModelAdmin):
     model = ArtPost
 
-
 admin.site.register(ArtUser, ArtUserAdmin)
 admin.site.register(ArtPost, ArtPostAdmin)
+
+
