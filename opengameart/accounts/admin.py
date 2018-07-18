@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import ArtUser, ArtPost
 # Register your models here.
 from django.utils.html import mark_safe
-
+from opengameart.settings import STATIC_URL
 
 class LikedArtsInline(admin.TabularInline):
     model = ArtUser.liked_arts.through
@@ -17,9 +17,12 @@ class ArtUserAdmin(admin.ModelAdmin):
     inlines = [LikedArtsInline]
 
     def display_image_field(self, obj):
-        url = obj.user_avatar.url
-        if not self.check_image_path(url):
-            self.fix_images_paths()
+        if obj.user_avatar:
+            url = obj.user_avatar.url
+            if not self.check_image_path(url):
+                self.fix_images_paths()
+        else:
+            url = STATIC_URL + 'user-default.png'
         return mark_safe('<img src="{url}" width="{width}" height={height} />'.format(
             url=url,
             width=300,
@@ -30,13 +33,14 @@ class ArtUserAdmin(admin.ModelAdmin):
     def fix_images_paths(self):
         all_users = [user for user in ArtUser.objects.all()]
         for user in all_users:
-            image_path = user.user_avatar.url
-            if not self.check_image_path(image_path):
-                dirs_arr = user.user_avatar.url.split('/')
-                dirs_arr.insert(-1, 'avatars')
-                dirs_arr = '/'.join(dirs_arr)
-                user.user_avatar.url = dirs_arr
-                user.save(update_picture=False)
+            if user.user_avatar:
+                image_path = user.user_avatar.url
+                if not self.check_image_path(image_path):
+                    dirs_arr = user.user_avatar.url.split('/')
+                    dirs_arr.insert(-1, 'avatars')
+                    dirs_arr = '/'.join(dirs_arr)
+                    user.user_avatar.url = dirs_arr
+                    user.save(update_picture=False)
 
     @staticmethod
     def check_image_path(path):

@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}Friends{% endblock %}
 
 {% block javascript %}
@@ -21,7 +21,11 @@
         {% if friends %}
         {% for friend in friends %}
             <div class="infinite-item">
-                <img src="{{ friend.user.user_avatar }}"/>
+                {% if friend.useruser_avatar %}
+                    <img src="{{ friend.user.user_avatar }}" />
+                {% else %}
+                    <img src="{% static 'user-default.png' %}" />
+                {% endif %}
                 <p>{{ friend.user.get_username }}</p>
             </div>
             <a href="#">Add as a friend</a>

@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}Configure account{% endblock %}
 
 {% block content %}
@@ -10,7 +10,12 @@
         <div class="card-deck">
             <div class="card">
                 <div class="card-body text-center">
-                    <img src="{{ art_user_form.user_avatar.url }}" />
+{#                    {% if art_user_form.user_avatar %}#}
+{#                        <img src="{{ art_user_form.user_avatar.url }}" />#}
+{#                    {% else %}#}
+{#                        <img src="{% static 'user-default.png' %}" />#}
+{#                    {% endif %}#}
+
                     <p>Avatar</p>
                     {{ art_user_form.user_avatar }}
 
