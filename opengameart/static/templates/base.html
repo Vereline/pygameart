@@ -10,6 +10,14 @@
         <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-4.1.1-dist/css/bootstrap-reboot.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 
+        <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+        <script src="{% static 'css/bootstrap-4.1.1-dist/js/bootstrap.js' %}"></script>
+        <script src="{% static 'css/bootstrap-4.1.1-dist/js/bootstrap.bundle.js' %}"></script>
+        <script src="{% static 'js/popper.min.js' %}"></script>
+        {# without these libs django will show me only pages and "Load More" #}
+        <script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+        <script src="{% static 'js/infinite.min.js' %}"></script>
+
         {% block stylesheet %}{% endblock stylesheet%}
 
     </head>
@@ -107,19 +115,9 @@
               </div>
         </footer>
 
-        <script src="{% static 'css/bootstrap-4.1.1-dist/js/bootstrap.js' %}"></script>
-        <script src="{% static 'css/bootstrap-4.1.1-dist/js/bootstrap.bundle.js' %}"></script>
-
-        <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
-
-        {# without these libs django will show me only pages and "Load More" #}
-        <script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
-        <script src="{% static 'js/infinite.min.js' %}"></script>
-
-        <script src="{% static 'js/app.js' %}"></script>
-
         {% block javascript %}{% endblock javascript%}
         {% block js %}
+            <script src="{% static 'js/app.js' %}"></script>
             <script>
                 // ajax query to get current quantity of posts
                 $(function(){

@@ -28,7 +28,7 @@
             likes = data['likes'];
             liked = data['liked'];
             if (liked){
-                alert('already liked');
+                alert('This post is already liked');
             }
             art_post_span.text(likes);
         });
@@ -47,7 +47,7 @@
             likes = data['likes'];
             disliked = data['disliked'];
             if (disliked){
-                alert('already disliked');
+                alert('This post is already disliked');
             }
             art_post_span.text(likes);
         });
@@ -75,7 +75,7 @@
                 <p>Likes: </p><span id="{{ post.art.id }}">{{ post.art.likes }}</span>
 
                 <button id="{{ post.art.id }}" class="btn btn-success like" type="submit" >Like</button>
-                <button id="{{ post.art.id }}" class="btn btn-success dislike" type="submit" >Dislike</button>
+                <button id="{{ post.art.id }}" class="btn btn-danger dislike" type="submit" >Dislike</button>
 
                 {% if current_user %}
                     <a href={% url 'delete_art' post.art.id %}>Delete art</a>
