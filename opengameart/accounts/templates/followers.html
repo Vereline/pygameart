@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Friends{% endblock %}
+
+{% block javascript %}
+  <script src="{% static 'js/popper.min.js' %}"></script>
+  <script>
+    var infinite = new Waypoint.Infinite({
+      element: $('.infinite-container')[0],
+      onBeforePageLoad: function () {
+        $('.loading').show();
+      },
+      onAfterPageLoad: function ($items) {
+        $('.loading').hide();
+      }
+    });
+  </script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item" >
+            <a class="nav-link active" data-toggle="tab" href="#following">Following</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#followed">Followed</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#friends">Friends</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#blocking">Blocking</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#blocked">Blocked</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="following" class="container tab-pane active">
+            <div class="infinite-container">
+                <h3>Following</h3>
+                {% if data.get_following %}
+                {% for friend in data.get_following %}
+                    <div class="infinite-item">
+                        {% if friend.user_avatar %}
+                            <img src="{{ friend.user_avatar }}" />
+                        {% else %}
+                            <img src="{% static 'user-default.png' %}" />
+                        {% endif %}
+                        <p>{{ friend.get_username }}</p>
+                    </div>
+                    <a class="btn btn-dark" href="#">Unfollow</a>
+                    <a class="btn btn-danger" href="#">Block</a>
+                {% endfor %}
+                {% else %}
+                    <p>Sorry, you have no following at the moment</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div id="followed" class="container tab-pane fade">
+            <div class="infinite-container">
+                <h3>Followers</h3>
+                {% if data.get_followers %}
+                {% for friend in data.get_followers %}
+                    <div class="infinite-item">
+                        {% if friend.user_avatar %}
+                            <img src="{{ friend.user_avatar }}" />
+                        {% else %}
+                            <img src="{% static 'user-default.png' %}" />
+                        {% endif %}
+                        <p>{{ friend.get_username }}</p>
+                    </div>
+                    <a class="btn btn-dark" href="#">Get friends(follow)</a>
+                    <a class="btn btn-danger" href="#">Block</a>
+                {% endfor %}
+                {% else %}
+                    <p>Sorry, you are not followed at the moment</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div id="friends" class="container tab-pane fade">
+            <div class="infinite-container">
+                <h3>Friends</h3>
+                {% if data.get_friends %}
+                {% for friend in data.get_friends %}
+                    <div class="infinite-item">
+                        {% if friend.user_avatar %}
+                            <img src="{{ friend.user_avatar }}" />
+                        {% else %}
+                            <img src="{% static 'user-default.png' %}" />
+                        {% endif %}
+                        <p>{{ friend.get_username }}</p>
+                    </div>
+                    <a class="btn btn-dark" href="#">Unfollow</a>
+                    <a class="btn btn-danger" href="#">Block</a>
+                {% endfor %}
+                {% else %}
+                    <p>Sorry, you have got no friends at the moment</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div id="blocking" class="container tab-pane fade">
+            <div class="infinite-container">
+                <h3>Blocking</h3>
+                {% if data.get_blocking %}
+                {% for friend in data.get_blocking %}
+                    <div class="infinite-item">
+                        {% if friend.user_avatar %}
+                            <img src="{{ friend.user_avatar }}" />
+                        {% else %}
+                            <img src="{% static 'user-default.png' %}" />
+                        {% endif %}
+                        <p>{{ friend.get_username }}</p>
+                    </div>
+                    <a class="btn btn-dark" href="#">Unblock</a>
+                {% endfor %}
+                {% else %}
+                    <p>Sorry, you have got no blocked at the moment</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div id="blocked" class="container tab-pane fade">
+            <div class="infinite-container">
+                <h3>Blocked</h3>
+                {% if data.get_blocked %}
+                {% for friend in data.get_blocked %}
+                    <div class="infinite-item">
+                        {% if friend.user_avatar %}
+                            <img src="{{ friend.user_avatar }}" />
+                        {% else %}
+                            <img src="{% static 'user-default.png' %}" />
+                        {% endif %}
+                        <p>{{ friend.get_username }}</p>
+                    </div>
+                {% endfor %}
+                {% else %}
+                    <p>Sorry, you aren't blocked at the moment</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -37,6 +37,9 @@ class ArtUser(models.Model):
     art_direction = models.CharField(max_length=255, choices=ART_DIRECTION, default=art)
     user_avatar = models.ImageField(upload_to=image_directory_path, storage=image_storage, null=True, blank=True)
     liked_arts = models.ManyToManyField(Art)
+    relationships = models.ManyToManyField('self', through='Relationship',
+                                           symmetrical=False,
+                                           related_name='related_to')
 
     def __str__(self):
         """A string representation of the model."""
@@ -65,6 +68,64 @@ class ArtUser(models.Model):
 
     def get_username(self):
         return self.get_user_info()['username']
+
+    def add_relationship(self, person, status):
+        relationship, created = Relationship.objects.get_or_create(
+            from_person=self,
+            to_person=person,
+            status=status)
+        return relationship
+
+    def remove_relationship(self, person, status):
+        Relationship.objects.filter(
+            from_person=self,
+            to_person=person,
+            status=status).delete()
+        return
+
+    def get_relationships(self, status):
+        return self.relationships.filter(
+            to_people__status=status,
+            to_people__from_person=self)
+
+    def get_related_to(self, status):
+        return self.related_to.filter(
+            from_people__status=status,
+            from_people__to_person=self)
+
+    def get_following(self):
+        return self.get_relationships(RELATIONSHIP_FOLLOWING)
+
+    def get_followers(self):
+        return self.get_related_to(RELATIONSHIP_FOLLOWING)
+
+    def get_blocking(self):
+        return self.get_relationships(RELATIONSHIP_BLOCKED)
+
+    def get_blocked(self):
+        return self.get_related_to(RELATIONSHIP_BLOCKED)
+
+    def get_friends(self):
+        return self.relationships.filter(
+            to_people__status=RELATIONSHIP_FOLLOWING,
+            to_people__from_person=self,
+            from_people__status=RELATIONSHIP_FOLLOWING,
+            from_people__to_person=self)
+
+
+RELATIONSHIP_FOLLOWING = 1
+RELATIONSHIP_BLOCKED = 2
+RELATIONSHIP_STATUSES = (
+    (RELATIONSHIP_FOLLOWING, 'Following'),
+    (RELATIONSHIP_BLOCKED, 'Blocked'),
+)
+
+
+class Relationship(models.Model):
+
+    from_person = models.ForeignKey(ArtUser, related_name='from_people', on_delete=models.CASCADE)
+    to_person = models.ForeignKey(ArtUser, related_name='to_people', on_delete=models.CASCADE)
+    status = models.IntegerField(choices=RELATIONSHIP_STATUSES)
 
 
 def get_id_by_path(file_path):

@@ -13,7 +13,7 @@ urlpatterns = [
     path('posts/<int:pk>', views.CurrentUserArtPostView.as_view(), name='art_posts_list_current'),
     path('users/<int:pk>/', views.configure_user, name='configure_user'),
     url('search/$', views.search_users, name='search_users'),
-    path('friends/', views.show_friends, name='show_friends'),
+    path('followers/<int:pk>', views.CurrentUserFollowersView.as_view(), name='show_followers'),
     url(r'^password/change/$', password_change, {
         'template_name': 'registration/password_change_form.html'},
         name='password_change'),

@@ -8,7 +8,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 from .models import ArtUser, ArtPost
 from arts.models import Art
-from .serializers import ArtUserSerializer, ArtPostSerializer
+from .serializers import ArtUserSerializer, ArtPostSerializer, ArtRelationshipSerializer
 from .forms import ArtUserForm, UserUpdateForm
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -157,9 +157,26 @@ def search_users(request):
     return render(request, 'search.html')
 
 
-@login_required
-def show_friends(request, **kwargs):
-    return render(request, 'friends.html')
+@method_decorator(login_required, name='dispatch')
+class CurrentUserFollowersView(generics.ListAPIView):
+    """
+    A view that returns a template HTML representation of a given user.
+    """
+    renderer_classes = (TemplateHTMLRenderer,)
+    template_name = 'followers.html'
+
+    def get(self, request, *args, **kwargs):
+        current_user = False
+        pk = self.kwargs['pk']
+        current_user_id = request.user.id
+        if pk == current_user_id:
+            current_user = True
+
+        # make check if user is not art user (admin, for example)
+        art_user = ArtUser.objects.get(user_id=pk)
+        serializer = ArtRelationshipSerializer(art_user, many=False)
+        serializer_data = serializer.data
+        return Response({'data': serializer_data, 'current': current_user})
 
 
 @login_required
