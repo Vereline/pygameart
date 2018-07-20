@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse_lazy
 from django.views import generic
-from .models import ArtUser, ArtPost
+from .models import ArtUser, ArtPost, RELATIONSHIP_BLOCKED, RELATIONSHIP_FOLLOWING
 from arts.models import Art
 from .serializers import ArtUserSerializer, ArtPostSerializer, ArtRelationshipSerializer
 from .forms import ArtUserForm, UserUpdateForm
@@ -154,8 +154,13 @@ def search_users(request):
     if request.method == "GET":
         search_query = request.GET.get('search_field')
         users = User.objects.filter(username__contains=search_query).filter(is_staff=False)
+        art_users = []
+        # reformat this expression
+        for user in users:
+            art_users.append(ArtUser.objects.get(user_id=user.id))
+
         arts = Art.objects.filter(title__contains=search_query)
-        return render(request, 'search.html', {'friends': users, 'arts': arts})
+        return render(request, 'search.html', {'friends': art_users, 'arts': arts})
     return render(request, 'search.html')
 
 
@@ -263,25 +268,84 @@ def update_likes(art_id):
 
 
 def update_all_likes():
+    """ Syncs all liked items in ArtUser collection with Arts in database """
     arts = [art for art in Art.objects.all()]
     for art in arts:
         update_likes(art.id)
 
 
-@login_required
-def follow_user(request):
-    pass
+def follow_user(art_user, following_user):
+    """ This view is called, when follow button is pressed """
+    already_followed = False
+    if following_user in art_user.get_following():
+        already_followed = True
+    else:
+        art_user.add_relationship(following_user, RELATIONSHIP_FOLLOWING)
+
+    return already_followed
+
+
+def unfollow_user(art_user, following_user):
+    """ This view is called, when unfollow button is pressed """
+    already_unfollowed = False
+    if following_user not in art_user.get_following():
+        already_unfollowed = True
+    else:
+        art_user.remove_relationship(following_user, RELATIONSHIP_FOLLOWING)
+
+    return already_unfollowed
+
+
+def block_user(art_user, blocking_user):
+    """ This view is called, when block button is pressed """
+    already_blocked = False
+    if blocking_user in art_user.get_blocking():
+        already_blocked = True
+    else:
+        art_user.add_relationship(blocking_user, RELATIONSHIP_BLOCKED)
+
+    return already_blocked
+
+
+def unblock_user(art_user, blocking_user):
+    """ This view is called, when unblock button is pressed """
+    already_unblocked = False
+    if blocking_user not in art_user.get_blocking():
+        already_unblocked = True
+    else:
+        art_user.remove_relationship(blocking_user, RELATIONSHIP_BLOCKED)
+
+    return already_unblocked
 
 
 @login_required
-def block_user(request):
-    pass
-
-
-@login_required
-def unfollow_user(request):
-    pass
-
-@login_required
-def unblock_user(request):
-    pass
+def set_relationship(request):
+    """ This view is called, when every relation button is pressed
+        And ajax query is done
+    """
+    actions = {
+        'follow': follow_user,
+        'unfollow': unfollow_user,
+        'block': block_user,
+        'unblock': unblock_user,
+    }
+    messages = {
+        'follow': 'already followed',
+        'unfollow': 'already unfollowed',
+        'block': 'already blocked',
+        'unblock': 'already unblocked',
+    }
+    if request.method == "GET":
+        pk = int(request.GET.get('pk'))
+        art_user = ArtUser.objects.get(user_id=pk)
+        relate_pk = int(request.GET.get('relate_pk'))
+        relate_user = ArtUser.objects.get(id=relate_pk)
+        action = request.GET.get('action')
+        if action not in actions:
+            return JsonResponse({'message': 'error'})
+        message_status = actions[action](art_user, relate_user)
+        if message_status:
+            message = messages[action]
+        else:
+            message = 'success'
+        return JsonResponse({'message': message})

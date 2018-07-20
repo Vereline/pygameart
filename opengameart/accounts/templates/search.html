@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}Search results{% endblock %}
 
 {% block javascript %}
@@ -14,6 +14,39 @@
       }
     });
   </script>
+<script>
+    $( "a[class~='relateAction']" ).click(function() {
+        let relate_id = this.id;
+        let action = '';
+        console.log("found");
+        if ($(this).hasClass('unfollow')){
+            action = 'unfollow';
+        }
+        else if ($(this).hasClass('follow')){
+            action = 'follow';
+        }
+        else if ($(this).hasClass('block')){
+            action = 'block';
+        }
+        else if ($(this).hasClass('unblock')){
+            action = 'unblock';
+        }
+
+        // let art_user_container = this.parent(".infinite-item");
+
+        let user_id = "{{ user.id }}";
+        let url_id = "{% url 'set_relationship' %}";
+        $.get(url_id, {'pk': user_id, 'relate_pk': relate_id, 'action':action}, function(data){
+
+            if (data['message']){
+                alert(data['message']);
+                //if (data['message'] === 'success'){
+                //    art_user_container.remove();
+                //}
+            }
+        });
+    });
+  </script>
 {% endblock %}
 
 {% block content %}
@@ -21,12 +54,16 @@
         <h3>Found people:</h3>
         {% if friends %}
         {% for friend in friends %}
-            <div class="infinite-item card">
+            <div id="{{ friend.id }}" class="infinite-item card">
                 <div class="card-body">
-                    <img src="{{ friend.user.user_avatar }}"/>
-                    <p>{{ friend.username }}</p>
-                    <a class="btn btn-dark" href="#">Follow</a>
-                    <a class="btn btn-danger" href="#">Block</a>
+                    {% if friend.user_avatar %}
+                        <img src="{{ friend.user_avatar.url }}"/>
+                    {% else %}
+                        <img src="{% static 'user-default.png' %}" />
+                    {% endif %}
+                    <p>{{ friend.get_username }}</p>
+                    <a id="{{ friend.id }}" class="relateAction follow btn btn-dark" href="#">Follow</a>
+                    <a id="{{ friend.id }}" class="relateAction block btn btn-danger" href="#">Block</a>
                 </div>
             </div>
         {% endfor %}

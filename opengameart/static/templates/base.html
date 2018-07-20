@@ -122,8 +122,9 @@
                 // ajax query to get current quantity of posts
                 $(function(){
                     {% if user.is_authenticated %}
-                        let art_post_span = $('ul.list-group').find('#art-post-span');
-                        let art_gallery_span = $('ul.list-group').find('#art-gallery-span');
+                        let span_list = $('ul.list-group');
+                        let art_post_span = span_list.find('#art-post-span');
+                        let art_gallery_span = span_list.find('#art-gallery-span');
 
                         let number = 123;
                         let user_id = "{{ user.id }}";

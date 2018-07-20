@@ -14,6 +14,38 @@
       }
     });
   </script>
+  <script>
+    $( "a[class~='relateAction']" ).click(function() {
+        let relate_id = this.id;
+        let action = '';
+        if ($(this).hasClass('unfollow')){
+            action = 'unfollow';
+        }
+        else if ($(this).hasClass('follow')){
+            action = 'follow';
+        }
+        else if ($(this).hasClass('block')){
+            action = 'block';
+        }
+        else if ($(this).hasClass('unblock')){
+            action = 'unblock';
+        }
+
+        let art_user_container = this.parent(".infinite-item");
+
+        let user_id = "{{ user.id }}";
+        let url_id = "{% url 'set_relationship' %}";
+        $.get(url_id, {'pk': user_id, 'relate_pk': relate_id, 'action':action}, function(data){
+
+            if (data['message']){
+                alert(data['message']);
+                if (data['message'] === 'success'){
+                    art_user_container.remove();
+                }
+            }
+        });
+    });
+  </script>
 {% endblock %}
 
 {% block content %}
@@ -42,16 +74,16 @@
                 <h3>Following</h3>
                 {% if data.get_following %}
                 {% for friend in data.get_following %}
-                    <div class="infinite-item">
+                    <div id="{{ friend.id }}" class="infinite-item">
                         {% if friend.user_avatar %}
                             <img src="{{ friend.user_avatar }}" />
                         {% else %}
                             <img src="{% static 'user-default.png' %}" />
                         {% endif %}
                         <p>{{ friend.get_username }}</p>
+                        <a id="{{ friend.id }}" class="relateAction unfollow btn btn-dark " href="#">Unfollow</a>
+                        <a id="{{ friend.id }}" class="relateAction block btn btn-danger" href="#">Block</a>
                     </div>
-                    <a class="btn btn-dark" href="#">Unfollow</a>
-                    <a class="btn btn-danger" href="#">Block</a>
                 {% endfor %}
                 {% else %}
                     <p>Sorry, you have no following at the moment</p>
@@ -64,7 +96,7 @@
                 <h3>Followers</h3>
                 {% if data.get_followers %}
                 {% for friend in data.get_followers %}
-                    <div class="infinite-item">
+                    <div id="{{ friend.id }}" class="infinite-item">
                         {% if friend.user_avatar %}
                             <img src="{{ friend.user_avatar }}" />
                         {% else %}
@@ -72,8 +104,8 @@
                         {% endif %}
                         <p>{{ friend.get_username }}</p>
                     </div>
-                    <a class="btn btn-dark" href="#">Get friends(follow)</a>
-                    <a class="btn btn-danger" href="#">Block</a>
+                    <a id="{{ friend.id }}" class="relateAction follow btn btn-dark" href="#">Get friends(follow)</a>
+                    <a id="{{ friend.id }}" class="relateAction block btn btn-danger" href="#">Block</a>
                 {% endfor %}
                 {% else %}
                     <p>Sorry, you are not followed at the moment</p>
@@ -86,7 +118,7 @@
                 <h3>Friends</h3>
                 {% if data.get_friends %}
                 {% for friend in data.get_friends %}
-                    <div class="infinite-item">
+                    <div id="{{ friend.id }}" class="infinite-item">
                         {% if friend.user_avatar %}
                             <img src="{{ friend.user_avatar }}" />
                         {% else %}
@@ -94,8 +126,8 @@
                         {% endif %}
                         <p>{{ friend.get_username }}</p>
                     </div>
-                    <a class="btn btn-dark" href="#">Unfollow</a>
-                    <a class="btn btn-danger" href="#">Block</a>
+                    <a id="{{ friend.id }}" class="relateAction unfollow btn btn-dark" href="#">Unfollow</a>
+                    <a id="{{ friend.id }}" class="relateAction block btn btn-danger" href="#">Block</a>
                 {% endfor %}
                 {% else %}
                     <p>Sorry, you have got no friends at the moment</p>
@@ -108,7 +140,7 @@
                 <h3>Blocking</h3>
                 {% if data.get_blocking %}
                 {% for friend in data.get_blocking %}
-                    <div class="infinite-item">
+                    <div id="{{ friend.id }}" class="infinite-item">
                         {% if friend.user_avatar %}
                             <img src="{{ friend.user_avatar }}" />
                         {% else %}
@@ -116,10 +148,10 @@
                         {% endif %}
                         <p>{{ friend.get_username }}</p>
                     </div>
-                    <a class="btn btn-dark" href="#">Unblock</a>
+                    <a id="{{ friend.id }}" class="relateAction unblock btn btn-dark" href="#">Unblock</a>
                 {% endfor %}
                 {% else %}
-                    <p>Sorry, you have got no blocked at the moment</p>
+                    <p>Sorry, you have got no blocked users at the moment</p>
                 {% endif %}
             </div>
         </div>

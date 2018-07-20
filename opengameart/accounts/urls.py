@@ -25,5 +25,6 @@ urlpatterns = [
     url('^ajax/like/$', views.like_post, name='like_post'),
     url('^ajax/dislike/$', views.dislike_post, name='dislike_post'),
     url('^ajax/show_likes/$', views.show_likes_in_post, name='show_likes_in_post'),
+    url('^ajax/set_relationship/$', views.set_relationship, name='set_relationship'),
 ]
 # path for post, url for get are suitable

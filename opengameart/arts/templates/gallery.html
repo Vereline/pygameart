@@ -47,7 +47,7 @@
 
 {% block content %}
     {% if current_user %}
-        <a href={% url 'add_art' %}>Add art</a>
+        <a class="btn btn-dark" href={% url 'add_art' %}>Add art</a>
     {% endif %}
 
     {% if not posts %}
@@ -89,10 +89,11 @@
 
     <script type="text/javascript">
         $(function() {
-            let current = $("div#thumbs li").first();
-            current.addClass('selected');
-            current.addClass('first');
-            let current_last = $("div#thumbs li").last();
+            let current = $("div#thumbs li");
+            let current_first = current.first();
+            current_first.addClass('selected');
+            current_first.addClass('first');
+            let current_last = current.last();
             current_last.addClass('last');
         });
 
