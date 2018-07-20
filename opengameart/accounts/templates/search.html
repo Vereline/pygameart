@@ -18,29 +18,33 @@
 
 {% block content %}
     <div class="infinite-container">
-        <p>Found friends:</p>
+        <h3>Found people:</h3>
         {% if friends %}
         {% for friend in friends %}
-            <div class="infinite-item">
-{#                <img src="{{ friend.user.user_avatar }}"/>#}
-                <p>{{ friend.username }}</p>
+            <div class="infinite-item card">
+                <div class="card-body">
+                    <img src="{{ friend.user.user_avatar }}"/>
+                    <p>{{ friend.username }}</p>
+                    <a class="btn btn-dark" href="#">Follow</a>
+                    <a class="btn btn-danger" href="#">Block</a>
+                </div>
             </div>
-            <a class="btn btn-dark" href="#">Follow</a>
-            <a class="btn btn-danger" href="#">Block</a>
         {% endfor %}
         {% else %}
             <p>Sorry, I didn't find anything</p>
         {% endif %}
     </div>
     <div class="infinite-container">
-        <p>Found arts:</p>
+        <h3>Found arts:</h3>
         {% if arts %}
         {% for art in arts %}
-            <div class="infinite-item">
-                <img src="{{ art.file.url }}"/>
-                <p>{{ art.title }}</p>
+            <div class="infinite-item card">
+                <div class="card-body">
+                    <img src="{{ art.file.url }}"/>
+                    <p>{{ art.title }}</p>
+                    <a class="btn btn-dark" href="#">Add as an art</a>
+                </div>
             </div>
-            <a href="#">Add as an art</a>
         {% endfor %}
         {% else %}
             <p>Sorry, I didn't find anything</p>
