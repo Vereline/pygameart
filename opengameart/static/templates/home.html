@@ -1,24 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
-{#{% block title %}Home{% endblock %}#}
-
-{% block javascript %}
-  <script>
-    var infinite = new Waypoint.Infinite({
-      element: $('.infinite-container')[0],
-      onBeforePageLoad: function () {
-        $('.loading').show();
-      },
-      onAfterPageLoad: function ($items) {
-        $('.loading').hide();
-      }
-    });
-  </script>
-{% endblock %}
 
 {% block content %}
 {% if user.is_authenticated %}
-  Hi {{ user.username }}!
+  <div class="alert alert-success alert-dismissable fade show">
+      <strong>Success!</strong> <p>Hi {{ user.username }}!</p>
+  </div>
   <p><a href="{% url 'logout' %}">logout</a></p>
   <div class="card">
     <div class="card-body">
@@ -33,21 +20,6 @@
         <p>{{ art_user.art_direction }}</p>
         <p>{{ art_user.description }}</p>
     </div>
-  </div>
-{#  <div class="infinite-container">#}
-{#    {% for number in numbers %}#}
-{#      <div class="infinite-item">{{ number }}</div>#}
-{#    {% endfor %}#}
-{#  </div>#}
-{##}
-{#  <div class="loading" style="display: none;">#}
-{#    Loading...#}
-{#  </div>#}
-{##}
-{#  {% if numbers.has_next %}#}
-{#    <a class="infinite-more-link" href="?page={{ numbers.next_page_number }}">More</a>#}
-{#  {% endif %}#}
-
 {% else %}
   <p>You are not logged in</p>
   <a class="btn btn-dark" href="{% url 'login' %}">login</a>

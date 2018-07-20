@@ -11,7 +11,6 @@ urlpatterns = [
     path('sandbox/', views.load_sandbox, name='load_sandbox'),
     path('gallery/<int:pk>', views.LoadGallery.as_view(), name='load_gallery'),
     path('about/', views.about_page, name='about_page'),
-    path('news/', views.news_page, name='news_page'),
     path('contacts/', views.contacts_page, name='contacts_page'),
     path(r'delete_art/<int:pk>/', views.ArtDelete.as_view(), name='delete_art'),
 ]

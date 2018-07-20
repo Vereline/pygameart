@@ -118,7 +118,3 @@ def about_page(request):
 
 def contacts_page(request):
     return render(request, 'contacts.html')
-
-
-def news_page(request):
-    return render(request, 'news.html')

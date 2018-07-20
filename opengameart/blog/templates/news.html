@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}News{% endblock %}
+
+{% block content %}
+    <h1>This is news page</h1>
+
+    {% for post in posts %}
+        <div>
+            <p>published: {{ post.published_date }}</p>
+            <h1><a href="{% url 'news_detail' pk=post.pk %}">{{ post.title }}</a></h1>
+            <a href="{% url 'news_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a>
+            <p>{{ post.text|linebreaksbr }}</p>
+        </div>
+    {% endfor %}
+{%  endblock %}
