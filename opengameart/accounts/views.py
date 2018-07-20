@@ -144,7 +144,9 @@ def configure_user(request, pk):
         art_user_form = ArtUserForm(instance=art_user)
         user = get_object_or_404(User, id=pk)
         user_form = UserUpdateForm(instance=user)
-        return render(request, 'users.html', {'art_user_form': art_user_form, 'user_form': user_form})
+        user_image = art_user.user_avatar.url
+        return render(request, 'users.html', {'art_user_form': art_user_form, 'user_form': user_form,
+                                              "user_image": user_image})
 
 
 @login_required
@@ -264,3 +266,22 @@ def update_all_likes():
     arts = [art for art in Art.objects.all()]
     for art in arts:
         update_likes(art.id)
+
+
+@login_required
+def follow_user(request):
+    pass
+
+
+@login_required
+def block_user(request):
+    pass
+
+
+@login_required
+def unfollow_user(request):
+    pass
+
+@login_required
+def unblock_user(request):
+    pass

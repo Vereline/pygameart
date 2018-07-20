@@ -5,49 +5,54 @@
 {% block content %}
     <h1>Here you may configure your account</h1>
     <h1> This form is not configured and tested</h1>
-    <form action="{% url 'configure_user' user.id %}" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="card-deck">
-            <div class="card">
-                <div class="card-body text-center">
-{#                    {% if art_user_form.user_avatar %}#}
-{#                        <img src="{{ art_user_form.user_avatar.url }}" />#}
-{#                    {% else %}#}
-{#                        <img src="{% static 'user-default.png' %}" />#}
-{#                    {% endif %}#}
+    <div class="card">
+        <div class="card-body text-center">
+            {% if user_image %}
+                <img width="80" height="80" src="{{ user_image }}" />
+            {% else %}
+                <img width="80" height="80" src="{% static 'user-default.png' %}" />
+            {% endif %}
+            <form action="{% url 'configure_user' user.id %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="card-deck">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <p>Avatar</p>
+                            {{ art_user_form.user_avatar }}
 
-                    <p>Avatar</p>
-                    {{ art_user_form.user_avatar }}
+                            <p>Username</p>
+                            {{ user_form.username }}
 
-                    <p>Username</p>
-                    {{ user_form.username }}
-                    <p>First Name</p>
-                    {{ user_form.first_name }}
-                    <p>Last Name</p>
-                    {{ user_form.last_name }}
-                    <p>Email</p>
-                    {{ user_form.email }}
-                    <a href="{% url 'password_change' %}">Change Password</a>
+                            <p>First Name</p>
+                            {{ user_form.first_name }}
+
+                            <p>Last Name</p>
+                            {{ user_form.last_name }}
+
+                            <p>Email</p>
+                            {{ user_form.email }}
+
+                            <a href="{% url 'password_change' %}">Change Password</a>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <p>Location</p>
+                            {{ art_user_form.location }}
+
+                            <p>Birth Date</p>
+                            {{ art_user_form.birth_date }}
+
+                            <p>Art Direction</p>
+                            {{ art_user_form.art_direction }}
+
+                            <p>Description</p>
+                            {{ art_user_form.description }}
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="card">
-                <div class="card-body text-center">
-                    <p>Location</p>
-                    {{ art_user_form.location }}
-                    <p>Birth Date</p>
-                    {{ art_user_form.birth_date }}
-                    <p>Art Direction</p>
-                    {{ art_user_form.art_direction }}
-                    <p>Description</p>
-                    {{ art_user_form.description }}
-                </div>
-            </div>
+                <input type="submit" class="btn btn-dark" value="Submit" />
+            </form>
         </div>
-{#        <p>User Data</p>#}
-{#        {{ user_form }}#}
-{#        <br>#}
-{#        {{ art_user_form }}#}
-{#        <br>#}
-        <input type="submit" class="btn btn-dark" value="Submit" />
-    </form>
+    </div>
 {% endblock %}

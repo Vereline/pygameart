@@ -25,7 +25,8 @@
 {#                <img src="{{ friend.user.user_avatar }}"/>#}
                 <p>{{ friend.username }}</p>
             </div>
-            <a href="#">Add as a friend</a>
+            <a class="btn btn-dark" href="#">Follow</a>
+            <a class="btn btn-danger" href="#">Block</a>
         {% endfor %}
         {% else %}
             <p>Sorry, I didn't find anything</p>
