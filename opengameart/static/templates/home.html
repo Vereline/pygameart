@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {#{% block title %}Home{% endblock %}#}
 
 {% block javascript %}
@@ -20,23 +20,36 @@
 {% if user.is_authenticated %}
   Hi {{ user.username }}!
   <p><a href="{% url 'logout' %}">logout</a></p>
-
-  <div class="infinite-container">
-    {% for number in numbers %}
-      <div class="infinite-item">{{ number }}</div>
-    {% endfor %}
+  <div class="card">
+    <div class="card-body">
+        {% if art_user.user_avatar %}
+            <img src="{{ art_user.user_avatar.url }}"/>
+        {% else %}
+            <img src="{% static 'user-default.png' %}" />
+        {% endif %}
+        <p>{{ art_user.get_username }}</p>
+        <p>{{ art_user.birthdate }}</p>
+        <p>{{ art_user.location }}</p>
+        <p>{{ art_user.art_direction }}</p>
+        <p>{{ art_user.description }}</p>
+    </div>
   </div>
-
-  <div class="loading" style="display: none;">
-    Loading...
-  </div>
-
-  {% if numbers.has_next %}
-    <a class="infinite-more-link" href="?page={{ numbers.next_page_number }}">More</a>
-  {% endif %}
+{#  <div class="infinite-container">#}
+{#    {% for number in numbers %}#}
+{#      <div class="infinite-item">{{ number }}</div>#}
+{#    {% endfor %}#}
+{#  </div>#}
+{##}
+{#  <div class="loading" style="display: none;">#}
+{#    Loading...#}
+{#  </div>#}
+{##}
+{#  {% if numbers.has_next %}#}
+{#    <a class="infinite-more-link" href="?page={{ numbers.next_page_number }}">More</a>#}
+{#  {% endif %}#}
 
 {% else %}
   <p>You are not logged in</p>
-  <a href="{% url 'login' %}">login</a>
+  <a class="btn btn-dark" href="{% url 'login' %}">login</a>
 {% endif %}
 {% endblock %}

@@ -41,20 +41,36 @@ class ListUser(generics.ListCreateAPIView):
     serializer_class = ArtUserSerializer
 
 
-def home(request):
-    numbers_list = range(1, 1000)
+def home(request, *args, **kwargs):
+    # numbers_list = range(1, 1000)
+    #
+    # page = request.GET.get('page', 1)
+    #
+    # paginator = Paginator(numbers_list, 20)
+    # try:
+    #     numbers = paginator.page(page)
+    # except PageNotAnInteger:
+    #     numbers = paginator.page(1)
+    # except EmptyPage:
+    #     numbers = paginator.page(paginator.num_pages)
+    if request.user.is_authenticated:
+        pk = request.user.id
+        art_user = get_object_or_404(ArtUser, user_id=pk)
+        return render(request, 'home.html', {'art_user': art_user})
+    else:
+        return render(request, 'home.html')
 
-    page = request.GET.get('page', 1)
 
-    paginator = Paginator(numbers_list, 20)
-    try:
-        numbers = paginator.page(page)
-    except PageNotAnInteger:
-        numbers = paginator.page(1)
-    except EmptyPage:
-        numbers = paginator.page(paginator.num_pages)
-
-    return render(request, 'home.html', {'numbers': numbers})
+def look_profile(request, *args, **kwargs):
+    if request.user.is_authenticated:
+        if kwargs:
+            pk = kwargs["pk"]
+        else:
+            pk = request.user.id
+        art_user = get_object_or_404(ArtUser, user_id=pk)
+        return render(request, 'home.html', {'art_user': art_user})
+    else:
+        return render(request, 'home.html')
 
 
 @method_decorator(login_required, name='dispatch')

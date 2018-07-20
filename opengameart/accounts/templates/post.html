@@ -72,7 +72,7 @@
                                 <img src="{% static 'user-default.png' %}" />
                             {% endif %}
 
-                            <p>{{ post.user.get_username }}</p>
+                            <a href="{% url 'user_profile' post.user.user_id %}">{{ post.user.get_username }}</a>
                             <p>{{ post.art.title }}</p>
                             <img src="{{ post.art.file }}"/>
                             <p>Likes: </p><span id="{{ post.art.id }}">{{ post.art.likes }}</span>
@@ -87,6 +87,9 @@
                     </div>
                 </div>
             {% endfor %}
+              <div class="loading" style="display: none;">
+                Loading...
+              </div>
             {% else %}
                 <p>Sorry, you have no posts</p>
             {% endif %}

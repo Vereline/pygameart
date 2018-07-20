@@ -61,12 +61,15 @@
                     {% else %}
                         <img src="{% static 'user-default.png' %}" />
                     {% endif %}
-                    <p>{{ friend.get_username }}</p>
+                    <a href="{% url 'user_profile' friend.user_id %}">{{ friend.get_username }}</a>
                     <a id="{{ friend.id }}" class="relateAction follow btn btn-dark" href="#">Follow</a>
                     <a id="{{ friend.id }}" class="relateAction block btn btn-danger" href="#">Block</a>
                 </div>
             </div>
         {% endfor %}
+        <div class="loading" style="display: none;">
+            Loading...
+        </div>
         {% else %}
             <p>Sorry, I didn't find anything</p>
         {% endif %}
@@ -83,6 +86,9 @@
                 </div>
             </div>
         {% endfor %}
+          <div class="loading" style="display: none;">
+            Loading...
+          </div>
         {% else %}
             <p>Sorry, I didn't find anything</p>
         {% endif %}

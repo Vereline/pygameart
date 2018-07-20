@@ -80,11 +80,14 @@
                         {% else %}
                             <img src="{% static 'user-default.png' %}" />
                         {% endif %}
-                        <p>{{ friend.get_username }}</p>
+                        <a href="{% url 'user_profile' friend.user_id %}">{{ friend.get_username }}</a>
                         <a id="{{ friend.id }}" class="relateAction unfollow btn btn-dark " href="#">Unfollow</a>
                         <a id="{{ friend.id }}" class="relateAction block btn btn-danger" href="#">Block</a>
                     </div>
                 {% endfor %}
+                  <div class="loading" style="display: none;">
+                    Loading...
+                  </div>
                 {% else %}
                     <p>Sorry, you have no following at the moment</p>
                 {% endif %}
@@ -102,11 +105,14 @@
                         {% else %}
                             <img src="{% static 'user-default.png' %}" />
                         {% endif %}
-                        <p>{{ friend.get_username }}</p>
+                        <a href="{% url 'user_profile' friend.user_id %}">{{ friend.get_username }}</a>
                     </div>
                     <a id="{{ friend.id }}" class="relateAction follow btn btn-dark" href="#">Get friends(follow)</a>
                     <a id="{{ friend.id }}" class="relateAction block btn btn-danger" href="#">Block</a>
                 {% endfor %}
+                  <div class="loading" style="display: none;">
+                    Loading...
+                  </div>
                 {% else %}
                     <p>Sorry, you are not followed at the moment</p>
                 {% endif %}
@@ -124,11 +130,14 @@
                         {% else %}
                             <img src="{% static 'user-default.png' %}" />
                         {% endif %}
-                        <p>{{ friend.get_username }}</p>
+                        <a href="{% url 'user_profile' friend.user_id %}">{{ friend.get_username }}</a>
                     </div>
                     <a id="{{ friend.id }}" class="relateAction unfollow btn btn-dark" href="#">Unfollow</a>
                     <a id="{{ friend.id }}" class="relateAction block btn btn-danger" href="#">Block</a>
                 {% endfor %}
+                  <div class="loading" style="display: none;">
+                    Loading...
+                  </div>
                 {% else %}
                     <p>Sorry, you have got no friends at the moment</p>
                 {% endif %}
@@ -146,10 +155,13 @@
                         {% else %}
                             <img src="{% static 'user-default.png' %}" />
                         {% endif %}
-                        <p>{{ friend.get_username }}</p>
+                        <a href="{% url 'user_profile' friend.user_id %}">{{ friend.get_username }}</a>
                     </div>
                     <a id="{{ friend.id }}" class="relateAction unblock btn btn-dark" href="#">Unblock</a>
                 {% endfor %}
+                  <div class="loading" style="display: none;">
+                    Loading...
+                  </div>
                 {% else %}
                     <p>Sorry, you have got no blocked users at the moment</p>
                 {% endif %}
@@ -167,9 +179,12 @@
                         {% else %}
                             <img src="{% static 'user-default.png' %}" />
                         {% endif %}
-                        <p>{{ friend.get_username }}</p>
+                        <a href="{% url 'user_profile' friend.user_id %}">{{ friend.get_username }}</a>
                     </div>
                 {% endfor %}
+                  <div class="loading" style="display: none;">
+                    Loading...
+                  </div>
                 {% else %}
                     <p>Sorry, you aren't blocked at the moment</p>
                 {% endif %}

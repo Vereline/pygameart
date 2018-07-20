@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^posts/$', views.UserArtPostView.as_view(), name='art_posts_list'),
     path('posts/<int:pk>', views.CurrentUserArtPostView.as_view(), name='art_posts_list_current'),
     path('users/<int:pk>/', views.configure_user, name='configure_user'),
+    path('users_profile/<int:pk>/', views.look_profile, name='user_profile'),
     url('search/$', views.search_users, name='search_users'),
     path('followers/<int:pk>', views.CurrentUserFollowersView.as_view(), name='show_followers'),
     url(r'^password/change/$', password_change, {
