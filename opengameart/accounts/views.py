@@ -203,68 +203,87 @@ def count_posts(request):
 
 
 @login_required
-def like_post(request):
-    """ This view is called, when like button is pressed
+def count_followers(request):
+    if request.method == "GET":
+        pk = int(request.GET.get('pk'))
+        art_user = ArtUser.objects.get(user_id=pk)
+        followers = art_user.get_followers().__len__()
+        return JsonResponse({'count_followers': followers})
+
+
+@login_required
+def appreciate_post(request):
+    """ This view is called, when like or dislike button is pressed
         And ajax query is done
     """
+    actions = {
+     "like": like_post,
+     "dislike": dislike_post,
+    }
+    messages = {
+     "like": 'already liked',
+     "dislike": 'already disliked',
+    }
     if request.method == "GET":
         pk = int(request.GET.get('pk'))
         art_user = ArtUser.objects.get(user_id=pk)
         art_pk = int(request.GET.get('art_pk'))
         art = Art.objects.get(id=art_pk)
-
-        liked = False
-        if art_user.liked_arts.filter(id=art_pk).count():
-            liked = True
+        action = request.GET.get('action')
+        if action not in actions:
+            return JsonResponse({'message': 'error', 'likes': 0})
+        message_status, likes = actions[action](art_user, art, art_pk)
+        if message_status:
+            message = messages[action]
         else:
-            art.likes += 1
-            art.save()
-            art_user.liked_arts.add(art)
-            art_user.save()
-
-        return JsonResponse({'likes': art.likes, 'liked': liked})
+            message = 'success'
+        return JsonResponse({'message': message, 'likes': likes})
 
 
-@login_required
-def dislike_post(request):
-    """ This view is called, when like button is pressed
-        And ajax query is done
-    """
-    if request.method == "GET":
-        pk = int(request.GET.get('pk'))
-        art_user = ArtUser.objects.get(user_id=pk)
-        art_pk = int(request.GET.get('art_pk'))
-        art = Art.objects.get(id=art_pk)
-
-        disliked = False
-        if not art_user.liked_arts.filter(id=art_pk).count():
-            disliked = True
-        else:
-            art.likes -= 1
-            art.save()
-            art_user.liked_arts.remove(art)
-            art_user.save()
-
-        return JsonResponse({'likes': art.likes, 'disliked': disliked})
+def like_post(art_user, art, art_pk):
+    """ This view is called, when like button is pressed And ajax query is done """
+    liked = False
+    if art_user.liked_arts.filter(id=art_pk).count():
+        liked = True
+    else:
+        art.likes += 1
+        art.save()
+        art_user.liked_arts.add(art)
+        art_user.save()
+    return liked, art.likes
 
 
-@login_required
-def show_likes_in_post(request):
-    """ This view is already made to show quantity of likes"""
-    # Deprecated and useless
-    if request.method == "GET":
-        user_id = request.user.id
-        current_art_user = ArtUser.objects.get(user_id=user_id)
-        art_pk = int(request.GET.get('art_pk'))
-        art = Art.objects.get(id=art_pk)
-        likes = art.artuser_set.count()
-        liked = False
-        if current_art_user.liked_arts.get(id=art_pk):
-            liked = True
-        return JsonResponse({'likes': likes, 'liked': liked})
+def dislike_post(art_user, art, art_pk):
+    """ This view is called, when dislike button is pressed And ajax query is done"""
+    disliked = False
+    if not art_user.liked_arts.filter(id=art_pk).count():
+        disliked = True
+    else:
+        art.likes -= 1
+        art.save()
+        art_user.liked_arts.remove(art)
+        art_user.save()
+    return disliked, art.likes
+
+
+# @login_required
+# def show_likes_in_post(request):
+#     """ This view is already made to show quantity of likes"""
+#     # Deprecated and useless
+#     if request.method == "GET":
+#         user_id = request.user.id
+#         current_art_user = ArtUser.objects.get(user_id=user_id)
+#         art_pk = int(request.GET.get('art_pk'))
+#         art = Art.objects.get(id=art_pk)
+#         likes = art.artuser_set.count()
+#         liked = False
+#         if current_art_user.liked_arts.get(id=art_pk):
+#             liked = True
+#         return JsonResponse({'likes': likes, 'liked': liked})
 
 
 def update_likes(art_id):
+    """ Update likes in 1 art """
     quantity_of_likes = ArtUser.objects.filter(liked_arts__id=art_id).count()
     art = Art.objects.get(id=art_id)
     art.likes = quantity_of_likes

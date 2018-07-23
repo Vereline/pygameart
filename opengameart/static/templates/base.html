@@ -69,7 +69,7 @@
                           <li class="list-group-item d-flex justify-content-between align-items-center bg-dark">
                             {% if user.is_authenticated %}
                                 <a class="nav-link" href="{% url 'show_followers' user.id %}">My followers</a>
-                                <span class="badge badge-success badge-pill">0</span>
+                                <span id="followers-span" class="badge badge-success badge-pill">0</span>
                             {% else %}
                                 <a class="nav-link" href="{% url 'login' %}">Gallery</a>
                                 <span class="badge badge-success badge-pill">0</span>
@@ -126,14 +126,27 @@
                         let art_post_span = span_list.find('#art-post-span');
                         let art_gallery_span = span_list.find('#art-gallery-span');
 
-                        let number = 123;
                         let user_id = "{{ user.id }}";
                         let url_id = "{% url 'count_posts' %}";
 
                         $.get(url_id, {'pk': user_id}, function(data){
-                            number = data['count_posts'];
+                            let number = data['count_posts'];
                             art_post_span.text(number);
                             art_gallery_span.text(number);
+                        });
+                    {% endif %}
+                });
+                $(function(){
+                    {% if user.is_authenticated %}
+                        let span_list = $('ul.list-group');
+                        let followers_span = span_list.find('#followers-span');
+
+                        let user_id = "{{ user.id }}";
+                        let url_id = "{% url 'count_followers' %}";
+
+                        $.get(url_id, {'pk': user_id}, function(data){
+                            let followers = data['count_followers'];
+                            followers_span.text(followers);
                         });
                     {% endif %}
                 });
