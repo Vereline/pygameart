@@ -1,4 +1,70 @@
 {% extends 'base.html' %}
+{% load static %}
+{% block javascript %}
+    <script type="text/javascript" src="{% static 'js/csrf.js' %}"></script>
+    <script>
+        function create_comment(data, pk, url){
+
+        }
+    </script>
+    <script>
+        // Submit post on submit
+        $('#post-form-comment').on('submit', function(event){
+            event.preventDefault();
+            console.log("form submitted!");  // sanity check
+            let data = $(this).serialize();
+
+            console.log("create comment is working!"); // sanity check
+            console.log($('#user_name').val());
+            console.log(data);
+
+            $.ajax({
+                url : "{% url 'add_comment_to_post' %}", // the endpoint
+                type : "POST", // http method
+                data : data + '&pk='+{{ post.pk }}, // data sent with the post request
+
+                // handle a successful response
+                success : function(json) {
+                    {#$('#user_text').val(''); // remove the value from the input#}
+                    console.log(json); // log the returned json to the console
+                    console.log("success"); // another sanity check
+                    let author = json['author'];
+                    let text = json['text'];
+                    let created_date = json['created_date'];
+                    let comment_pk = json['comment_pk'];
+                    createCommentChild(created_date, author, text,true,comment_pk);
+                },
+
+                // handle a non-successful response
+                error : function(xhr,errmsg,err) {
+                    $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                    console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                    }
+                });
+        });
+    </script>
+    <script>
+        function createCommentChild(created_date, author, text, may_change, comment_pk) {
+             let node = $('<div class="comment"><div class="date">'+created_date+'</div><strong>'+author+'</strong><p>'+text+'</p></div>');
+
+             let remove_comment_url="/news/comment/"+comment_pk+"/remove/";
+             let remove_comment_node=$('<a class="btn btn-default" href="'+remove_comment_url+'">Remove <span class="glyphicon glyphicon-remove"></span></a>');
+
+             let approve_comment_url="/news/comment/"+comment_pk+"/approve/";
+             let approve_comment_node=$('<a class="btn btn-default" href="'+approve_comment_url+'">Approve <span class="glyphicon glyphicon-ok"></span></a>');
+
+             if (may_change){
+                 let data_child = node.children('.date');
+                 data_child.append(remove_comment_node);
+                 data_child.append(approve_comment_node);
+             }
+
+             let list = document.getElementsByClassName('current-comments');
+             node.appendTo(list);
+        }
+    </script>
+{% endblock javascript %}
 
 {% block content %}
     <div class="post">
@@ -11,22 +77,52 @@
         <p>{{ post.text|linebreaksbr }}</p>
     </div>
     <hr>
-    <a class="btn btn-default" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>
-    {% for comment in post.comments.all %}
-    {% if user.is_authenticated or comment.approved_comment %}
-    <div class="comment">
-        <div class="date">
-            {{ comment.created_date }}
-            {% if not comment.approved_comment %}
-                <a class="btn btn-default" href="{% url 'comment_remove' pk=comment.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
-                <a class="btn btn-default" href="{% url 'comment_approve' pk=comment.pk %}"><span class="glyphicon glyphicon-ok"></span></a>
+    <div class="current-comments">
+        {% for comment in post.comments.all %}
+            {% if user.is_authenticated or comment.approved_comment %}
+                <div class="comment">
+                    <div class="date">
+                        {{ comment.created_date }}
+                        {% if not comment.approved_comment and user.is_staff %}
+                            <a class="btn btn-default" href="{% url 'comment_remove' pk=comment.pk %}">Remove <span class="glyphicon glyphicon-remove"></span></a>
+                            <a class="btn btn-default" href="{% url 'comment_approve' pk=comment.pk %}">Approve <span class="glyphicon glyphicon-ok"></span></a>
+                        {% elif not comment.approved_comment and user.id == comment.author_id|add:"0"  %} {# filter for comparing values #}
+                            <a class="btn btn-default" href="{% url 'comment_remove' pk=comment.pk %}">Remove <span class="glyphicon glyphicon-remove"></span></a>
+                            <a class="btn btn-default" href="{% url 'comment_approve' pk=comment.pk %}">Approve <span class="glyphicon glyphicon-ok"></span></a>
+                        {% endif %}
+                    </div>
+                    <strong>{{ comment.author }}</strong>
+                    <p>{{ comment.text|linebreaks }}</p>
+                </div>
             {% endif %}
-        </div>
-        <strong>{{ comment.author }}</strong>
-        <p>{{ comment.text|linebreaks }}</p>
+        {% empty %}
+            <p class="empty-comments">No comments here yet :(</p>
+        {% endfor %}
     </div>
-    {% endif %}
-{% empty %}
-    <p>No comments here yet :(</p>
-{% endfor %}
+
+{#    <a class="btn btn-default" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>#}
+    <h1>New comment</h1>
+    {% now "m, d, y" %}
+    <form method="POST" id="post-form-comment">
+      {% csrf_token %}
+      <fieldset>
+            <legend>Comment:</legend>
+            <div class="fieldWrapper">
+                {{ form.author.errors }}
+                <label for="id_author">Username:</label>
+                {% if user.is_authenticated %}
+                    <input id="id_author" type="text" name="author" maxlength="100" value="{{ user.username }}" readonly required>
+                {% else %}
+                    <input id="id_author" type="text" name="author" maxlength="100" required>
+                {% endif %}
+            </div>
+            <div class="fieldWrapper">
+                {{ form.text.errors }}
+                <label for="{{ form.text.id_for_label }}">Your Text:</label>
+                {{ form.text }}
+            </div>
+            <button type="submit" class="save btn btn-default">Send</button>
+            <div id="results"></div>
+      </fieldset>
+    </form>
 {% endblock %}
