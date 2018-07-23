@@ -1,7 +1,7 @@
 import json
 
-from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from .models import Post, Comment
 # Create your views here.
@@ -48,13 +48,24 @@ def add_comment_to_post(request):
         )
 
 
-def comment_approve(request, pk):
-    comment = get_object_or_404(Comment, pk=pk)
-    comment.approve()
-    return redirect('news_detail', pk=comment.post.pk)
+def comment_approve(request):
+    try:
+        pk = request.GET.get('pk')
+        comment = get_object_or_404(Comment, pk=pk)
+        comment.approve()
+    except Exception as ex:
+        print(ex)
+        return JsonResponse({'message': "fail"})
+    return JsonResponse({'message': "success"})
 
 
-def comment_remove(request, pk):
-    comment = get_object_or_404(Comment, pk=pk)
-    comment.delete()
-    return redirect('news_detail', pk=comment.post.pk)
+def comment_remove(request):
+    try:
+        pk = request.GET.get('pk')
+        action = request.GET.get('action')
+        comment = get_object_or_404(Comment, pk=pk)
+        comment.delete()
+    except Exception as ex:
+        print(ex)
+        return JsonResponse({'message': "fail"})
+    return JsonResponse({'message': "success"})
