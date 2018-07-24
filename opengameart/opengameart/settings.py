@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'arts',
     'accounts',
     'blog',
+    'chat',
 
 ]
 
