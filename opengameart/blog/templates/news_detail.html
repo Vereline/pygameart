@@ -1,13 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}Latest news{% endblock title %}
-{% block javascript %}
-    <script type="text/javascript" src="{% static 'js/csrf.js' %}"></script>
-    <script>
-        function create_comment(data, pk, url){
 
-        }
-    </script>
+{% block js_imports %}
+    <script type="text/javascript" src="{% static 'js/csrf.js' %}"></script>
+{% endblock js_imports %}
+
+{% block javascript %}
     <script>
         // Submit post on submit
         $('#post-form-comment').on('submit', function(event){

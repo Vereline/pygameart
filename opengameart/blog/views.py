@@ -48,6 +48,7 @@ def add_comment_to_post(request):
         )
 
 
+# TODO: rewrite all ajax backend methods (which return Json response) with usage of Rest framework serializers
 def comment_approve(request):
     try:
         pk = request.GET.get('pk')
