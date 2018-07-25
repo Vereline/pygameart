@@ -8,9 +8,9 @@
     <div class="card">
         <div class="card-body text-center">
             {% if user_image %}
-                <img width="80" height="80" src="{{ user_image }}" />
+                <img width="80" height="80" src="{{ user_image }}" alt="User Image"/>
             {% else %}
-                <img width="80" height="80" src="{% static 'user-default.png' %}" />
+                <img width="80" height="80" src="{% static 'user-default.png' %}" alt="User Image"/>
             {% endif %}
             <form action="{% url 'configure_user' user.id %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}

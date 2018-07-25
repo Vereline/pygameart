@@ -54,14 +54,14 @@
                     <div class="card-body">
                         <div class="infinite-item">
                             {% if post.user.user_avatar %}
-                                <img src="{{ post.user.user_avatar }}" />
+                                <img src="{{ post.user.user_avatar }}" alt="User Image"/>
                             {% else %}
-                                <img src="{% static 'user-default.png' %}" />
+                                <img src="{% static 'user-default.png' %}" alt="User Image"/>
                             {% endif %}
 
                             <a href="{% url 'user_profile' post.user.user_id %}">{{ post.user.get_username }}</a>
                             <p>{{ post.art.title }}</p>
-                            <img src="{{ post.art.file }}"/>
+                            <img src="{{ post.art.file }}" alt="Post Image"/>
                             <p>Likes: </p><span id="{{ post.art.id }}">{{ post.art.likes }}</span>
 
                             <button id="{{ post.art.id }}" class="btn btn-success appreciate like" type="submit" >Like</button>

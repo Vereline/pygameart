@@ -56,7 +56,7 @@
         <div id="wrapper">
 
             <div id="main-image">
-                <img src="{{ first.art.file }}" />
+                <img src="{{ first.art.file }}" alt="First image"/>
             </div>
 
             <div id="thumbs">
@@ -64,7 +64,7 @@
                     {% for post in posts %}
                         <li style="list-style-type: none;">
                             <a class="thumb" name="thumb" href="{{ post.art.file }}" title="">
-                                <img class='galleryImage' src="{{ post.art.file }}" alt="" />
+                                <img class='galleryImage' src="{{ post.art.file }}" alt="Gallery image" />
                             </a>
                         </li>
                     {%  endfor %}
@@ -72,11 +72,11 @@
             </div>
 
             <div id="prevButton" class="imageButton">
-                <img src="{% static 'arrowLeftGrey.png' %}" alt="" />
+                <img src="{% static 'arrowLeftGrey.png' %}" alt="Left" />
             </div>
 
             <div id="nextButton" class="imageButton">
-                <img src="{% static 'arrowRightGrey.png' %}" alt="" />
+                <img src="{% static 'arrowRightGrey.png' %}" alt="Right" />
             </div>
 
         </div>

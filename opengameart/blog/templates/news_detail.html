@@ -100,14 +100,16 @@
 {% endblock javascript %}
 
 {% block content %}
-    <div class="post">
-        {% if post.published_date %}
-            <div class="date">
-                {{ post.published_date }}
-            </div>
-        {% endif %}
-        <h1>{{ post.title }}</h1>
-        <p>{{ post.text|linebreaksbr }}</p>
+    <div class="card">
+        <div class="card-body post">
+            {% if post.published_date %}
+                <div class="date">
+                    {{ post.published_date }}
+                </div>
+            {% endif %}
+            <h1 class="card-title">{{ post.title }}</h1>
+            <p class="card-text">{{ post.text|linebreaksbr }}</p>
+        </div>
     </div>
     <hr>
     <div class="current-comments">
@@ -117,18 +119,18 @@
                     <div class="date">
                         {{ comment.created_date }}
                         {% if not comment.approved_comment and user.is_staff %}
-                            <button id="{{ comment.pk }}" class="btn btn-default change remove">
+                            <button id="{{ comment.pk }}" class="btn btn-danger change remove">
                                 Remove <span class="glyphicon glyphicon-remove"></span>
                             </button>
-                            <button id="{{ comment.pk }}" class="btn btn-default change approve">
+                            <button id="{{ comment.pk }}" class="btn btn-light change approve">
                                 Approve <span class="glyphicon glyphicon-ok"></span>
                             </button>
                         {# filter for comparing values #}
                         {% elif not comment.approved_comment and user.id == comment.author_id|add:"0"  %}
-                            <button id="{{ comment.pk }}" class="btn btn-default change remove">
+                            <button id="{{ comment.pk }}" class="btn btn-danger change remove">
                                 Remove <span class="glyphicon glyphicon-remove"></span>
                             </button>
-                            <button id="{{ comment.pk }}" class="btn btn-default change approve">
+                            <button id="{{ comment.pk }}" class="btn btn-light change approve">
                                 Approve <span class="glyphicon glyphicon-ok"></span>
                             </button>
                         {% endif %}
@@ -162,7 +164,7 @@
                 <label for="{{ form.text.id_for_label }}">Your Text:</label>
                 {{ form.text }}
             </div>
-            <button type="submit" class="save btn btn-default">Send</button>
+            <button type="submit" class="save btn btn-dark">Send</button>
             <div id="results"></div>
       </fieldset>
     </form>

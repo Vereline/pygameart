@@ -57,9 +57,9 @@
             <div id="{{ friend.id }}" class="infinite-item card">
                 <div class="card-body">
                     {% if friend.user_avatar %}
-                        <img src="{{ friend.user_avatar.url }}"/>
+                        <img src="{{ friend.user_avatar.url }}" alt="Friend User Image"/>
                     {% else %}
-                        <img src="{% static 'user-default.png' %}" />
+                        <img src="{% static 'user-default.png' %}" alt="Friend User Image"/>
                     {% endif %}
                     <a href="{% url 'user_profile' friend.user_id %}">{{ friend.get_username }}</a>
                     <a id="{{ friend.id }}" class="relateAction follow btn btn-dark" href="#">Follow</a>
@@ -80,7 +80,7 @@
         {% for art in arts %}
             <div class="infinite-item card">
                 <div class="card-body">
-                    <img src="{{ art.file.url }}"/>
+                    <img src="{{ art.file.url }}" alt="Found Image"/>
                     <p>{{ art.title }}</p>
                     <a class="btn btn-dark" href="#">Add as an art</a>
                 </div>

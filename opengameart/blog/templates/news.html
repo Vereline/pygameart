@@ -3,14 +3,42 @@
 {% block title %}News{% endblock %}
 
 {% block content %}
-    <h1>This is news page</h1>
+    <div class="jumbotron text-center">
+        <h1>Latest news</h1>
+        <small>An informative page</small>
+    </div>
 
     {% for post in posts %}
-        <div>
-            <p>published: {{ post.published_date }}</p>
-            <h1><a href="{% url 'news_detail' pk=post.pk %}">{{ post.title }}</a></h1>
-            <a href="{% url 'news_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a>
-            <p>{{ post.text|linebreaksbr }}</p>
+        <div class="card mb-4">
+            <div class="card-body">
+                <h1 class="card-title">
+                    <a href="{% url 'news_detail' pk=post.pk %}">{{ post.title }}</a>
+                </h1>
+                <a href="{% url 'news_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a>
+                <p class="card-text">{{ post.text|linebreaksbr }}</p>
+                <a class="btn btn-success" href="{% url 'news_detail' pk=post.pk %}">Read more</a>
+                <div class="card-footer text-muted">
+                    <p>published: {{ post.published_date }}</p>
+                </div>
+            </div>
         </div>
     {% endfor %}
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if posts.has_previous %}
+                <a class="btn btn-dark" href="?page=1">&laquo; first</a>
+                <a class="btn btn-dark" href="?page={{ posts.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ posts.number }} of {{ posts.paginator.num_pages }}.
+            </span>
+
+            {% if posts.has_next %}
+                <a class="btn btn-dark" href="?page={{ posts.next_page_number }}">next</a>
+                <a class="btn btn-dark" href="?page={{ posts.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
 {%  endblock %}

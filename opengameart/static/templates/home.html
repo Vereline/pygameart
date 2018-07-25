@@ -11,9 +11,9 @@
   <div class="card">
     <div class="card-body">
         {% if art_user.user_avatar %}
-            <img src="{{ art_user.user_avatar.url }}"/>
+            <img src="{{ art_user.user_avatar.url }}" alt="User Image"/>
         {% else %}
-            <img src="{% static 'user-default.png' %}" />
+            <img src="{% static 'user-default.png' %}" alt="User Image"/>
         {% endif %}
         <p>{{ art_user.get_username }}</p>
         <p>{{ art_user.birthdate }}</p>

@@ -39,7 +39,7 @@
                     <div class="list-group">
                         {% for user in users %}
                             <a href="{% url 'chat' request.user.id user.id %}" id="user{{ user.id }}" class="list-group-item row">
-                                <img src="{% static 'user-default.png' %}" class="col s4">
+                                <img src="{% static 'user-default.png' %}" class="col s4" alt="User Image">
                                 <div class="col-sm-5">
                                     <span class="title" style="font-weight: bolder">{{ user.username }}</span>
                                 </div>

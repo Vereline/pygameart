@@ -76,9 +76,9 @@
                 {% for friend in data.get_following %}
                     <div id="{{ friend.id }}" class="infinite-item">
                         {% if friend.user_avatar %}
-                            <img src="{{ friend.user_avatar }}" />
+                            <img src="{{ friend.user_avatar }}" alt="User Image"/>
                         {% else %}
-                            <img src="{% static 'user-default.png' %}" />
+                            <img src="{% static 'user-default.png' %}" alt="User Image"/>
                         {% endif %}
                         <a href="{% url 'user_profile' friend.user_id %}">{{ friend.get_username }}</a>
                         <a id="{{ friend.id }}" class="relateAction unfollow btn btn-dark " href="#">Unfollow</a>
@@ -101,9 +101,9 @@
                 {% for friend in data.get_followers %}
                     <div id="{{ friend.id }}" class="infinite-item">
                         {% if friend.user_avatar %}
-                            <img src="{{ friend.user_avatar }}" />
+                            <img src="{{ friend.user_avatar }}" alt="User Image"/>
                         {% else %}
-                            <img src="{% static 'user-default.png' %}" />
+                            <img src="{% static 'user-default.png' %}" alt="User Image"/>
                         {% endif %}
                         <a href="{% url 'user_profile' friend.user_id %}">{{ friend.get_username }}</a>
                     </div>
@@ -126,9 +126,9 @@
                 {% for friend in data.get_friends %}
                     <div id="{{ friend.id }}" class="infinite-item">
                         {% if friend.user_avatar %}
-                            <img src="{{ friend.user_avatar }}" />
+                            <img src="{{ friend.user_avatar }}" alt="User Image"/>
                         {% else %}
-                            <img src="{% static 'user-default.png' %}" />
+                            <img src="{% static 'user-default.png' %}" alt="User Image"/>
                         {% endif %}
                         <a href="{% url 'user_profile' friend.user_id %}">{{ friend.get_username }}</a>
                     </div>
@@ -151,9 +151,9 @@
                 {% for friend in data.get_blocking %}
                     <div id="{{ friend.id }}" class="infinite-item">
                         {% if friend.user_avatar %}
-                            <img src="{{ friend.user_avatar }}" />
+                            <img src="{{ friend.user_avatar }}" alt="User Image"/>
                         {% else %}
-                            <img src="{% static 'user-default.png' %}" />
+                            <img src="{% static 'user-default.png' %}" alt="User Image"/>
                         {% endif %}
                         <a href="{% url 'user_profile' friend.user_id %}">{{ friend.get_username }}</a>
                     </div>
@@ -175,9 +175,9 @@
                 {% for friend in data.get_blocked %}
                     <div class="infinite-item">
                         {% if friend.user_avatar %}
-                            <img src="{{ friend.user_avatar }}" />
+                            <img src="{{ friend.user_avatar }}" alt="User Image"/>
                         {% else %}
-                            <img src="{% static 'user-default.png' %}" />
+                            <img src="{% static 'user-default.png' %}" alt="User Image"/>
                         {% endif %}
                         <a href="{% url 'user_profile' friend.user_id %}">{{ friend.get_username }}</a>
                     </div>
