@@ -4,7 +4,8 @@
 {% block content %}
 {% if user.is_authenticated %}
   <div class="alert alert-success alert-dismissable fade show">
-      <strong>Success!</strong> <p>Hi {{ user.username }}!</p>
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Success!</strong> <p>Hi {{ user.username }}!</p>
   </div>
   <p><a href="{% url 'logout' %}">logout</a></p>
   <div class="card">

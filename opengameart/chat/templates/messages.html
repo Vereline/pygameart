@@ -4,14 +4,18 @@
 {% block messages %}
     {% for message in messages %}
         {% if message.sender == request.user %}
-            <div class="card-panel right" style="width: 75%; position: relative">
-                <div style="position: absolute; top: 0; left:3px; font-weight: bolder" class="title">You</div>
-                {{ message }}
+            <div class="card-body message-container" style="width: 75%; position: relative">
+                <p style="float: right; font-weight: bolder" class="title">You</p>
+                <br>
+                <p>{{ message }}</p>
+                <span class="time-right">{{ message.timestamp }}</span>
             </div>
         {% else %}
-            <div class="card-panel left blue lighten-5" style="width: 75%; position: relative">
-                <div style="position: absolute; top: 0; left:3px; font-weight: bolder" class="title">{{ message.sender }}</div>
-                {{ message }}
+            <div class="card-body message-container darker-message" style="width: 75%; position: relative">
+                <p style="float: left; font-weight: bolder" class="title">{{ message.sender }}</p>
+                <br>
+                <p>{{ message }}</p>
+                <span class="time-left">{{ message.timestamp }}</span>
             </div>
         {% endif %}
     {% endfor %}

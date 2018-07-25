@@ -52,6 +52,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path(r'news/', include('blog.urls')),
     path(r'chat/', include('chat.urls')),
+    path(r'contact/', include('contact.urls')),
     url(r'^api/$', get_schema_view()),
     url(r'^api/echo/$', EchoView.as_view()),
     url(r'^api/auth/', include('rest_framework.urls', namespace='rest_framework')),
