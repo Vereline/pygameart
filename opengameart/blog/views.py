@@ -14,13 +14,20 @@ def news_list(request):
     paginator = Paginator(post_list, 5)
 
     page = request.GET.get('page')
-    posts = paginator.get_page(page)
+    try:
+        posts = paginator.get_page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        posts = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        posts = paginator.page(paginator.num_pages)
     return render(request, 'news.html', {'posts': posts})
 
 
 def news_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    form = CommentForm
+    form = CommentForm()
     return render(request, 'news_detail.html', {'post': post, 'form': form})
 
 
@@ -68,7 +75,7 @@ def comment_approve(request):
 def comment_remove(request):
     try:
         pk = request.GET.get('pk')
-        action = request.GET.get('action')
+        # action = request.GET.get('action')
         comment = get_object_or_404(Comment, pk=pk)
         comment.delete()
     except Exception as ex:

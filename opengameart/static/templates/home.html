@@ -15,10 +15,15 @@
         {% else %}
             <img src="{% static 'user-default.png' %}" alt="User Image"/>
         {% endif %}
+        <p class="bg-success text-white ">Username:</p>
         <p>{{ art_user.get_username }}</p>
+        <p class="bg-success text-white ">Birth date:</p>
         <p>{{ art_user.birthdate }}</p>
+        <p class="bg-success text-white ">Location:</p>
         <p>{{ art_user.location }}</p>
+        <p class="bg-success text-white ">Art Direction:</p>
         <p>{{ art_user.art_direction }}</p>
+        <p class="bg-success text-white ">Description:</p>
         <p>{{ art_user.description }}</p>
     </div>
 {% else %}

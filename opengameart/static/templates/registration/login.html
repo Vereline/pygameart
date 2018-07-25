@@ -6,7 +6,7 @@
 {% block content %}
 
     <form action="" method="POST" class="elegant-aero">
-        {{ form }}
+        {{ form.as_p }}
         {% csrf_token %}
         <p></p>
         <button class="btn btn-dark">Login</button>

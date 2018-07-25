@@ -53,10 +53,13 @@ def user_list(request, pk=None):
         if pk:
             users = User.objects.filter(id=pk)
         else:
-            current_user_id = request.user.id
-            friends_ids = get_list_of_users_ids(current_user_id)
-            users = User.objects.filter(id__in=friends_ids)
-            # users = User.objects.all()
+            try:
+                current_user_id = request.user.id
+                friends_ids = get_list_of_users_ids(current_user_id)
+                users = User.objects.filter(id__in=friends_ids)
+            except Exception as ex:
+                print(ex)
+                users = User.objects.all()
         serializer = UserSerializer(users, many=True, context={'request': request})
         return JsonResponse(serializer.data, safe=False)
 
