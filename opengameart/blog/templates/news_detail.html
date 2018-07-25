@@ -101,6 +101,9 @@
 
 {% block content %}
     <div class="card">
+        {% if post.post_image %}
+            <img src="{{ post.post_image.url }}" alt="Post image"/>
+        {% endif %}
         <div class="card-body post">
             {% if post.published_date %}
                 <div class="date">
