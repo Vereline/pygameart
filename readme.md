@@ -89,6 +89,10 @@ python manage.py shell
 1. Come into the directory with tests
 2. ./manage.py test
 
+(help) ./manage.py test --help
+./manage.py test module_name
+./manage.py test --verbosity=2
+
 ### Collect static files
 ./manage.py collectstaticfiles
 
