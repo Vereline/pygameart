@@ -3,31 +3,67 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-  <div class="alert alert-success alert-dismissable fade show">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <strong>Success!</strong> <p>Hi {{ user.username }}!</p>
-  </div>
-  <p><a href="{% url 'logout' %}">logout</a></p>
-  <div class="card">
-    <div class="card-body">
-        {% if art_user.user_avatar %}
-            <img src="{{ art_user.user_avatar.url }}" alt="User Image"/>
-        {% else %}
-            <img src="{% static 'user-default.png' %}" alt="User Image"/>
-        {% endif %}
-        <p class="bg-success text-white ">Username:</p>
-        <p>{{ art_user.get_username }}</p>
-        <p class="bg-success text-white ">Birth date:</p>
-        <p>{{ art_user.birthdate }}</p>
-        <p class="bg-success text-white ">Location:</p>
-        <p>{{ art_user.location }}</p>
-        <p class="bg-success text-white ">Art Direction:</p>
-        <p>{{ art_user.art_direction }}</p>
-        <p class="bg-success text-white ">Description:</p>
-        <p>{{ art_user.description }}</p>
+    <div class="alert alert-success alert-dismissable fade show">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Success!</strong> <p>Hi {{ user.username }}!</p>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad" >
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{ user.username }}</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-3 col-lg-3 " align="center">
+                            {% if art_user.user_avatar %}
+                                <div class="image">
+                                    <img style="height: 100px; width: 100px" src="{{ art_user.user_avatar.url }}" alt="User Image"/>
+                                </div>
+                            {% else %}
+                                <div class="image">
+                                    <img style="height: 100px; width: 100px" src="{% static 'user-default.png' %}" alt="User Image"/>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                    <div class=" col-md-9 col-lg-9 ">
+                        <table class="table table-user-information">
+                            <tbody>
+                                <tr>
+                                    <td>Birth date:</td>
+                                    <td>{{ art_user.birth_date }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Location:</td>
+                                <td>{{ art_user.location }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Art Direction:</td>
+                                    <td>{{ art_user.art_direction }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Email</td>
+                                    <td><a class="nav-link" href="mailto:{{ user.email }}">{{ user.email }}</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                  <a href="#" class="btn btn-dark">Edit account</a>
+                  <a href="#" class="btn btn-danger">Remove account</a>
+                </div>
+              </div>
+            </div>
+            <div class="panel-footer">
+                <h3>Description</h3>
+                <span class="pull-right">
+                    {{ art_user.description }}
+                </span>
+            </div>
+          </div>
+        </div>
     </div>
 {% else %}
-  <p>You are not logged in</p>
-  <a class="btn btn-dark" href="{% url 'login' %}">login</a>
+    <p>You are not logged in</p>
+    <a class="btn btn-dark" href="{% url 'login' %}">login</a>
 {% endif %}
 {% endblock %}

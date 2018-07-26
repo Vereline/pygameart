@@ -38,8 +38,8 @@ class Art(models.Model):
         try:
             if update_picture:
                 file_name = self.file.name
-                img = Image.open(self.file)  # Creates an instance of PIL Image class - PIL does the verification of file
-
+                # Creates an instance of PIL Image class - PIL does the verification of file
+                img = Image.open(self.file)
                 # img_copy = copy.copy(img)
                 # if not valid_img(img_copy):
                 #     raise Exception('An invalid image was detected when attempting to save an Art!')

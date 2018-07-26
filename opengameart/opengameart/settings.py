@@ -24,7 +24,7 @@ SECRET_KEY = 'ns*dq2y)!rv6b+)h-i9f!ss6m0uxs+&)mg&l2cvi5#&9o=udw^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
 
 # Application definition
 
@@ -38,7 +38,6 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'corsheaders',  # A Django App that adds CORS (Cross-Origin Resource Sharing) headers to responses.
-    'debug_toolbar',
 
     'arts',
     'accounts',
@@ -59,8 +58,49 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
+
+
+# debug_toolbar settings
+if DEBUG:
+    INTERNAL_IPS = ('127.0.0.1',)
+
+    MIDDLEWARE += (
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+    )
+
+    INSTALLED_APPS += (
+        'debug_toolbar',
+    )
+
+    DEBUG_TOOLBAR_PANELS = [
+        'debug_toolbar.panels.versions.VersionsPanel',
+        'debug_toolbar.panels.timer.TimerPanel',
+        'debug_toolbar.panels.settings.SettingsPanel',
+        'debug_toolbar.panels.headers.HeadersPanel',
+        'debug_toolbar.panels.request.RequestPanel',
+        'debug_toolbar.panels.sql.SQLPanel',
+        'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+        'debug_toolbar.panels.templates.TemplatesPanel',
+        'debug_toolbar.panels.cache.CachePanel',
+        'debug_toolbar.panels.signals.SignalsPanel',
+        'debug_toolbar.panels.logging.LoggingPanel',
+        'debug_toolbar.panels.redirects.RedirectsPanel',
+    ]
+
+    DEBUG_TOOLBAR_CONFIG = {
+        'INTERCEPT_REDIRECTS': False,
+    }
+
+    # Django debug toolbar default configuration
+    CONFIG_DEFAULTS = {
+        # Toolbar options
+        'RESULTS_CACHE_SIZE': 3,
+        'SHOW_COLLAPSED': True,
+        # Panel options
+        'SQL_WARNING_THRESHOLD': 100,   # milliseconds
+        'JQUERY_URL': os.path.join(BASE_DIR, 'static', 'js', 'jquery-3.3.1.min.js'),
+    }
 
 ROOT_URLCONF = 'opengameart.urls'
 
@@ -127,7 +167,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# path for deployment
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
 STATICFILES_DIRS = [
@@ -163,6 +204,7 @@ LOGOUT_REDIRECT_URL = 'home'
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 
+# Redis settings
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',

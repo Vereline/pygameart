@@ -1,4 +1,4 @@
-var text_box = '<div class="card-panel right" style="width: 75%; position: relative">' +
+var text_box = '<div class="card-body message-container" >' +
         '<div style="position: absolute; top: 0; left:3px; font-weight: bolder" class="title">{sender}</div>' +
         '{message}' +
         '</div>';

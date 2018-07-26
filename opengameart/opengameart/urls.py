@@ -47,6 +47,11 @@ urlpatterns = [
     url(r'^api/auth/token/refresh/$', TokenRefreshView.as_view()),
 ]
 
-urlpatterns += staticfiles_urlpatterns()
 if DEBUG is True:
+    import debug_toolbar
+    urlpatterns += staticfiles_urlpatterns()
     urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
+    urlpatterns = [
+                      url(r'^__debug__/', include(debug_toolbar.urls)),
+                  ] + urlpatterns
+
