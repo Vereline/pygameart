@@ -306,6 +306,8 @@ def update_all_likes():
 
 def follow_user(art_user, following_user):
     """ This view is called, when follow button is pressed """
+    if following_user in art_user.get_blocking():
+        art_user.remove_relationship(following_user, RELATIONSHIP_BLOCKED)
     already_followed = False
     if following_user in art_user.get_following():
         already_followed = True
@@ -328,6 +330,8 @@ def unfollow_user(art_user, following_user):
 
 def block_user(art_user, blocking_user):
     """ This view is called, when block button is pressed """
+    if blocking_user in art_user.get_following():
+        art_user.remove_relationship(blocking_user, RELATIONSHIP_FOLLOWING)
     already_blocked = False
     if blocking_user in art_user.get_blocking():
         already_blocked = True

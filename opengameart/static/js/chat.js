@@ -1,6 +1,6 @@
 var text_box_send = '<li class="left clearfix">\n' +
     '<span class="chat-img float-left">\n' +
-    '<img src="{% static \'user-default.png\' %}" alt="User Avatar" class="rounded-circle " />\n' +
+    '<img src=\"\/static\/user-default.png\" alt="User Avatar" class="rounded-circle " />\n' +
     '</span>\n' +
     '<div class="chat-body clearfix">\n' +
     '<div class="header">\n' +
@@ -12,8 +12,8 @@ var text_box_send = '<li class="left clearfix">\n' +
     '</li>';
 
 var text_box_receive = '<li class="right clearfix">\n' +
-    '<span class="chat-img float-right">\n' + //TODO: fix images, which are not displayed``
-    '<img src="{% static \'user-default.png\' %}" alt="User Avatar" class="rounded-circle " />\n' +
+    '<span class="chat-img float-right">\n' +
+    '<img src=\"\/static\/user-default.png\" alt="User Avatar" class="rounded-circle " />\n' +
     '</span>\n' +
     '<div class="chat-body clearfix">\n' +
     '<div class="header">\n' +

@@ -118,3 +118,11 @@
     width: 50px;
     height: 50px;
 }
+
+a.names {
+    color: #0f9d58;
+}
+
+a.names:hover {
+    color: #0b2e13;
+}
