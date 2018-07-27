@@ -2,8 +2,13 @@
 {% load static %}
 {% block title %}Latest news{% endblock title %}
 
+{% block stylesheet %}
+    <link rel="stylesheet" type="text/css" href="{% static "css/style_news_detail.css" %}">
+{% endblock stylesheet %}
+
 {% block js_imports %}
     <script type="text/javascript" src="{% static 'js/csrf.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/news.js' %}"></script>
 {% endblock js_imports %}
 
 {% block javascript %}
@@ -46,22 +51,21 @@
     </script>
     <script>
         function createCommentChild(created_date, author, text, may_change, comment_pk) {
-             let node = $('<div class="comment"><div class="date">'+created_date+'</div><strong>'+author+'</strong><p>'+text+'</p></div>');
+             let remove_comment_url="/news/comment/remove/"+comment_pk;
+             let approve_comment_url="/news/comment/approve/"+comment_pk;
+             let node = comment_text.replace('{author}', author);
+             node = node.replace('{created_date}', created_date);
+             node = node.replace('{text}', text);
+             node = node.replace(/{comment_pk}/g, comment_pk);
 
-             let remove_comment_url="/news/comment/"+comment_pk+"/remove/";
-             let remove_comment_node=$('<a class="btn btn-default" href="'+remove_comment_url+'">Remove <span class="glyphicon glyphicon-remove"></span></a>');
-
-             let approve_comment_url="/news/comment/"+comment_pk+"/approve/";
-             let approve_comment_node=$('<a class="btn btn-default" href="'+approve_comment_url+'">Approve <span class="glyphicon glyphicon-ok"></span></a>');
-
-             if (may_change){
-                 let data_child = node.children('.date');
-                 data_child.append(remove_comment_node);
-                 data_child.append(approve_comment_node);
-             }
+             //if (may_change){
+             //    let data_child = $(node).children('.date');
+             //    data_child.append(remove_comment_node);
+             //    data_child.append(approve_comment_node);
+             //}
 
              let list = document.getElementsByClassName('current-comments');
-             node.appendTo(list);
+             $(node).appendTo(list);
         }
     </script>
     <script>
@@ -78,7 +82,12 @@
             else if ($(this).hasClass('remove')){
                 action = 'remove';
                 url_id = "{% url 'comment_remove' %}";
+            } else if ($(this).hasClass('edit')){
+                action = 'edit';
+                {#url_id = "{% url 'comment_edit' %}";#}
+                return;
             }
+
 
             let comment_container = $(this).parent(".date").parent(".comment");
 
@@ -115,39 +124,98 @@
         </div>
     </div>
     <hr>
-    <div class="current-comments">
-        {% for comment in post.comments.all %}
-            {% if user.is_authenticated or comment.approved_comment %}
-                <div class="comment">
-                    <div class="date">
-                        {{ comment.created_date }}
-                        {% if not comment.approved_comment and user.is_staff %}
-                            <button id="{{ comment.pk }}" class="btn btn-danger change remove">
-                                Remove <span class="glyphicon glyphicon-remove"></span>
-                            </button>
-                            <button id="{{ comment.pk }}" class="btn btn-light change approve">
-                                Approve <span class="glyphicon glyphicon-ok"></span>
-                            </button>
-                        {# filter for comparing values #}
-                        {% elif not comment.approved_comment and user.id == comment.author_id|add:"0"  %}
-                            <button id="{{ comment.pk }}" class="btn btn-danger change remove">
-                                Remove <span class="glyphicon glyphicon-remove"></span>
-                            </button>
-                            <button id="{{ comment.pk }}" class="btn btn-light change approve">
-                                Approve <span class="glyphicon glyphicon-ok"></span>
-                            </button>
+    <div class="row justify-content-center">
+        <div class="card card-custom">
+            <div class="card-heading">
+                <h3 class="card-title">Recent Comments<span class="float-right badge badge-success badge-pill">{{ post.approved_comments.count }}</span></h3>
+            </div>
+            <div class="card-body">
+                <ul class="list-group current-comments">
+                    {% for comment in post.comments.all %}
+                        {% if user.is_authenticated or comment.approved_comment %}
+                            <li class="list-group-item comment">
+                                <div class="row">
+                                    <div class="col-xs-3 col-xl-3">
+                                        <img src="{% static 'user-default.png' %}" class="rounded-circle img-responsive" alt="" />
+                                    </div>
+                                    <div class="col-xs-10 col-xl-9">
+                                        <div class="date">
+                                            <a href="">Comment Title</a>
+                                            <div class="mic-info">
+                                                By: <a href="#">{{ comment.author }}</a> {{ comment.created_date }}
+                                            </div>
+
+                                            <div class="comment-text">{{ comment.text|linebreaks }}</div>
+                                            {% if not comment.approved_comment and user.is_staff %}
+    {#                                            <div class="action">#}
+                                                    <button id="{{ comment.pk }}" type="button" class="btn btn-primary btn-xs change edit" title="Edit">
+                                                        Edit
+                                                    </button>
+                                                    <button id="{{ comment.pk }}" type="button" class="btn btn-success btn-xs change approve" title="Approved">
+                                                        Approve
+                                                    </button>
+                                                    <button id="{{ comment.pk }}" type="button" class="btn btn-danger btn-xs change remove" title="Remove">
+                                                        Remove
+                                                    </button>
+    {#                                            </div>#}
+                                            {# filter for comparing values #}
+                                            {% elif not comment.approved_comment and user.id == comment.author_id|add:"0"%}
+                                                <button id="{{ comment.pk }}" type="button" class="btn btn-primary btn-xs change edit" title="Edit">
+                                                    Edit
+                                                </button>
+                                                <button id="{{ comment.pk }}" type="button" class="btn btn-success btn-xs change approve" title="Approved">
+                                                    Approve
+                                                </button>
+                                                <button id="{{ comment.pk }}" type="button" class="btn btn-danger btn-xs change remove " title="Remove">
+                                                    Remove
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
                         {% endif %}
-                    </div>
-                    <strong>{{ comment.author }}</strong>
-                    <p>{{ comment.text|linebreaks }}</p>
-                </div>
-            {% endif %}
-        {% empty %}
-            <p class="empty-comments">No comments here yet :(</p>
-        {% endfor %}
+                    {% empty %}
+                        <p class="empty-comments">No comments here yet :(</p>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
     </div>
 
-    <h1>New comment</h1>
+{#    <div class="current-comments">#}
+{#        {% for comment in post.comments.all %}#}
+{#            {% if user.is_authenticated or comment.approved_comment %}#}
+{#                <div class="comment">#}
+{#                    <div class="date">#}
+{#                        {{ comment.created_date }}#}
+{#                        {% if not comment.approved_comment and user.is_staff %}#}
+{#                            <button id="{{ comment.pk }}" class="btn btn-danger change remove">#}
+{#                                Remove <span class="glyphicon glyphicon-remove"></span>#}
+{#                            </button>#}
+{#                            <button id="{{ comment.pk }}" class="btn btn-light change approve">#}
+{#                                Approve <span class="glyphicon glyphicon-ok"></span>#}
+{#                            </button>#}
+                        {# filter for comparing values #}
+{#                        {% elif not comment.approved_comment and user.id == comment.author_id|add:"0"  %}#}
+{#                            <button id="{{ comment.pk }}" class="btn btn-danger change remove">#}
+{#                                Remove <span class="glyphicon glyphicon-remove"></span>#}
+{#                            </button>#}
+{#                            <button id="{{ comment.pk }}" class="btn btn-light change approve">#}
+{#                                Approve <span class="glyphicon glyphicon-ok"></span>#}
+{#                            </button>#}
+{#                        {% endif %}#}
+{#                    </div>#}
+{#                    <strong>{{ comment.author }}</strong>#}
+{#                    <p>{{ comment.text|linebreaks }}</p>#}
+{#                </div>#}
+{#            {% endif %}#}
+{#        {% empty %}#}
+{#            <p class="empty-comments">No comments here yet :(</p>#}
+{#        {% endfor %}#}
+{#    </div>#}
+
+    <h1>Add a new comment</h1>
     {% now "m/d/Y" %}
     <form method="POST" id="post-form-comment">
       {% csrf_token %}
@@ -165,6 +233,7 @@
             <div class="fieldWrapper">
                 {{ form.text.errors }}
                 <label for="{{ form.text.id_for_label }}">Your Text:</label>
+{#              <input id="id_text" type="text" name="text" maxlength="100" required>#}
                 {{ form.text }}
             </div>
             <button type="submit" class="save btn btn-dark">Send</button>

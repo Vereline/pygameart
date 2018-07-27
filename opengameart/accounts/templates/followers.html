@@ -31,7 +31,7 @@
             action = 'unblock';
         }
 
-        let art_user_container = this.parent(".infinite-item");
+        let art_user_container = $(this).parent(".infinite-item");
 
         let user_id = "{{ user.id }}";
         let url_id = "{% url 'set_relationship' %}";

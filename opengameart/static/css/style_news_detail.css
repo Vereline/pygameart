@@ -1,0 +1,61 @@
+.card-custom {
+    width: 80%;
+
+}
+.card-body {
+    padding:0;
+}
+
+.list-group {
+    margin-bottom: 0;
+}
+
+.card-title {
+    display:inline;
+}
+
+.label-info {
+    float: right;
+}
+
+.card li.list-group-item {
+    border-radius: 0;
+    border: 0;
+    border-top: 1px solid #ddd;
+}
+
+.card li.list-group-item:hover {
+    background-color: rgba(86,61,124,.1);
+}
+
+.mic-info {
+    color: #666666;
+    font-size: 11px;
+}
+
+.action {
+    margin-top:5px;
+}
+
+.comment-text {
+    font-size: 12px;
+}
+
+.btn-block {
+    border-top-left-radius:0;
+    border-top-right-radius:0;
+}
+
+div .card-heading{
+    margin-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+img.rounded-circle {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+}
+
+

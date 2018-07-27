@@ -1,0 +1,25 @@
+.post-title {
+    color: #218838;
+    text-decoration: none !important;
+}
+
+.post-comments {
+    color: #808080;
+    text-decoration: none !important;
+}
+
+.post-comments:hover, .post-title:hover {
+    color: #2F4F4F;
+    text-decoration: none !important;
+}
+
+ul.pages {
+    list-style: none;
+	padding-left: 0;
+	padding-right: 0;
+    display: inline-block;
+}
+
+ul.pages li {
+    display: inline;
+}

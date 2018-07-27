@@ -122,7 +122,7 @@ RELATIONSHIP_STATUSES = (
 
 
 class Relationship(models.Model):
-
+    # TODO: check the fact that people can't be blocked and followed at the same time
     from_person = models.ForeignKey(ArtUser, related_name='from_people', on_delete=models.CASCADE)
     to_person = models.ForeignKey(ArtUser, related_name='to_people', on_delete=models.CASCADE)
     status = models.IntegerField(choices=RELATIONSHIP_STATUSES)

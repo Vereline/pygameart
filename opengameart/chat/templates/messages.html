@@ -33,7 +33,9 @@
     {% endfor %}
     <script>
     $(function () {
-        $('#user{{ receiver.id }}').addClass('active');
+        let chosen_user = $('#user{{ receiver.id }}');
+        // chosen_user.addClass('active');
+        chosen_user.addClass('list-group-item-success');
         //Call receive function each 1 seconds to check for new messages in the database
         setInterval(receive,1000)
     })

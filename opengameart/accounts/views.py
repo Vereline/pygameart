@@ -56,9 +56,13 @@ def look_profile(request, **kwargs):
         else:
             pk = request.user.id
         art_user = get_object_or_404(ArtUser, user_id=pk)
-        return render(request, 'home.html', {'art_user': art_user})
+        try:
+            user_profile = get_object_or_404(User, id=int(pk))
+        except ValueError:
+            return render(request, 'user_page.html')
+        return render(request, 'user_page.html', {'art_user': art_user, 'user_profile': user_profile})
     else:
-        return render(request, 'home.html')
+        return render(request, 'user_page.html')
 
 
 @method_decorator(login_required, name='dispatch')

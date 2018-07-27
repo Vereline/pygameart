@@ -50,5 +50,9 @@ class Comment(models.Model):
         self.approved_comment = True
         self.save()
 
+    def edit(self):
+        # TODO: create editing comments function
+        pass
+
     def __str__(self):
         return self.text

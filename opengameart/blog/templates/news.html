@@ -1,9 +1,13 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}News{% endblock %}
 
+{% block stylesheet %}
+    <link rel="stylesheet" type="text/css" href="{% static "css/style_news.css" %}">
+{% endblock stylesheet %}
+
 {% block content %}
-    <div class="jumbotron text-center">
+    <div class="jumbotron text-center success">
         <h1>Latest news</h1>
         <small>An informative page</small>
     </div>
@@ -15,14 +19,16 @@
             {% endif %}
             <div class="card-body">
                 <h1 class="card-title">
-                    <a href="{% url 'news_detail' pk=post.pk %}">{{ post.title }}</a>
+                    <a class="post-title" href="{% url 'news_detail' pk=post.pk %}">{{ post.title }}</a>
                 </h1>
-                <a href="{% url 'news_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a>
-                <p class="card-text">{{ post.text|linebreaksbr }}</p>
-                <a class="btn btn-success" href="{% url 'news_detail' pk=post.pk %}">Read more</a>
                 <div class="card-footer text-muted">
-                    <p>published: {{ post.published_date }}</p>
+                    <p>Published: {{ post.published_date }}</p>
                 </div>
+                <a class="post-comments" href="{% url 'news_detail' pk=post.pk %}">
+                    Comments: {{ post.approved_comments.count }}
+                </a>
+                <p class="card-text">{{ post.text|linebreaksbr }}</p>
+                <a class="btn btn-success float-right" href="{% url 'news_detail' pk=post.pk %}">Read more</a>
             </div>
         </div>
     {% endfor %}
@@ -30,18 +36,28 @@
     <div class="pagination">
         <span class="step-links">
             {% if posts.has_previous %}
-                <a class="btn btn-dark" href="?page=1">&laquo; first</a>
-                <a class="btn btn-dark" href="?page={{ posts.previous_page_number }}">previous</a>
+                <a class="btn btn-dark" href="?page=1">&laquo; First</a>
+                <a class="btn btn-dark" href="?page={{ posts.previous_page_number }}">Previous</a>
+            {% endif %}
+
+            <ul class="pages">
+                {% for pg in page_range %}
+                    {% if posts.number == pg %}
+                        <li><a href="?page={{pg}}" class="btn btn-dark">{{pg}}</a></li>
+                    {% else %}
+                        <li><a href="?page={{pg}}" class="btn btn-light">{{pg}}</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+
+            {% if posts.has_next %}
+                <a class="btn btn-dark" href="?page={{ posts.next_page_number }}">Next</a>
+                <a class="btn btn-dark" href="?page={{ posts.paginator.num_pages }}">Last &raquo;</a>
             {% endif %}
 
             <span class="current">
                 Page {{ posts.number }} of {{ posts.paginator.num_pages }}.
             </span>
-
-            {% if posts.has_next %}
-                <a class="btn btn-dark" href="?page={{ posts.next_page_number }}">next</a>
-                <a class="btn btn-dark" href="?page={{ posts.paginator.num_pages }}">last &raquo;</a>
-            {% endif %}
         </span>
     </div>
 {%  endblock %}

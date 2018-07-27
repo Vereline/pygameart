@@ -1,5 +1,6 @@
 import json
 
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
@@ -22,7 +23,18 @@ def news_list(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         posts = paginator.page(paginator.num_pages)
-    return render(request, 'news.html', {'posts': posts})
+
+    # Get the index of the current page
+    index = posts.number - 1  # edited to something easier without index
+    # This value is maximum index of pages, so the last page - 1
+    max_index = len(paginator.page_range)
+    # calculate where to slice the list
+    start_index = index - 3 if index >= 3 else 0
+    end_index = index + 3 if index <= max_index - 3 else max_index
+    # Get a new page range.
+    page_range = list(paginator.page_range)[start_index:end_index]
+
+    return render(request, 'news.html', {'posts': posts, 'page_range': page_range})
 
 
 def news_detail(request, pk):
@@ -78,6 +90,19 @@ def comment_remove(request):
         # action = request.GET.get('action')
         comment = get_object_or_404(Comment, pk=pk)
         comment.delete()
+    except Exception as ex:
+        print(ex)
+        return JsonResponse({'message': "fail"})
+    return JsonResponse({'message': "success"})
+
+
+@login_required
+def comment_edit(request):
+    try:
+        pk = request.GET.get('pk')
+        # action = request.GET.get('action')
+        comment = get_object_or_404(Comment, pk=pk)
+        # comment.edit()
     except Exception as ex:
         print(ex)
         return JsonResponse({'message': "fail"})
