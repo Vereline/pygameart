@@ -1,0 +1,8 @@
+.image-shadow{
+    display:table-cell;
+    vertical-align:middle;
+    text-align:center;
+    width: 600px;
+    height: 480px;
+    background: rgba(0, 0, 0, 0.125);
+}

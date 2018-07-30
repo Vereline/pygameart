@@ -27,8 +27,8 @@ footer {
 
 .infinite-item, .loading {
   margin-bottom: 5px;
-  background-color: #0b7;
-  color: #fff;
+  background-color: #fff;
+  color: #000;
   text-align: center;
   padding: 25px 0;
 }
@@ -42,6 +42,7 @@ footer {
     width: 0;
     position: fixed;
     top: 0; left: 0;
+    z-index: 10;
   }
 
 .list-group-item:first-child {

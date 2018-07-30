@@ -2,6 +2,11 @@
 {% load static %}
 {% block title %}Current Posts{% endblock %}
 
+{% block stylesheet %}
+    <link rel="stylesheet" type="text/css" href="{% static  "css/style_post.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_modal.css' %}">
+{% endblock stylesheet %}
+
 {% block javascript %}
   <script>
     var infinite = new Waypoint.Infinite({
@@ -40,10 +45,51 @@
         });
     });
   </script>
+  <script>
+    MAX_WIDTH = 600;
+    MAX_HEIGHT = 480;
+    $(document).ready(function () {
+        let array = $('img.postimg');
+        console.log(array.length);
+        for (let img of array) {
+            console.log('width ' + img.clientWidth);
+            console.log('height ' + img.clientHeight);
+            console.log(typeof img.clientWidth);
+            let params = defineImageSize(img.clientWidth, img.clientHeight, MAX_WIDTH, MAX_HEIGHT);
+            console.log(params);
+            $(img).width(params['width'] + 'px');
+            $(img).height(params['height'] + 'px');
+        }
+
+    })
+  </script>
+  <script>
+        $( "img[class~='postimg']" ).click(function() {
+
+            // Get the modal
+            let modal = document.getElementById('myModal');
+            // Get the image and insert it inside the modal - use its "alt" text as a caption
+            let img = this;
+            let modalImg = document.getElementById('myImg');
+            let captionText = document.getElementById("caption");
+
+            modal.style.display = "block";
+            modalImg.src = img.src;
+            captionText.innerHTML = img.alt;
+
+            // Get the <span> element that closes the modal
+            let span = document.getElementsByClassName("close")[0];
+
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+        });
+  </script>
 {% endblock %}
 
 {% block content %}
-    <div class="card-deck">
+    <div class="card-deck justify-content-center">
         <div class="infinite-container">
             {% if current_user %}
                 <a class="btn btn-dark" href={% url 'add_art' %}>Add art</a>
@@ -53,16 +99,20 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="infinite-item">
-                            {% if post.user.user_avatar %}
-                                <img src="{{ post.user.user_avatar }}" alt="User Image"/>
-                            {% else %}
-                                <img src="{% static 'user-default.png' %}" alt="User Image"/>
-                            {% endif %}
+                            <span class="float-left align-top">
+                                {% if post.user.user_avatar %}
+                                    <img src="{{ post.user.user_avatar }}" alt="User Image" class="rounded-circle img-responsive"/>
+                                {% else %}
+                                    <img src="{% static 'user-default.png' %}" alt="User Image" class="rounded-circle img-responsive"/>
+                                {% endif %}
 
-                            <a href="{% url 'user_profile' post.user.user_id %}">{{ post.user.get_username }}</a>
-                            <p>{{ post.art.title }}</p>
-                            <img src="{{ post.art.file }}" alt="Post Image"/>
-                            <p>Likes: </p><span id="{{ post.art.id }}">{{ post.art.likes }}</span>
+                                <a href="{% url 'user_profile' post.user.user_id %}">{{ post.user.get_username }}</a>
+                            </span>
+                            <h3>{{ post.art.title }}</h3>
+                            <div class="image-shadow">
+                                <img id='img{{ post.art.id }}' class="postimg" src="{{ post.art.file }}" alt="{{ object.title }}"/>
+                            </div>
+                            <span id="{{ post.art.id }}">Likes: {{ post.art.likes }}</span>
 
                             <button id="{{ post.art.id }}" class="btn btn-success appreciate like" type="submit" >Like</button>
                             <button id="{{ post.art.id }}" class="btn btn-danger appreciate dislike" type="submit" >Dislike</button>
@@ -74,9 +124,17 @@
                     </div>
                 </div>
             {% endfor %}
-              <div class="loading" style="display: none;">
+            <div class="loading" style="display: none;">
                 Loading...
-              </div>
+            </div>
+
+            <!-- The Modal -->
+            <div id="myModal" class="modal">
+                <span class="close">&times;</span>
+                <img class="modal-content" id="myImg">
+                <div id="caption"></div>
+            </div>
+
             {% else %}
                 <p>Sorry, you have no posts</p>
             {% endif %}
