@@ -89,7 +89,7 @@
             }
 
 
-            let comment_container = $(this).parent(".date").parent(".comment");
+            let comment_container = $(this).closest("li[class~=comment]");
 
             console.log(url_id);
             $.get(url_id, {'pk': comment_id, 'action':action}, function(data){
@@ -99,7 +99,9 @@
                     if (data['message'] === 'success' && action === 'remove'){
                         comment_container.remove();
                     }else if (data['message'] === 'success' && action === 'approve'){
-                        $(this).siblings('.remove').remove();
+                        console.log(this);
+                        console.log($(this));
+                        $(this).siblings('button').remove();
                         $(this).remove();
                     }
                 }
@@ -132,7 +134,7 @@
             <div class="card-body">
                 <ul class="list-group current-comments">
                     {% for comment in post.comments.all %}
-                        {% if user.is_authenticated or comment.approved_comment %}
+                        {% if user.is_staff or comment.approved_comment %}
                             <li class="list-group-item comment">
                                 <div class="row">
                                     <div class="col-xs-3 col-xl-3">
@@ -170,6 +172,32 @@
                                                     Remove
                                                 </button>
                                             {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        {% elif not comment.approved_comment and user.id == comment.author_id|add:"0"%}
+                            <li class="list-group-item comment">
+                                <div class="row">
+                                    <div class="col-xs-3 col-xl-3">
+                                        <img src="{% static 'user-default.png' %}" class="rounded-circle img-responsive" alt="" />
+                                    </div>
+                                    <div class="col-xs-10 col-xl-9">
+                                        <div class="date">
+                                            <a href="">Comment Title</a>
+                                            <div class="mic-info">
+                                                By: <a href="#">{{ comment.author }}</a> {{ comment.created_date }}
+                                            </div>
+                                            <div class="comment-text">{{ comment.text|linebreaks }}</div>
+                                            <button id="{{ comment.pk }}" type="button" class="btn btn-primary btn-xs change edit" title="Edit">
+                                                Edit
+                                            </button>
+                                            <button id="{{ comment.pk }}" type="button" class="btn btn-success btn-xs change approve" title="Approved">
+                                                Approve
+                                            </button>
+                                            <button id="{{ comment.pk }}" type="button" class="btn btn-danger btn-xs change remove" title="Remove">
+                                                Remove
+                                            </button>
                                         </div>
                                     </div>
                                 </div>

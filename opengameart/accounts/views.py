@@ -81,7 +81,7 @@ class UserArtPostView(APIView):
         :param format: Format of the users posts to return to
         :return: Returns a list of users posts
         """
-        update_all_likes()
+        # update_all_likes()
         posts = ArtPost.objects.all()
         serializer = ArtPostSerializer(posts, many=True)
         return Response({'posts': serializer.data})
@@ -110,7 +110,7 @@ class CurrentUserArtPostView(generics.ListAPIView):
     template_name = 'post.html'
 
     def get(self, request, *args, **kwargs):
-        update_all_likes()
+        # update_all_likes()
         current_user = False
         pk = self.kwargs['pk']
         current_user_id = request.user.id
