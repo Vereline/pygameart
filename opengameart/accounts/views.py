@@ -144,7 +144,7 @@ def configure_user(request, pk):
             user.last_name = user_form.cleaned_data['last_name']
             user.username = user_form.cleaned_data['username']
             user.email = user_form.cleaned_data['email']
-            user.save(update_picture=True)
+            user.save()
 
             return HttpResponseRedirect('/')
     else:

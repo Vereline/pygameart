@@ -37,10 +37,14 @@
             <div class="col-sm-3">
                 <div class="list-group">
                     {% for user in users %}
-                        <a href="{% url 'chat' request.user.id user.id %}" id="user{{ user.id }}" class="list-group-item row names">
-                            <img style="width: 70px; height:70px" src="{% static 'user-default.png' %}" class="col s4" alt="User Image">
+                        <a href="{% url 'chat' request.user.id user.user.id %}" id="user{{ user.user.id }}" class="list-group-item row names">
+                            {% if user.avatar %}
+                                <img style="width: 70px; height:70px" src="{{ user.avatar }}" class="col s4" alt="User Image">
+                            {% else %}
+                                <img style="width: 70px; height:70px" src="{% static 'user-default.png' %}" class="col s4" alt="User Image">
+                            {% endif %}
                             <div class="col-sm-5">
-                                <span class="title" style="font-weight: bolder">{{ user.username }}</span>
+                                <span class="title" style="font-weight: bolder">{{ user.user.username }}</span>
                             </div>
                         </a>
                     {% endfor %}

@@ -61,6 +61,7 @@ class ArtPostAdmin(admin.ModelAdmin):
 
 class ArtRelationshipAdmin(admin.ModelAdmin):
     model = Relationship
+    list_display = ('from_person', 'to_person', 'status', 'id')
 
 
 admin.site.register(ArtUser, ArtUserAdmin)

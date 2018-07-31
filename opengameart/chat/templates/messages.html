@@ -6,7 +6,11 @@
         {% if message.sender == request.user %}
             <li class="left clearfix">
                 <span class="chat-img float-left">
-                    <img src="{% static 'user-default.png' %}" alt="User Avatar" class="rounded-circle " />
+                    {% if sender_avatar %}
+                        <img src="{{ sender_avatar }}" alt="User Avatar" class="rounded-circle " />
+                    {% else %}
+                        <img src="{% static 'user-default.png' %}" alt="User Avatar" class="rounded-circle " />
+                    {% endif %}
                 </span>
                 <div class="chat-body clearfix">
                     <div class="header">
@@ -19,7 +23,12 @@
         {% else %}
             <li class="right clearfix">
                 <span class="chat-img float-right">
-                    <img src="{% static 'user-default.png' %}" alt="User Avatar" class="rounded-circle " />
+                    {% if receiver_avatar %}
+                        <img src="{{ receiver_avatar }}" alt="User Avatar" class="rounded-circle " />
+                    {% else %}
+                        <img src="{% static 'user-default.png' %}" alt="User Avatar" class="rounded-circle " />
+                    {% endif %}
+{#                    <img src="{% static 'user-default.png' %}" alt="User Avatar" class="rounded-circle " />#}
                 </span>
                 <div class="chat-body clearfix">
                     <div class="header">

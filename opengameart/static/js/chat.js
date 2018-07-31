@@ -1,6 +1,8 @@
+DEFAULT_IMAGE ="/static/user-default.png";
+
 var text_box_send = '<li class="left clearfix">\n' +
     '<span class="chat-img float-left">\n' +
-    '<img src=\"\/static\/user-default.png\" alt="User Avatar" class="rounded-circle " />\n' +
+    '<img src={source_image} alt="User Avatar" class="rounded-circle " />\n' +
     '</span>\n' +
     '<div class="chat-body clearfix">\n' +
     '<div class="header">\n' +
@@ -13,7 +15,7 @@ var text_box_send = '<li class="left clearfix">\n' +
 
 var text_box_receive = '<li class="right clearfix">\n' +
     '<span class="chat-img float-right">\n' +
-    '<img src=\"\/static\/user-default.png\" alt="User Avatar" class="rounded-circle " />\n' +
+    '<img src={source_image} alt="User Avatar" class="rounded-circle " />\n' +
     '</span>\n' +
     '<div class="chat-body clearfix">\n' +
     '<div class="header">\n' +
@@ -35,6 +37,7 @@ function send(sender, receiver, message) {
         console.log(data);
         let box = text_box_send.replace('{sender}', "You");
         box = box.replace('{message}', message);
+        box = box.replace('{source_image}', DEFAULT_IMAGE);
         let date_now = Date(); // TODO: change date format to be shown correctly
         box = box.replace('{timestamp}', date_now);
         $('#board').append(box);
@@ -50,6 +53,7 @@ function receive() {
             for(let i=0;i<data.length;i++) {
                 console.log(data[i]);
                 let box = text_box_receive.replace('{sender}', data[i].sender);
+                box = box.replace('{source_image}', DEFAULT_IMAGE);
                 box = box.replace('{message}', data[i].message);
                 box = box.replace('{timestamp}', data[i].timestamp);
                 $('#board').append(box);
