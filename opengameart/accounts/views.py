@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, JsonResponse
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views import generic
 from .models import ArtUser, ArtPost, RELATIONSHIP_BLOCKED, RELATIONSHIP_FOLLOWING
 from arts.models import Art
@@ -383,3 +383,26 @@ def set_relationship(request):
         else:
             message = 'success'
         return JsonResponse({'message': message})
+
+
+def delete_objects_for_user(user_id):
+    try:
+        # ... other deletions
+        art_user_id = ArtUser.objects.get(user_id=user_id).id
+        # remove comments
+        # remove art posts and arts
+        # remove likes, news, chats and relationships
+        ArtUser.objects.filter(user_id=user_id).delete()
+        return True
+    except Exception as ex:
+        print(ex)
+        return False
+
+
+# not_tested
+@login_required
+def remove_account(request):
+    delete_objects_for_user(request.user.pk)  # optional
+    # UserSocialAuth.objects.filter(user=request.user).delete()
+    User.objects.filter(pk=request.user.pk).update(is_active=False, email=None)
+    return HttpResponseRedirect(reverse('django.contrib.auth.views.logout'))
