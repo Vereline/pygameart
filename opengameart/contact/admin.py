@@ -6,7 +6,7 @@ from .models import Contact
 
 class ContactAdmin(admin.ModelAdmin):
     model = Contact
-    list_display = ('first_name', 'email')
+    list_display = ('first_name', 'country', 'email')
 
 
 admin.site.register(Contact, ContactAdmin)

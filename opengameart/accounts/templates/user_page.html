@@ -1,6 +1,49 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block stylesheet %}
+    <style>
+        a.relateAction {
+            text-transform: capitalize;
+        }
+    </style>
+{% endblock stylesheet %}
+
+{% block javascript %}
+    <script>
+        $( "a[class~='relateAction']" ).click(function() {
+            let relate_id = this.id;
+            let action = '';
+            if ($(this).hasClass('unfollow')){
+                action = 'unfollow';
+            }
+            else if ($(this).hasClass('follow')){
+                action = 'follow';
+            }
+            else if ($(this).hasClass('block')){
+                action = 'block';
+            }
+            else if ($(this).hasClass('unblock')){
+                action = 'unblock';
+            }
+
+            let art_user_container = $(this).parent(".infinite-item");
+
+            let user_id = "{{ user.id }}";
+            let url_id = "{% url 'set_relationship' %}";
+            $.get(url_id, {'pk': user_id, 'relate_pk': relate_id, 'action':action}, function(data){
+
+                if (data['message']){
+                    alert(data['message']);
+                    if (data['message'] === 'success'){
+                        art_user_container.remove();
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock javascript %}
+
 {% block content %}
 {% if user.is_authenticated %}
     <div class="row">
@@ -44,8 +87,8 @@
                                 </tr>
                             </tbody>
                         </table>
-                  <a href="#" class="btn btn-dark">Follow</a>
-                  <a href="#" class="btn btn-danger">Block</a>
+                  <a href="#" id="{{ art_user.id }}" class="relateAction {{ follow_message }} btn btn-dark">{{ follow_message }}</a>
+                  <a id="{{ art_user.id }}" class="relateAction {{ block_message }} btn btn-danger" href="#">{{ block_message }}</a>
                 </div>
               </div>
             </div>

@@ -102,11 +102,9 @@ class LoadGallery(generics.ListAPIView):
     template_name = 'gallery.html'
 
     def get(self, request, *args, **kwargs):
-        current_user = False
         pk = self.kwargs['pk']
         current_user_id = request.user.id
-        if pk == current_user_id:
-            current_user = True
+        current_user = True if pk == current_user_id else False
         art_posts = ArtPost.objects.filter(user__user_id=pk)
         serializer = ArtPostSerializer(art_posts, many=True)
         return Response({'posts': serializer.data, 'current_user': current_user, 'first': serializer.data[0]})

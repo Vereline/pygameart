@@ -2,47 +2,8 @@
 {% load static %}
 {% block title %}Art gallery{% endblock title %}
 {% block stylesheet %}
-<style>
-    #wrapper{
-      width: 87%;
-      margin: auto;
-      padding: 0 10px;
-      background-color: rgba(255,255,255,0.9);
-      overflow: hidden;
-      box-shadow: 0 0 5px #eee;
-    }
-
-    a {text-decoration: none;}
-
-    li {
-      display: inline;
-      padding: 0 5px 5px 0;
-    }
-
-    #main-image{
-      width: 540px;
-      overflow: hidden;
-      margin: 0 auto
-    }
-
-    #main-image img {
-      max-height: 400px;
-      height: 300px;
-      width: auto;
-    }
-    .galleryImage{
-        width: 54px;
-        height: 30px;
-    }
-    .thumbs{text-align: center;}
-
-    #thumbs li {border:none;}
-    #thumbs li.selected img {border: #0b7 solid 3px;}
-
-    .imageButton {display: inline;}
-
-</style>
-
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_modal.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_gallery.css' %}">
 {% endblock stylesheet %}
 
 {% block content %}
@@ -56,15 +17,15 @@
         <div id="wrapper">
 
             <div id="main-image">
-                <img src="{{ first.art.file }}" alt="First image"/>
+                <img id="myImg" src="{{ first.art.file }}" alt="First image"/>
             </div>
 
             <div id="thumbs">
                 <ul class="thumbs">
                     {% for post in posts %}
                         <li style="list-style-type: none;">
-                            <a class="thumb" name="thumb" href="{{ post.art.file }}" title="">
-                                <img class='galleryImage' src="{{ post.art.file }}" alt="Gallery image" />
+                            <a class="thumb" name="thumb" href="{{ post.art.file }}" title="{{ post.art.title }}">
+                                <img class='galleryImage' src="{{ post.art.file }}" alt="{{ post.art.title }}" />
                             </a>
                         </li>
                     {%  endfor %}
@@ -79,6 +40,13 @@
                 <img src="{% static 'arrowRightGrey.png' %}" alt="Right" />
             </div>
 
+        </div>
+
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+            <span class="close">&times;</span>
+            <img class="modal-content" id="imgToShow">
+            <div id="caption"></div>
         </div>
 
     {% endif %}
@@ -97,13 +65,17 @@
             current_last.addClass('last');
         });
 
-        jQuery(document).ready(function() {
-            jQuery(".thumb").click(function() {
+        $(document).ready(function() {
+            $(".thumb").click(function() {
 
                   $('.selected').removeClass('selected');
-                  jQuery(this).parent().addClass('selected');
-                  let big_url = jQuery(this).attr("href");
-                  jQuery("#main-image img").attr("src", big_url);
+                  $(this).parent().addClass('selected');
+                  let big_url = $(this).attr("href");
+
+                  let mainImage = $("#main-image img");
+                  mainImage.attr("src", big_url);
+                  let title = $(this).attr("title");
+                  mainImage.attr("alt", title);
 
                 return false;
             });
@@ -118,8 +90,11 @@
                     current = $(current).next('li');
                     current.addClass('selected');
 
-                    let big_url = jQuery("a", current).attr("href");
-                    jQuery("#main-image img").attr("src", big_url);
+                    let mainImage = $("#main-image img");
+                    let big_url = $("a", current).attr("href");
+                    mainImage.attr("src", big_url);
+                    let title = $("a", current).attr("title");
+                    mainImage.attr("alt", title);
                 }
 
             });
@@ -130,10 +105,36 @@
                     current = $(current).prev('li');
                     current.addClass('selected');
 
-                    let big_url = jQuery("a", current).attr("href");
-                    jQuery("#main-image img").attr("src", big_url);
+                    let mainImage = $("#main-image img");
+                    let big_url = $("a", current).attr("href");
+                    mainImage.attr("src", big_url);
+                    let title = $("a", current).attr("title");
+                    mainImage.attr("alt", title);
                 }
             });
         });
+    </script>
+
+    <script>
+        // Get the modal
+        let modal = document.getElementById('myModal');
+
+        // Get the image and insert it inside the modal - use its "alt" text as a caption
+        let img = document.getElementById('myImg');
+        let modalImg = document.getElementById("imgToShow");
+        let captionText = document.getElementById("caption");
+        img.onclick = function(){
+            modal.style.display = "block";
+            modalImg.src = this.src;
+            captionText.innerHTML = this.alt;
+        };
+
+        // Get the <span> element that closes the modal
+        let span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
     </script>
 {% endblock javascript %}

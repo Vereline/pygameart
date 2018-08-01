@@ -102,6 +102,9 @@ Pass:12345678a
 User:second_user
 Pass:123second
 
+User:user_to_delete
+Pass:12345qwe
+
 ### Django shell
 Aftre runing server:
 ```sh

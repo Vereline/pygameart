@@ -25,7 +25,7 @@
     <!-- The Modal -->
     <div id="myModal" class="modal">
         <span class="close">&times;</span>
-        <img class="modal-content" id="img01">
+        <img class="modal-content" id="imgToShow">
         <div id="caption"></div>
     </div>
 
@@ -38,7 +38,7 @@
 
     // Get the image and insert it inside the modal - use its "alt" text as a caption
     let img = document.getElementById('myImg');
-    let modalImg = document.getElementById("img01");
+    let modalImg = document.getElementById("imgToShow");
     let captionText = document.getElementById("caption");
     img.onclick = function(){
         modal.style.display = "block";

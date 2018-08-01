@@ -8,6 +8,8 @@ from django.urls import reverse_lazy, reverse
 from django.views import generic
 from .models import ArtUser, ArtPost, RELATIONSHIP_BLOCKED, RELATIONSHIP_FOLLOWING
 from arts.models import Art
+from blog.models import Comment
+from chat.models import Message
 from .serializers import ArtUserSerializer, ArtPostSerializer, ArtRelationshipSerializer
 from .forms import ArtUserForm, UserUpdateForm
 from django.utils.decorators import method_decorator
@@ -51,16 +53,26 @@ def home(request):
 
 def look_profile(request, **kwargs):
     if request.user.is_authenticated:
+        current_authenticated_user = ArtUser.objects.get(user_id=request.user.id)
         if kwargs:
             pk = kwargs["pk"]
         else:
             pk = request.user.id
         art_user = get_object_or_404(ArtUser, user_id=pk)
+        follow_message = 'follow'
+        block_message = 'block'
+        if art_user in current_authenticated_user.get_blocking():
+            block_message = 'unblock'
+        if art_user in current_authenticated_user.get_following():
+            follow_message = 'unfollow'
         try:
             user_profile = get_object_or_404(User, id=int(pk))
         except ValueError:
             return render(request, 'user_page.html')
-        return render(request, 'user_page.html', {'art_user': art_user, 'user_profile': user_profile})
+        return render(request, 'user_page.html', {'art_user': art_user,
+                                                  'user_profile': user_profile,
+                                                  'follow_message': follow_message,
+                                                  'block_message': block_message})
     else:
         return render(request, 'user_page.html')
 
@@ -164,7 +176,7 @@ def configure_user(request, pk):
 def search_users(request):
     if request.method == "GET":
         search_query = request.GET.get('search_field')
-        users = User.objects.filter(username__contains=search_query).filter(is_staff=False)
+        users = User.objects.filter(username__contains=search_query).filter(is_staff=False).filter(is_active=True)
         art_users = []
         # reformat this expression
         for user in users:
@@ -387,22 +399,24 @@ def set_relationship(request):
 
 def delete_objects_for_user(user_id):
     try:
-        # ... other deletions
         art_user_id = ArtUser.objects.get(user_id=user_id).id
         # remove comments
+        Comment.objects.filter(author_id=user_id).delete()
         # remove art posts and arts
+        Art.objects.filter(owner_id=art_user_id).delete()
         # remove likes, news, chats and relationships
         ArtUser.objects.filter(user_id=user_id).delete()
+        update_all_likes()
+        Message.objects.filter(receiver__id=user_id).delete()
+        Message.objects.filter(sender__id=user_id).delete()
         return True
     except Exception as ex:
         print(ex)
         return False
 
 
-# not_tested
 @login_required
 def remove_account(request):
-    delete_objects_for_user(request.user.pk)  # optional
-    # UserSocialAuth.objects.filter(user=request.user).delete()
-    User.objects.filter(pk=request.user.pk).update(is_active=False, email=None)
-    return HttpResponseRedirect(reverse('django.contrib.auth.views.logout'))
+    delete_objects_for_user(request.user.id)  # optional
+    User.objects.filter(pk=request.user.pk).update(is_active=False, email='')
+    return HttpResponseRedirect(reverse('logout'))

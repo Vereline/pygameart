@@ -93,6 +93,7 @@ class ArtUser(models.Model):
             from_people__status=status,
             from_people__to_person=self)
 
+    # always ask to check: who am i following/followed_by/blocking/blocked_by?
     def get_following(self):
         return self.get_relationships(RELATIONSHIP_FOLLOWING)
 

@@ -14,6 +14,7 @@ urlpatterns = [
     path('users/<int:pk>/', views.configure_user, name='configure_user'),
     path('users_profile/<int:pk>/', views.look_profile, name='user_profile'),
     url('search/$', views.search_users, name='search_users'),
+    url('remove/$', views.remove_account, name='remove_account'),
     path('followers/<int:pk>', views.CurrentUserFollowersView.as_view(), name='show_followers'),
     url(r'^password/change/$', password_change, {
         'template_name': 'registration/password_change_form.html'},

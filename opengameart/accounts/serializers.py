@@ -51,6 +51,10 @@ class ArtPostSerializer(serializers.ModelSerializer):
         art_post, created = ArtPost.objects.update_or_create(user=user, art=art)
         return art_post
 
+    # def to_representation(self, instance):
+    #     representation_data = super().to_representation(instance)
+        # return representation_data
+
 
 class ArtRelationshipSerializer(serializers.ModelSerializer):
     class Meta:

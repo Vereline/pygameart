@@ -1,0 +1,38 @@
+
+    #wrapper{
+      width: 87%;
+      margin: auto;
+      padding: 0 10px;
+      background-color: rgba(255,255,255,0.9);
+      overflow: hidden;
+      box-shadow: 0 0 5px #eee;
+    }
+
+    a {text-decoration: none;}
+
+    li {
+      display: inline;
+      padding: 0 5px 5px 0;
+    }
+
+    #main-image{
+      width: 540px;
+      overflow: hidden;
+      margin: 0 auto
+    }
+
+    #main-image img {
+      max-height: 400px;
+      height: 300px;
+      width: auto;
+    }
+    .galleryImage{
+        width: 54px;
+        height: 30px;
+    }
+    .thumbs{text-align: center;}
+
+    #thumbs li {border:none;}
+    #thumbs li.selected img {border: #0b7 solid 3px;}
+
+    .imageButton {display: inline;}
