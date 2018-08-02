@@ -81,7 +81,7 @@
                       <li class="list-group-item d-flex justify-content-between align-items-center bg-dark">
                         {% if user.is_authenticated %}
                             <a class="nav-link" href="{% url 'chats'  %}">My messages</a>
-                            <span id="followers-span" class="badge badge-success badge-pill">0</span>
+                            <span id="messages-span" class="badge badge-success badge-pill">0</span>
                         {% else %}
                             <a class="nav-link" href="{% url 'login' %}">Messages</a>
                             <span class="badge badge-success badge-pill">0</span>
@@ -165,6 +165,21 @@
                         $.get(url_id, {'pk': user_id}, function(data){
                             let followers = data['count_followers'];
                             followers_span.text(followers);
+                        });
+                    {% endif %}
+                });
+                $(function(){
+                    // ajax query to get current quantity of unread messages
+                    {% if user.is_authenticated %}
+                        let span_list = $('ul.list-group');
+                        let followers_span = span_list.find('#messages-span');
+
+                        let user_id = "{{ user.id }}";
+                        let url_id = "{% url 'count_unread_messages' %}";
+
+                        $.get(url_id, {'pk': user_id}, function(data){
+                            let messages = data['count_messages'];
+                            followers_span.text(messages);
                         });
                     {% endif %}
                 });

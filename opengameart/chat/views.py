@@ -110,3 +110,13 @@ def message_list(request, sender=None, receiver=None):
             serializer.save()
             return JsonResponse(serializer.data, status=201)
         return JsonResponse(serializer.errors, status=400)
+
+
+@login_required
+def get_unread_messages(request):
+    """ Quantity of all messages, which are not read"""
+    if request.method == "GET":
+        pk = int(request.GET.get('pk'))
+        user = User.objects.get(id=pk)
+        messages = Message.objects.filter(receiver=user).filter(is_read=False).count()
+        return JsonResponse({'count_messages': messages})

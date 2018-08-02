@@ -37,7 +37,7 @@ function send(sender, receiver, message) {
         console.log(data);
         let box = text_box_send.replace('{sender}', "You");
         box = box.replace('{message}', message);
-        box = box.replace('{source_image}', DEFAULT_IMAGE);
+        box = box.replace('{source_image}', DEFAULT_IMAGE); // TODO: make correct images instead of default images
         let date_now = Date(); // TODO: change date format to be shown correctly
         box = box.replace('{timestamp}', date_now);
         $('#board').append(box);
