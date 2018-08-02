@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+import logging
 # Create your views here.
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -20,6 +20,9 @@ from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from django.shortcuts import get_object_or_404
 from django.contrib.admin.views.decorators import staff_member_required
+
+
+logger = logging.getLogger(__name__)
 
 
 class SignUp(generic.CreateView):
@@ -46,8 +49,10 @@ def home(request):
     if request.user.is_authenticated:
         pk = request.user.id
         art_user = get_object_or_404(ArtUser, user_id=pk)
+        logger.info("User is authenticated")
         return render(request, 'home.html', {'art_user': art_user})
     else:
+        logger.info("User is not authenticated")
         return render(request, 'home.html')
 
 
