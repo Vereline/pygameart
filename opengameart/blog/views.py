@@ -3,11 +3,16 @@ import json
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404
+from django.template.loader import render_to_string
 from django.utils import timezone
 from .models import Post, Comment
 # Create your views here.
 from .forms import CommentForm
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 def news_list(request):
@@ -79,7 +84,7 @@ def comment_approve(request):
         comment = get_object_or_404(Comment, pk=pk)
         comment.approve()
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
         return JsonResponse({'message': "fail"})
     return JsonResponse({'message': "success"})
 
@@ -91,19 +96,47 @@ def comment_remove(request):
         comment = get_object_or_404(Comment, pk=pk)
         comment.delete()
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
         return JsonResponse({'message': "fail"})
     return JsonResponse({'message': "success"})
 
 
-@login_required
-def comment_edit(request):
+# @login_required
+# def comment_edit(request):
+#     try:
+#         pk = request.GET.get('pk')
+#         # action = request.GET.get('action')
+#         comment = get_object_or_404(Comment, pk=pk)
+#         # comment.edit()
+#     except Exception as ex:
+#         print(ex)
+#         return JsonResponse({'message': "fail"})
+#     return JsonResponse({'message': "success"})
+
+def save_comment_form(request, form, comment_pk,template_name):
+    data = dict()
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            data['form_is_valid'] = True
+            data['new_text'] = form.cleaned_data['text']
+            data['id'] = comment_pk
+        else:
+            data['form_is_valid'] = False
+    context = {'form': form}
     try:
-        pk = request.GET.get('pk')
-        # action = request.GET.get('action')
-        comment = get_object_or_404(Comment, pk=pk)
-        # comment.edit()
+        data['html_form'] = render_to_string(template_name, context, request=request)
+        data['message'] = 'success'
     except Exception as ex:
-        print(ex)
-        return JsonResponse({'message': "fail"})
-    return JsonResponse({'message': "success"})
+        data['message'] = 'fail'
+        logger.error(ex)
+    return JsonResponse(data)
+
+
+def comment_edit(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    if request.method == 'POST':
+        form = CommentForm(request.POST, instance=comment)
+    else:
+        form = CommentForm(instance=comment)
+    return save_comment_form(request, form, pk, 'partial_comment_edit.html')

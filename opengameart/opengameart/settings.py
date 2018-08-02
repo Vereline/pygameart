@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'widget_tweaks',
     'corsheaders',  # A Django App that adds CORS (Cross-Origin Resource Sharing) headers to responses.
 
     'arts',
