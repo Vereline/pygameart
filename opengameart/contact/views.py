@@ -1,6 +1,10 @@
+import logging
 from django.shortcuts import render, redirect
 from .forms import ContactForm
 # Create your views here.
+
+
+logger = logging.getLogger(__name__)
 
 
 def contacts_page(request):

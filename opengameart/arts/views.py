@@ -1,3 +1,5 @@
+import os
+import logging
 from django.shortcuts import render, get_object_or_404
 from rest_framework import generics
 from django.http import HttpResponse, HttpResponseRedirect
@@ -5,16 +7,17 @@ from django.views.generic.edit import DeleteView
 from django.urls import reverse_lazy
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
-
 from accounts.models import ArtPost, ArtUser
 from accounts.serializers import ArtPostSerializer
 from .models import Art
 from .serializers import ArtSerializer
 from .forms import ArtForm
-import os
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
+
+
+logger = logging.getLogger(__name__)
 
 
 @method_decorator(staff_member_required, name='dispatch')

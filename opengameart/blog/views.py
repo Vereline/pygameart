@@ -100,19 +100,7 @@ def comment_remove(request):
     return JsonResponse({'message': "success"})
 
 
-# @login_required
-# def comment_edit(request):
-#     try:
-#         pk = request.GET.get('pk')
-#         # action = request.GET.get('action')
-#         comment = get_object_or_404(Comment, pk=pk)
-#         # comment.edit()
-#     except Exception as ex:
-#         print(ex)
-#         return JsonResponse({'message': "fail"})
-#     return JsonResponse({'message': "success"})
-
-def save_comment_form(request, form, comment_pk,template_name):
+def save_comment_form(request, form, comment_pk, template_name):
     data = dict()
     if request.method == 'POST':
         if form.is_valid():

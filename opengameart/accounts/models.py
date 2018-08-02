@@ -1,8 +1,13 @@
+import logging
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 from arts.models import Art
+
+
+logger = logging.getLogger(__name__)
+
 
 # Create your models here.
 image_storage = FileSystemStorage(
@@ -56,9 +61,10 @@ class ArtUser(models.Model):
                 # Rename image file into unique value
                 self.file_id = art_user_id
                 self.user_avatar.name = self.file_id + '.' + file_name[-1]
+                logging.info('Created unique file name ' + art_user_id)
 
         except Exception as e:
-            print("Error trying to save model: saving image failed: " + str(e))
+            logger.error("Error trying to save model: saving image failed: " + str(e))
             pass
 
         super(ArtUser, self).save(*args, **kwargs)
@@ -136,8 +142,8 @@ def get_id_by_path(file_path):
     art_id = None
     try:
         art_id = hashlib.md5(str_to_encode.encode()).hexdigest()
-    except Exception as e:
-        print('{}, {}'.format(type(e), e))
+    except Exception as ex:
+        logger.error('{}, {}'.format(type(ex), ex))
     return art_id
 
 

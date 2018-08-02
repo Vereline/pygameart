@@ -1,9 +1,13 @@
+import logging
 from django.db import models
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 from PIL import Image  # Holds downloaded image and verifies it
 import copy  # Copies instances of Image
 # Create your models here.
+
+
+logger = logging.getLogger(__name__)
 
 
 image_storage = FileSystemStorage(
@@ -50,9 +54,10 @@ class Art(models.Model):
                 self.file_id = art_id
                 self.file.name = self.file_id + '.' + file_name[-1]
                 self.file_path = '/images/loaded/' + self.file.name
+                logging.info('Created unique file name ' + art_id)
 
-        except Exception as e:
-            print("Error trying to save model: saving image failed: " + str(e))
+        except Exception as ex:
+            logger.error("Error trying to save model: saving image failed: " + str(ex))
             pass
 
         super(Art, self).save(*args, **kwargs)
@@ -69,8 +74,8 @@ def valid_img(img):
         try:
             img.verify()
             return True
-        except Exception as e:
-            print(e)
+        except Exception as ex:
+            logger.error(ex)
             return False
     else:
         return False
@@ -83,6 +88,6 @@ def get_id_by_path(file_path):
     art_id = None
     try:
         art_id = hashlib.md5(str_to_encode.encode()).hexdigest()
-    except Exception as e:
-        print('{}, {}'.format(type(e), e))
+    except Exception as ex:
+        logger.error('{}, {}'.format(type(ex), ex))
     return art_id

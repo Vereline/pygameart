@@ -1,3 +1,4 @@
+import logging
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
@@ -7,6 +8,9 @@ from django.contrib.auth.models import User
 from chat.serializers import MessageSerializer, UserSerializer
 from django.contrib.auth.decorators import login_required
 from accounts.models import ArtUser
+
+
+logger = logging.getLogger(__name__)
 
 
 # Create your views here.
@@ -75,7 +79,7 @@ def user_list(request, pk=None):
                 # users = [{'user': users[i], 'avatar': friends_avatars[str(users[i].id)]} for i in range(
                 # users.count())]
             except Exception as ex:
-                print(ex)
+                logger.error(ex)
                 users = User.objects.all()
         serializer = UserSerializer(users, many=True, context={'request': request})
         return JsonResponse({'data': serializer.data, 'avatars': friends_avatars}, safe=False)

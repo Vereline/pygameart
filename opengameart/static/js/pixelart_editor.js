@@ -1,4 +1,4 @@
-var Picture = class Picture {
+let Picture = class Picture {
   constructor(width, height, pixels) {
     this.width = width;
     this.height = height;
@@ -34,9 +34,9 @@ function elt(type, props, ...children) {
   return dom;
 }
 
-var scale = 10;
+let scale = 10;
 
-var PictureCanvas = class PictureCanvas {
+let PictureCanvas = class PictureCanvas {
   constructor(picture, pointerDown) {
     this.dom = elt("canvas", {
       onmousedown: event => this.mouse(event, pointerDown),
@@ -45,7 +45,7 @@ var PictureCanvas = class PictureCanvas {
     this.syncState(picture);
   }
   syncState(picture) {
-    if (this.picture == picture) return;
+    if (this.picture === picture) return;
     drawPicture(picture, this.dom, scale, this.picture);
     this.picture = picture;
     // if (this.picture === picture) return;
@@ -69,8 +69,8 @@ var PictureCanvas = class PictureCanvas {
 
 function drawPicture(picture, canvas, scale, previous) {
     if (previous == null ||
-        previous.width != picture.width ||
-        previous.height != picture.height) {
+        previous.width !== picture.width ||
+        previous.height !== picture.height) {
       canvas.width = picture.width * scale;
       canvas.height = picture.height * scale;
       previous = null;
@@ -80,7 +80,7 @@ function drawPicture(picture, canvas, scale, previous) {
     for (let y = 0; y < picture.height; y++) {
       for (let x = 0; x < picture.width; x++) {
         let color = picture.pixel(x, y);
-        if (previous == null || previous.pixel(x, y) != color) {
+        if (previous == null || previous.pixel(x, y) !== color) {
           cx.fillStyle = color;
           cx.fillRect(x * scale, y * scale, scale, scale);
         }
@@ -155,12 +155,12 @@ class PixelEditor {
            (a, c) => a.concat(" ", c.dom), []));
     }
     keyDown(event, config) {
-      if (event.key == "z" && (event.ctrlKey || event.metaKey)) {
+      if (event.key === "z" && (event.ctrlKey || event.metaKey)) {
         event.preventDefault();
         config.dispatch({undo: true});
       } else if (!event.ctrlKey && !event.metaKey && !event.altKey) {
         for (let tool of Object.keys(config.tools)) {
-          if (tool[0] == event.key) {
+          if (tool[0] === event.key) {
             event.preventDefault();
             config.dispatch({tool});
             return;
@@ -175,7 +175,7 @@ class PixelEditor {
     }
 }
 
-var ToolSelect = class ToolSelect {
+let ToolSelect = class ToolSelect {
   constructor(state, {tools, dispatch}) {
     this.select = elt("select", {
       onchange: () => dispatch({tool: this.select.value})
@@ -187,7 +187,7 @@ var ToolSelect = class ToolSelect {
   syncState(state) { this.select.value = state.tool; }
 };
 
-var ColorSelect = class ColorSelect {
+let ColorSelect = class ColorSelect {
   constructor(state, {dispatch}) {
     this.input = elt("input", {
       type: "color",
@@ -276,7 +276,7 @@ function drawLine(from, to, color) {
     return points;
   }
 
-var around = [{dx: -1, dy: 0}, {dx: 1, dy: 0},
+let around = [{dx: -1, dy: 0}, {dx: 1, dy: 0},
                 {dx: 0, dy: -1}, {dx: 0, dy: 1}];
 
 function fill({x, y}, state, dispatch) {
@@ -300,7 +300,7 @@ function pick(pos, state, dispatch) {
   dispatch({color: state.picture.pixel(pos.x, pos.y)});
 }
 
-var SaveButton = class SaveButton {
+let SaveButton = class SaveButton {
   constructor(state) {
     this.picture = state.picture;
     this.dom = elt("button", {
@@ -321,7 +321,7 @@ var SaveButton = class SaveButton {
   syncState(state) { this.picture = state.picture; }
 };
 
-var LoadButton = class LoadButton {
+let LoadButton = class LoadButton {
   constructor(_, {dispatch}) {
     this.dom = elt("button", {
       onclick: () => startLoad(dispatch)
@@ -392,7 +392,7 @@ function historyUpdateState(state, action) {
   }
 }
 
-var UndoButton = class UndoButton {
+let UndoButton = class UndoButton {
   constructor(state, {dispatch}) {
     this.dom = elt("button", {
       onclick: () => dispatch({undo: true}),
@@ -404,7 +404,7 @@ var UndoButton = class UndoButton {
   }
 };
 
-var startState = {
+let startState = {
   tool: "draw",
   color: "#000000",
   picture: Picture.empty(60, 30, "#f0f0f0"),
@@ -412,9 +412,9 @@ var startState = {
   doneAt: 0
 };
 
-var baseTools = {draw, fill, rectangle, pick, circle, line};
+let baseTools = {draw, fill, rectangle, pick, circle, line};
 
-var baseControls = [
+let baseControls = [
   ToolSelect, ColorSelect, SaveButton, LoadButton, UndoButton
 ];
 

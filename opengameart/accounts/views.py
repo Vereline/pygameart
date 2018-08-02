@@ -72,7 +72,8 @@ def look_profile(request, **kwargs):
             follow_message = 'unfollow'
         try:
             user_profile = get_object_or_404(User, id=int(pk))
-        except ValueError:
+        except ValueError as err:
+            logger.error(err)
             return render(request, 'user_page.html')
         return render(request, 'user_page.html', {'art_user': art_user,
                                                   'user_profile': user_profile,
@@ -220,9 +221,8 @@ def count_posts(request):
         pk = int(request.GET.get('pk'))
         art_user = ArtUser.objects.get(user_id=pk)
         user_id = art_user.id
-        posts = ArtPost.objects.filter(user_id=user_id)
-        number = [post for post in posts].__len__()
-        return JsonResponse({'count_posts': number})
+        posts = ArtPost.objects.filter(user_id=user_id).count()
+        return JsonResponse({'count_posts': posts})
 
 
 @login_required
@@ -230,7 +230,7 @@ def count_followers(request):
     if request.method == "GET":
         pk = int(request.GET.get('pk'))
         art_user = ArtUser.objects.get(user_id=pk)
-        followers = art_user.get_followers().__len__()
+        followers = art_user.get_followers().count()
         return JsonResponse({'count_followers': followers})
 
 
@@ -416,7 +416,7 @@ def delete_objects_for_user(user_id):
         Message.objects.filter(sender__id=user_id).delete()
         return True
     except Exception as ex:
-        print(ex)
+        logger.error(ex)
         return False
 
 
