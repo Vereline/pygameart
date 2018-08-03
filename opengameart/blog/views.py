@@ -4,6 +4,8 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
 from django.utils import timezone
+
+from accounts.models import ArtUser
 from .models import Post, Comment
 # Create your views here.
 from .forms import CommentForm
@@ -41,8 +43,24 @@ def news_list(request):
     return render(request, 'news.html', {'posts': posts, 'page_range': page_range})
 
 
+def connect_avatars_to_comments():
+    comments = Comment.objects.all()
+    for comment in comments:
+        if comment.author_id:
+            art_user = ArtUser.objects.get(user_id=comment.author_id)
+            if art_user.user_avatar:
+                comment.author_avatar = art_user.user_avatar.url
+            else:
+                comment.author_avatar = ''
+        else:
+            comment.author_avatar = ''
+        comment.save()
+
+
 def news_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
+    # post_comments = post.comments.all()
+    # connect_avatars_to_comments()
     form = CommentForm()
     return render(request, 'news_detail.html', {'post': post, 'form': form})
 
@@ -57,6 +75,11 @@ def add_comment_to_post(request):
             comment.post = post
             if request.user.is_authenticated:
                 comment.author_id = request.user.id
+                art_user = ArtUser.objects.get(user_id=request.user.id)
+                if art_user.user_avatar:
+                    comment.author_avatar = art_user.user_avatar.url
+                else:
+                    comment.author_avatar = ''
             comment.save()
 
             response_data = {
@@ -64,6 +87,7 @@ def add_comment_to_post(request):
                 'text': comment.text,
                 'comment_pk': comment.id,
                 'created_date': str(comment.created_date.strftime('%b %d, %Y %H:%m')),
+                'user_image': comment.author_avatar
             }
             return HttpResponse(
                 json.dumps(response_data),

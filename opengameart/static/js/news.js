@@ -1,7 +1,9 @@
+DEFAULT_IMAGE ="/static/user-default.png";
+
 let comment_text = "<li class=\"list-group-item comment\">\n" +
     "                                <div class=\"row\">\n" +
     "                                    <div class=\"col-xs-3 col-xl-3\">\n" +
-    "                                        <img src=\"\/static\/user-default.png\" class=\"rounded-circle img-responsive\" alt=\"\" />\n" +
+    "                                        <img src=\"{user_image}\" class=\"rounded-circle img-responsive\" alt=\"\" />\n" +
     "                                    </div>\n" +
     "                                    <div class=\"col-xs-10 col-xl-9\">\n" +
     "                                        <div class=\"date\">\n" +
@@ -64,12 +66,17 @@ $.ajax({
 return false;
 };
 
-function createCommentChild(created_date, author, text, may_change, comment_pk) {
+function createCommentChild(created_date, author, text, may_change, comment_pk, user_image=undefined) {
      let remove_comment_url="/news/comment/remove/"+comment_pk;
      let approve_comment_url="/news/comment/approve/"+comment_pk;
      let node = comment_text.replace('{author}', author);
      node = node.replace('{created_date}', created_date);
      node = node.replace('{text}', text);
+     if (user_image){
+         node = node.replace('{user_image}', user_image);
+     } else {
+         node = node.replace('{user_image}', DEFAULT_IMAGE);
+     }
      node = node.replace('{data_url}', '/news/comment/{comment_pk}/edit/');
      node = node.replace(/{comment_pk}/g, comment_pk);
 

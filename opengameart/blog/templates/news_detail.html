@@ -37,7 +37,8 @@
                     let text = json['text'];
                     let created_date = json['created_date'];
                     let comment_pk = json['comment_pk'];
-                    createCommentChild(created_date, author, text,true,comment_pk);
+                    let user_image = json['user_image'];
+                    createCommentChild(created_date, author, text,true,comment_pk, user_image);
                 },
 
                 // handle a non-successful response
@@ -137,13 +138,21 @@
                             <li class="list-group-item comment">
                                 <div class="row">
                                     <div class="col-xs-3 col-xl-3">
-                                        <img src="{% static 'user-default.png' %}" class="rounded-circle img-responsive" alt="" />
-                                    </div>
+                                        {% if comment.author_avatar %}
+                                            <img src="{{ comment.author_avatar }}" class="rounded-circle img-responsive" alt="" />
+                                        {% else %}
+                                            <img src="{% static 'user-default.png' %}" class="rounded-circle img-responsive" alt="" />
+                                        {% endif %}
+                                        </div>
                                     <div class="col-xs-10 col-xl-9">
                                         <div class="date">
                                             <a href="">Comment Title</a>
                                             <div class="mic-info">
-                                                By: <a href="#">{{ comment.author }}</a> {{ comment.created_date }}
+                                                {% if comment.author_id %}
+                                                    By: <a href={% url 'user_profile' comment.author_id %}>{{ comment.author }}</a> {{ comment.created_date }}
+                                                {% else %}
+                                                    By: <a href="#">{{ comment.author }}</a> {{ comment.created_date }}
+                                                {% endif %}
                                             </div>
 
                                             <div class="comment-text">{{ comment.text|linebreaks }}</div>
