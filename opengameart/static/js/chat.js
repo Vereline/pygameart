@@ -35,9 +35,15 @@ function scrolltoend() {
 function send(sender, receiver, message) {
     $.post('/chat/api/messages', '{"sender": "'+ sender +'", "receiver": "'+ receiver +'","message": "'+ message +'" }', function (data) {
         console.log(data);
+
+        let image = DEFAULT_IMAGE;
+        if (data['avatar']){
+            image = data['avatar'];
+        }
+
         let box = text_box_send.replace('{sender}', "You");
         box = box.replace('{message}', message);
-        box = box.replace('{source_image}', DEFAULT_IMAGE); // TODO: make correct images instead of default images
+        box = box.replace('{source_image}', image);
         let date_now = Date(); // TODO: change date format to be shown correctly
         box = box.replace('{timestamp}', date_now);
         $('#board').append(box);
@@ -48,14 +54,18 @@ function send(sender, receiver, message) {
 function receive() {
     $.get('/chat/api/messages/'+ sender_id + '/' + receiver_id, function (data) {
         console.log(data);
-        if (data.length !== 0)
+        let image = DEFAULT_IMAGE;
+        if (data['data'].length !== 0)
         {
-            for(let i=0;i<data.length;i++) {
-                console.log(data[i]);
-                let box = text_box_receive.replace('{sender}', data[i].sender);
-                box = box.replace('{source_image}', DEFAULT_IMAGE);
-                box = box.replace('{message}', data[i].message);
-                box = box.replace('{timestamp}', data[i].timestamp);
+            for(let i=0;i<data['data'].length;i++) {
+                console.log(data['data'][i]);
+                if (data['avatar']){
+                    image = data['avatar'];
+                }
+                let box = text_box_receive.replace('{sender}', data['data'][i].sender);
+                box = box.replace('{source_image}', image);
+                box = box.replace('{message}', data['data'][i].message);
+                box = box.replace('{timestamp}', data['data'][i].timestamp);
                 $('#board').append(box);
                 scrolltoend();
             }

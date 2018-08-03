@@ -48,14 +48,19 @@ def message_view(request, sender, receiver):
         users = User.objects.filter(id__in=friends_ids)
         users = [{'user': users[i], 'avatar': friends_avatars[str(users[i].id)]} for i in range(users.count())]
         sender_art_user = ArtUser.objects.get(user_id=(str(sender)))
+        receiver_art_user = ArtUser.objects.get(user_id=(str(receiver)))
         if sender_art_user.user_avatar:
             sender_avatar = sender_art_user.user_avatar.url
         else:
-            sender_avatar = None
+            sender_avatar = ''
+        if receiver_art_user.user_avatar:
+            receiver_avatar = receiver_art_user.user_avatar.url
+        else:
+            receiver_avatar = ''
         return render(request, "messages.html",
                       {'users': users,
                        'receiver': User.objects.get(id=receiver),
-                       'receiver_avatar': friends_avatars[str(receiver)],
+                       'receiver_avatar': receiver_avatar,
                        'sender_avatar': sender_avatar,
                        'messages': Message.objects.filter(sender_id=sender, receiver_id=receiver) |
                                    Message.objects.filter(sender_id=receiver, receiver_id=sender)})
@@ -100,19 +105,29 @@ def message_list(request, sender=None, receiver=None):
     List all required messages, or create a new message.
     """
     if request.method == 'GET':
+        avatar = ArtUser.objects.get(user_id=sender).user_avatar
+        if avatar:
+            avatar = avatar.url
+        else:
+            avatar = ''
         messages = Message.objects.filter(sender_id=sender, receiver_id=receiver, is_read=False)
         serializer = MessageSerializer(messages, many=True, context={'request': request})
         for message in messages:
             message.is_read = True
             message.save()
-        return JsonResponse(serializer.data, safe=False)
+        return JsonResponse({'data': serializer.data, 'avatar': avatar}, safe=False)
 
     elif request.method == 'POST':
         data = JSONParser().parse(request)
+        avatar = ArtUser.objects.get(user_id=request.user.id).user_avatar
+        if avatar:
+            avatar = avatar.url
+        else:
+            avatar = ''
         serializer = MessageSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse(serializer.data, status=201)
+            return JsonResponse({'data': serializer.data, 'avatar': avatar}, status=201)
         return JsonResponse(serializer.errors, status=400)
 
 
