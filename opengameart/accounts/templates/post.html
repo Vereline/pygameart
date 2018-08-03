@@ -71,7 +71,7 @@
             // Get the image and insert it inside the modal - use its "alt" text as a caption
             let img = this;
             let modalImg = document.getElementById('myImg');
-            let captionText = document.getElementById("caption");
+            let captionText = document.getElementById("img-caption");
 
             modal.style.display = "block";
             modalImg.src = img.src;
@@ -108,9 +108,9 @@
 
                                 <a href="{% url 'user_profile' post.user.user_id %}">{{ post.user.get_username }}</a>
                             </span>
-                            <h3>{{ post.art.title }}</h3>
+                            <a href="{% url 'detail_art' post.art.id %}">{{ post.art.title }}</a>
                             <div class="image-shadow">
-                                <img id='img{{ post.art.id }}' class="postimg" src="{{ post.art.file }}" alt="{{ object.title }}"/>
+                                <img id='img{{ post.art.id }}' class="postimg" src="{{ post.art.file }}" alt="{{  post.art.title }}"/>
                             </div>
                             <span id="{{ post.art.id }}">Likes: {{ post.art.likes }}</span>
 
@@ -129,10 +129,10 @@
             </div>
 
             <!-- The Modal -->
-            <div id="myModal" class="modal">
+            <div id="myModal" class="modal-img">
                 <span class="close">&times;</span>
-                <img class="modal-content" id="myImg">
-                <div id="caption"></div>
+                <img class="modal-content-img" id="myImg">
+                <div id="img-caption"></div>
             </div>
 
             {% else %}

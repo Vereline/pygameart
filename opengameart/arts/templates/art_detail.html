@@ -1,22 +1,24 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Latest news{% endblock title %}
+{% block title %}Current Art{% endblock title %}
 
 {% block stylesheet %}
     <link rel="stylesheet" type="text/css" href="{% static "css/style_news_detail.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static  "css/style_post.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_modal.css' %}">
 {% endblock stylesheet %}
 
 {% block js_imports %}
     <script type="text/javascript" src="{% static 'js/csrf.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/news.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/art_comment.js' %}"></script>
 {% endblock js_imports %}
 
 {% block javascript %}
     <script>
         // Submit post on submit
         $('#post-form-comment').on('submit', function(event){
-            event.preventDefault();
             console.log("form submitted!");  // sanity check
+            event.preventDefault();
             let data = $(this).serialize();
 
             console.log("create comment is working!"); // sanity check
@@ -24,9 +26,9 @@
             console.log(data);
 
             $.ajax({
-                url : "{% url 'add_comment_to_post' %}", // the endpoint
+                url : "{% url 'add_art_comment_to_post' %}", // the endpoint
                 type : "POST", // http method
-                data : data + '&pk='+{{ post.pk }}, // data sent with the post request
+                data : data + '&pk='+ "{{ post.art.id }}", // data sent with the post request
 
                 // handle a successful response
                 success : function(json) {
@@ -51,7 +53,7 @@
         });
     </script>
     <script>
-     $(document).on('click', "button[class~='change']", function() {
+     $(document).on('click', "button[class~='change']",function() {
             let comment_id = this.id;
             console.log('ping');
             console.log(comment_id);
@@ -59,17 +61,12 @@
             let url_id = '';
             if ($(this).hasClass('approve')){
                 action = 'approve';
-                url_id = "{% url 'comment_approve' %}";
+                url_id = "{% url 'art_comment_approve' %}";
             }
             else if ($(this).hasClass('remove')){
                 action = 'remove';
-                url_id = "{% url 'comment_remove' %}";
+                url_id = "{% url 'art_comment_remove' %}";
             }
-            //else if ($(this).hasClass('edit')){
-            //    action = 'edit';
-                {#url_id = "{% url 'comment_edit' comment_id %}";#}
-           // }
-
 
             let comment_container = $(this).closest("li[class~=comment]");
 
@@ -93,47 +90,89 @@
         $(function () {
           /* Binding */
 
-          // Create comment
-          // $(".js-create-comment").click(loadForm);
-          // $("#modal-comment").on("submit", ".js-comment-create-form", saveForm);
-
-          // Update book
+          // Update comment
           $(".date").on("click", ".js-update-comment", loadForm);
           $("#modal-comment").on("submit", ".js-comment-update-form", saveForm);
             console.log('pi');
-
-          // Delete comment
-          // $("#comment-table").on("click", ".js-delete-comment", loadForm);
-          // $("#modal-comment").on("submit", ".js-comment-delete-form", saveForm);
-
         });
     </script>
+    <script>
+    MAX_WIDTH = 600;
+    MAX_HEIGHT = 480;
+    $(document).ready(function () {
+        let array = $('img.postimg');
+        console.log(array.length);
+        for (let img of array) {
+            console.log('width ' + img.clientWidth);
+            console.log('height ' + img.clientHeight);
+            console.log(typeof img.clientWidth);
+            let params = defineImageSize(img.clientWidth, img.clientHeight, MAX_WIDTH, MAX_HEIGHT);
+            console.log(params);
+            $(img).width(params['width'] + 'px');
+            $(img).height(params['height'] + 'px');
+        }
+
+    })
+  </script>
+  <script>
+     $( "img[class~='postimg']" ).click(function() {
+            // Get the modal
+            let modal = document.getElementById('myModal');
+            // Get the image and insert it inside the modal - use its "alt" text as a caption
+            let img = this;
+            let modalImg = document.getElementById('myImg');
+            let captionText = document.getElementById("img-caption");
+
+            modal.style.display = "block";
+            modalImg.src = img.src;
+            captionText.innerHTML = img.alt;
+
+            // Get the <span> element that closes the modal
+            let span = document.getElementsByClassName("close")[0];
+
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+        });
+  </script>
 {% endblock javascript %}
 
 {% block content %}
     <div class="card">
-        {% if post.post_image %}
-            <img src="{{ post.post_image.url }}" alt="Post image"/>
-        {% endif %}
-        <div class="card-body post">
-            {% if post.published_date %}
-                <div class="date">
-                    {{ post.published_date }}
-                </div>
+        <div class="card-body">
+            <span class="float-left align-top">
+                {% if post.user.user_avatar %}
+                    <img src="{{ post.user.user_avatar }}" alt="User Image" class="rounded-circle img-responsive"/>
+                {% else %}
+                    <img src="{% static 'user-default.png' %}" alt="User Image" class="rounded-circle img-responsive"/>
+                {% endif %}
+
+                <a href="{% url 'user_profile' post.user.user_id %}">{{ post.user.get_username }}</a>
+            </span>
+            <h3>{{ post.art.title }}</h3>
+            <div class="image-shadow">
+                <img id='img{{ post.art.id }}' class="postimg" src="{{ post.art.file }}" alt="{{  post.art.title }}"/>
+            </div>
+            <span id="{{ post.art.id }}">Likes: {{ post.art.likes }}</span>
+
+            <button id="{{ post.art.id }}" class="btn btn-success appreciate like" type="submit" >Like</button>
+            <button id="{{ post.art.id }}" class="btn btn-danger appreciate dislike" type="submit" >Dislike</button>
+
+            {% if current_user %}
+                <a class="btn btn-danger" href={% url 'delete_art' post.art.id %}>Delete art</a>
             {% endif %}
-            <h1 class="card-title">{{ post.title }}</h1>
-            <p class="card-text">{{ post.text|linebreaksbr }}</p>
         </div>
     </div>
     <hr>
     <div class="row justify-content-center">
         <div class="card card-custom">
             <div class="card-heading">
-                <h3 class="card-title">Recent Comments<span class="float-right badge badge-success badge-pill">{{ post.approved_comments.count }}</span></h3>
+                <h3 class="card-title">Recent Comments<span class="float-right badge badge-success badge-pill">{{ post.art.comments.count }}</span></h3>
             </div>
             <div class="card-body">
                 <ul class="list-group current-comments">
-                    {% for comment in post.comments.all %}
+                    {% for comment in post.art.comments %}
                         {% if user.is_staff or comment.approved_comment %}
                             <li class="list-group-item comment">
                                 <div class="row">
@@ -158,25 +197,25 @@
                                             <div class="comment-text">{{ comment.text|linebreaks }}</div>
                                             {% if not comment.approved_comment and user.is_staff %}
     {#                                            <div class="action">#}
-                                                    <button id="{{ comment.pk }}" type="button" class="btn btn-primary btn-xs js-update-comment" title="Edit" data-url="{% url 'comment_edit' comment.pk %}">
+                                                    <button id="{{ comment.id }}" type="button" class="btn btn-primary btn-xs js-update-comment" title="Edit" data-url="{% url 'art_comment_edit' comment.id %}">
                                                         Edit
                                                     </button>
-                                                    <button id="{{ comment.pk }}" type="button" class="btn btn-success btn-xs change approve" title="Approved">
+                                                    <button id="{{ comment.id }}" type="button" class="btn btn-success btn-xs change approve" title="Approve">
                                                         Approve
                                                     </button>
-                                                    <button id="{{ comment.pk }}" type="button" class="btn btn-danger btn-xs change remove" title="Remove">
+                                                    <button id="{{ comment.id }}" type="button" class="btn btn-danger btn-xs change remove" title="Remove">
                                                         Remove
                                                     </button>
     {#                                            </div>#}
                                             {# filter for comparing values #}
                                             {% elif not comment.approved_comment and user.id == comment.author_id|add:"0"%}
-                                                <button id="{{ comment.pk }}" type="button" class="btn btn-primary btn-xs js-update-comment" title="Edit" data-url="{% url 'comment_edit' comment.pk %}">
+                                                <button id="{{ comment.id }}" type="button" class="btn btn-primary btn-xs js-update-comment" title="Edit" data-url="{% url 'art_comment_edit' comment.id %}">
                                                     Edit
                                                 </button>
-                                                <button id="{{ comment.pk }}" type="button" class="btn btn-success btn-xs change approve" title="Approved">
+                                                <button id="{{ comment.id }}" type="button" class="btn btn-success btn-xs change approve" title="Approve">
                                                     Approve
                                                 </button>
-                                                <button id="{{ comment.pk }}" type="button" class="btn btn-danger btn-xs change remove " title="Remove">
+                                                <button id="{{ comment.id }}" type="button" class="btn btn-danger btn-xs change remove " title="Remove">
                                                     Remove
                                                 </button>
                                             {% endif %}
@@ -204,14 +243,14 @@
                                                     By: <a href="#">{{ comment.author }}</a> {{ comment.created_date }}
                                                 {% endif %}
                                             </div>
-                                            <div id="{{ comment.pk }}" class="comment-text">{{ comment.text|linebreaks }}</div>
-                                            <button id="{{ comment.pk }}" type="button" class="btn btn-primary btn-xs js-update-comment" title="Edit" data-url="{% url 'comment_edit' comment.pk %}">
+                                            <div id="{{ comment.id }}" class="comment-text">{{ comment.text|linebreaks }}</div>
+                                            <button id="{{ comment.id }}" type="button" class="btn btn-primary btn-xs js-update-comment" title="Edit" data-url="{% url 'art_comment_edit' comment.id %}">
                                                 Edit
                                             </button>
-                                            <button id="{{ comment.pk }}" type="button" class="btn btn-success btn-xs change approve" title="Approved">
+                                            <button id="{{ comment.id }}" type="button" class="btn btn-success btn-xs change approve" title="Approve">
                                                 Approve
                                             </button>
-                                            <button id="{{ comment.pk }}" type="button" class="btn btn-danger btn-xs change remove" title="Remove">
+                                            <button id="{{ comment.id }}" type="button" class="btn btn-danger btn-xs change remove" title="Remove">
                                                 Remove
                                             </button>
                                         </div>
@@ -226,38 +265,6 @@
             </div>
         </div>
     </div>
-
-{#    <div class="current-comments">#}
-{#        {% for comment in post.comments.all %}#}
-{#            {% if user.is_authenticated or comment.approved_comment %}#}
-{#                <div class="comment">#}
-{#                    <div class="date">#}
-{#                        {{ comment.created_date }}#}
-{#                        {% if not comment.approved_comment and user.is_staff %}#}
-{#                            <button id="{{ comment.pk }}" class="btn btn-danger change remove">#}
-{#                                Remove <span class="glyphicon glyphicon-remove"></span>#}
-{#                            </button>#}
-{#                            <button id="{{ comment.pk }}" class="btn btn-light change approve">#}
-{#                                Approve <span class="glyphicon glyphicon-ok"></span>#}
-{#                            </button>#}
-                        {# filter for comparing values #}
-{#                        {% elif not comment.approved_comment and user.id == comment.author_id|add:"0"  %}#}
-{#                            <button id="{{ comment.pk }}" class="btn btn-danger change remove">#}
-{#                                Remove <span class="glyphicon glyphicon-remove"></span>#}
-{#                            </button>#}
-{#                            <button id="{{ comment.pk }}" class="btn btn-light change approve">#}
-{#                                Approve <span class="glyphicon glyphicon-ok"></span>#}
-{#                            </button>#}
-{#                        {% endif %}#}
-{#                    </div>#}
-{#                    <strong>{{ comment.author }}</strong>#}
-{#                    <p>{{ comment.text|linebreaks }}</p>#}
-{#                </div>#}
-{#            {% endif %}#}
-{#        {% empty %}#}
-{#            <p class="empty-comments">No comments here yet :(</p>#}
-{#        {% endfor %}#}
-{#    </div>#}
 
     <h1>Add a new comment</h1>
     {% now "m/d/Y" %}
@@ -277,10 +284,9 @@
             <div class="fieldWrapper">
                 {{ form.text.errors }}
                 <label for="{{ form.text.id_for_label }}">Your Text:</label>
-{#              <input id="id_text" type="text" name="text" maxlength="100" required>#}
                 {{ form.text }}
             </div>
-            <button type="submit" class="save btn btn-dark">Send</button>
+            <button id="" type="submit" class="save btn btn-dark">Send</button>
             <div id="results"></div>
       </fieldset>
     </form>
@@ -292,4 +298,11 @@
           </div>
         </div>
       </div>
+
+        <!-- The Modal -->
+        <div id="myModal" class="modal-img">
+            <span class="close">&times;</span>
+            <img class="modal-content-img" id="myImg">
+            <div id="img-caption"></div>
+        </div>
 {% endblock %}

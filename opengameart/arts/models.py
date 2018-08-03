@@ -2,13 +2,14 @@ import logging
 from django.db import models
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
+from django.utils import timezone
 from PIL import Image  # Holds downloaded image and verifies it
 import copy  # Copies instances of Image
+
 # Create your models here.
 
 
 logger = logging.getLogger(__name__)
-
 
 image_storage = FileSystemStorage(
     # Physical file location ROOT
@@ -91,3 +92,24 @@ def get_id_by_path(file_path):
     except Exception as ex:
         logger.error('{}, {}'.format(type(ex), ex))
     return art_id
+
+
+class ArtComment(models.Model):
+    art = models.ForeignKey('arts.Art', on_delete=models.CASCADE, related_name='comments')
+    author = models.CharField(max_length=200)
+    author_id = models.CharField(max_length=200, default='', blank=True)
+    author_avatar = models.CharField(max_length=200, default='', blank=True)
+    text = models.TextField()
+    created_date = models.DateTimeField(default=timezone.now)
+    approved_comment = models.BooleanField(default=False)
+
+    def approve(self):
+        self.approved_comment = True
+        self.save()
+
+    def edit(self, new_text):
+        self.text = new_text
+        self.save()
+
+    def __str__(self):
+        return self.text

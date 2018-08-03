@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Art
+from .models import Art, ArtComment
 from django.utils.html import mark_safe
 
 
@@ -21,4 +21,10 @@ class ArtAdmin(admin.ModelAdmin):
         )
 
 
+class ArtCommentAdmin(admin.ModelAdmin):
+    model = ArtComment
+    list_display = ('author', 'created_date')
+
+
+admin.site.register(ArtComment, ArtCommentAdmin)
 admin.site.register(Art, ArtAdmin)
