@@ -1,22 +1,26 @@
-.AppMenu ul {
-    list-style-type: none;
-    overflow: hidden;
-    background-color: #333333;
-    text-align: left;
-    padding: 0;
-    width: max-content;
+.app-menu li{
+    color: #343a40;
 }
 
-.AppMenu li {
-    padding: 16px;
+.app-menu {
+    width: 200px;
 }
 
-.AppMenu li a {
-    color: white;
-    text-align: left;
-    text-decoration: none;
+.app-menu li:hover {
+    background-color: #ccc;
 }
 
-.AppMenu li:hover {
-    background-color: #111111;
+.app-menu li.active {
+    background-color: #343a40;
+    border-color: #343a40;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.list-group-item:first-child {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.list-group{
+    height: 100%;
 }

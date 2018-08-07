@@ -1,0 +1,12 @@
+.app-logo {
+    color: rgba(255, 255, 255, 0.7);
+    width: 200px;
+}
+.login-button {
+    margin-left: 5px;
+    text-decoration-color: #ffffff;
+}
+
+input[type=text]:focus{
+    border-color: green;
+}

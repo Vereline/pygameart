@@ -1,41 +1,19 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
-
-import {echo} from './actions/echo'
-import {serverMessage} from './reducers'
-
-import AppHeader from './components/AppHeader'
-import AppFooter from './components/AppFooter'
+import './styles/App.css';
 import AppMenu from "./components/AppMenu";
-import AppPost from "./components/AppPost";
+import AppNavbar from "./components/AppNavbar";
 
 class App extends Component {
-  componentDidMount() {
-      this.props.fetchMessage('Hi!')
-  }
-
-  render() {
+   render() {
     return (
       <div>
-          <header className="App-header">
-          <h1 className="App-title">PyGameArt</h1>
-          <AppHeader />
+        <header>
+          <AppNavbar/>
         </header>
-        <AppMenu />
-          <p>
-              {this.props.message}
-          </p>
-        <AppPost />
-          <footer className="App-footer">
-              <AppFooter />
-          </footer>
-
+        <AppMenu name={'user'} />
       </div>
     );
   }
 }
 
-export default connect(
-  state => ({ message: serverMessage(state) }),
-  { fetchMessage: echo }
-)(App);
+export default App;
