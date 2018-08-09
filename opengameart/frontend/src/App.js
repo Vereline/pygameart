@@ -17,10 +17,10 @@ class App extends Component {
                     <AppMenu name={'user'} />
                 </div>
                 <div className={'col-10'}>
-                    <Card/>
-                    <Card/>
-                    <Card/>
-                    <Card/>
+                    <Card color="#FF6663" />
+                    <Card color="#FF6663" />
+                    <Card color="#784c84" />
+                    <Card color="#FF6663" />
                 </div>
             </div>
         </div>

@@ -5,7 +5,7 @@ class Square extends Component {
     render() {
         let squareStyle = {
             height: 150,
-            backgroundColor: "#FF6663"
+            backgroundColor: this.props.color
         };
 
         return (
@@ -26,7 +26,7 @@ class TitleLabel extends Component {
         };
 
         return (
-            <p style={labelStyle}>#FF6663</p>
+            <p style={labelStyle}>{this.props.color}</p>
         );
     }
 }
@@ -41,7 +41,7 @@ class NameLabel extends Component {
         };
 
         return (
-            <p style={labelStyle}>#FF6663</p>
+            <p style={labelStyle}>{this.props.color}</p>
         );
     }
 }
@@ -61,9 +61,11 @@ class Card extends Component {
 
         return (
             <div style={cardStyle}>
-                <Square/>
-                <TitleLabel/>
-                <NameLabel/>
+                {/*this is made to transfer all the properties through several components*/}
+                <Square {...this.props} />
+                
+                <TitleLabel color={this.props.color} />
+                <NameLabel color={this.props.color} />
             </div>
         );
     }
