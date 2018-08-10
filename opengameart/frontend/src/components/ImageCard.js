@@ -60,10 +60,10 @@ class Card extends Component {
         };
 
         return (
-            <div style={cardStyle}>
+            <div className={'image-card'} style={cardStyle}>
                 {/*this is made to transfer all the properties through several components*/}
                 <Square {...this.props} />
-                
+
                 <TitleLabel color={this.props.color} />
                 <NameLabel color={this.props.color} />
             </div>
