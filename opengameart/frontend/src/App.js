@@ -3,7 +3,7 @@ import './styles/App.css';
 import AppMenu from "./components/AppMenu";
 import AppNavbar from "./components/AppNavbar";
 import Card from './components/ImageCard'
-import LightningCounterDisplay from './components/LightningCounter'
+// import LightningCounterDisplay from './components/LightningCounter'
 
 class App extends Component {
    render() {
@@ -16,14 +16,14 @@ class App extends Component {
             <div className={'row justify-content-start'}>
                 <div className={'col'}>
                     <AppMenu name={'user'} />
-                    <LightningCounterDisplay/>
+                    {/*<LightningCounterDisplay/>*/}
                 </div>
                 <div className={'col-10'}>
+                    <Card color="#FF6663" title={"abc"}/>
                     <Card color="#FF6663" />
-                    <Card color="#FF6663" />
+                    <Card color="#784c84" title={"def"}/>
                     <Card color="#784c84" />
-                    <Card color="#784c84" />
-                    <Card color="#784c84" />
+                    <Card color="#784c84" title={"123"}/>
                     <Card color="#784c84" />
                     <Card color="#784c84" />
                     <Card color="#784c84" />
