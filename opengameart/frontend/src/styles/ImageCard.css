@@ -1,8 +1,17 @@
-.image-card:hover {
-    -webkit-transform: scale(1.2);
-    -ms-transform: scale(1.2);
-    transform: scale(1.2);
-    transition: transform 0.3s;
+/* Card grow */
+.image-card {
+    display: inline-block;
+    vertical-align: middle;
+    transform: translateZ(0);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    backface-visibility: hidden;
+    -moz-osx-font-smoothing: grayscale;
+    transition-duration: 0.3s;
+    transition-property: transform;
 }
 
-
+.image-card:hover,
+.image-card:focus,
+.image-card:active {
+    transform: scale(1.2);
+}
